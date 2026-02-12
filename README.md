@@ -10,6 +10,18 @@ Royal College of Art Association of Black Students, Alumni & Friends website.
 - shadcn/ui
 - Tailwind CSS
 - TanStack Query
+- **Jubilat** (typography)
+
+## Font Setup (Jubilat)
+
+The site uses Jubilat throughout. To enable it:
+
+1. **Adobe Fonts** (recommended): Create a web project at [fonts.adobe.com](https://fonts.adobe.com), add Jubilat, and copy your kit ID from the embed code. Add to `.env.local`:
+   ```
+   NEXT_PUBLIC_ADOBE_FONT_KIT_ID=your_kit_id
+   ```
+
+2. **Self-hosted**: Add Jubilat `.woff2` files to `public/fonts/` and uncomment the `@font-face` block in `src/app/globals.css`.
 
 ## Getting Started
 

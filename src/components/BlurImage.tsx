@@ -10,7 +10,7 @@ interface BlurImageProps {
   src: string;
   alt: string;
   className?: string;
-  aspectRatio?: "4/3" | "4/5" | "3/4";
+  aspectRatio?: "4/3" | "4/5" | "3/4" | "1/1";
   sizes?: string;
   priority?: boolean;
   hoverOpacity?: boolean;
@@ -30,7 +30,9 @@ export function BlurImage({
       ? "aspect-[4/3]"
       : aspectRatio === "4/5"
         ? "aspect-[4/5]"
-        : "aspect-[3/4]";
+        : aspectRatio === "1/1"
+          ? "aspect-square"
+          : "aspect-[3/4]";
 
   return (
     <div

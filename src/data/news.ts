@@ -58,7 +58,7 @@ export const newsArticles: NewsArticle[] = [
     title: "Sir Frank Bowling Scholarship",
     category: "Announcement",
     date: "February 10, 2025",
-    image: "/assets/news-frank-bowling.jpg",
+    image: "/3_Website Images/FrankBowling_CreditMathildeAgius_725px.jpg",
     body: [
       "The Sir Frank Bowling Scholarship supports emerging artists of Black and African heritage at the Royal College of Art.",
     ],

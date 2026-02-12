@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { X, Plus } from "lucide-react";
+import { X } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 const SlideOutMenu = () => {
   const [open, setOpen] = useState(false);
@@ -27,10 +28,14 @@ const SlideOutMenu = () => {
       {/* Toggle button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed top-4 right-4 z-50 text-foreground hover:opacity-70 transition-opacity"
+        className="fixed top-4 right-4 z-50 text-foreground hover:opacity-70 transition-opacity flex items-center justify-center"
         aria-label={open ? "Close menu" : "Open menu"}
       >
-        {open ? <X size={32} /> : <Plus size={32} />}
+        {open ? (
+          <X size={32} />
+        ) : (
+          <Image src="/RCA BLK–MENU ICON.svg" alt="Menu" width={32} height={32} />
+        )}
       </button>
 
       {/* Overlay */}

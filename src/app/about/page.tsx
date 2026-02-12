@@ -1,6 +1,7 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
-import Link from "next/link";
+import { Logo } from "@/components/Logo";
+import { BlurImage } from "@/components/BlurImage";
 
 export default function About() {
   return (
@@ -9,10 +10,7 @@ export default function About() {
 
       {/* RCA BLK Logo */}
       <div className="flex justify-center pt-8 pb-4">
-        <Link href="/" className="text-4xl font-black tracking-tight text-foreground leading-none text-center no-underline" style={{ fontFamily: "'Arial Black', 'Arial', sans-serif" }}>
-          <span className="block">RCA</span>
-          <span className="block">BLK</span>
-        </Link>
+        <Logo className="h-12" />
       </div>
 
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0">
@@ -63,16 +61,16 @@ export default function About() {
         {/* Right column - Images */}
         <div className="px-8 lg:px-16 py-8 lg:py-12 flex flex-col gap-8 items-center" style={{ backgroundColor: "hsl(207, 70%, 88%)" }}>
           <div className="w-full max-w-sm">
-            <div className="w-full aspect-[3/4] bg-muted/20 border border-foreground/10" />
-            <p className="mt-3 text-xl font-black text-foreground tracking-wide" style={{ fontFamily: "'Arial Black', 'Arial', sans-serif" }}>
+            <BlurImage src="/3_Website Images/Chris Ofili.jpg" alt="Chris Ofili" aspectRatio="3/4" />
+            <p className="mt-3 text-xl font-black text-foreground tracking-wide">
               Chris Ofili
             </p>
           </div>
 
           <div className="w-full max-w-sm">
-            <div className="w-full aspect-[3/4] bg-muted/20 border border-foreground/10" />
-            <p className="mt-3 text-xl font-black text-foreground tracking-wide" style={{ fontFamily: "'Arial Black', 'Arial', sans-serif" }}>
-              Artist Name
+            <BlurImage src="/3_Website Images/magdalene odundo2.jpeg" alt="Magdalene Odundo" aspectRatio="3/4" />
+            <p className="mt-3 text-xl font-black text-foreground tracking-wide">
+              Magdalene Odundo
             </p>
           </div>
         </div>

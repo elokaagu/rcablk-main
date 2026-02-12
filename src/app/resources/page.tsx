@@ -1,6 +1,6 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
-import Link from "next/link";
+import { Logo } from "@/components/Logo";
 
 export default function Resources() {
   return (
@@ -8,10 +8,7 @@ export default function Resources() {
       <SlideOutMenu />
 
       <div className="px-8 lg:px-12 pt-8">
-        <Link href="/" className="text-3xl font-black tracking-tight text-foreground leading-none no-underline block" style={{ fontFamily: "'Arial Black', 'Arial', sans-serif" }}>
-          <span className="block">RCA</span>
-          <span className="block ml-8">BLK</span>
-        </Link>
+        <Logo className="h-10" />
       </div>
 
       {/* Title */}

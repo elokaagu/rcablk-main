@@ -1,5 +1,6 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
-import Link from "next/link";
+import { Logo } from "@/components/Logo";
+import { BlurImage } from "@/components/BlurImage";
 
 export default function Contact() {
   return (
@@ -9,9 +10,7 @@ export default function Contact() {
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[250px_1fr] min-h-screen">
         {/* Left - Logo */}
         <div className="px-8 pt-8">
-          <Link href="/" className="text-2xl font-black tracking-tight text-foreground leading-none whitespace-nowrap no-underline" style={{ fontFamily: "'Arial Black', 'Arial', sans-serif" }}>
-            RCA BLK
-          </Link>
+          <Logo className="h-10" />
         </div>
 
         {/* Main content */}
@@ -29,9 +28,11 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Central circle image placeholder */}
+          {/* Central circle image */}
           <div className="flex-1 flex items-center justify-center py-12">
-            <div className="w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] rounded-full bg-foreground/10" />
+            <div className="relative w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] rounded-full overflow-hidden">
+              <BlurImage src="/RCA-BLACK-SQUARE.jpg" alt="RCA BLK" aspectRatio="1/1" className="rounded-full w-full h-full" />
+            </div>
           </div>
 
           {/* Bottom row */}

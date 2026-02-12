@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
 import { newsArticles } from "@/data/news";
 
@@ -22,21 +23,13 @@ export default async function NewsArticle({ params }: PageProps) {
       <SlideOutMenu />
 
       <div className="px-8 lg:px-12 pt-8">
-        <Link
-          href="/"
-          className="text-3xl font-black tracking-tight text-foreground leading-none no-underline block"
-          style={{ fontFamily: "'Arial Black', 'Arial', sans-serif" }}
-        >
-          <span className="block">RCA</span>
-          <span className="block ml-8">BLK</span>
-        </Link>
+        <Logo className="h-10" />
       </div>
 
       <article className="flex-1 px-8 lg:px-16 max-w-4xl mx-auto w-full pb-16">
         {/* Category */}
         <p
           className="text-center text-xl italic text-foreground mt-12 mb-6"
-          style={{ fontFamily: "'Georgia', serif" }}
         >
           {article.category}
         </p>
@@ -44,7 +37,6 @@ export default async function NewsArticle({ params }: PageProps) {
         {/* Title */}
         <h1
           className="text-center text-3xl md:text-4xl font-normal text-foreground mb-4"
-          style={{ fontFamily: "'Georgia', serif" }}
         >
           {article.title}
         </h1>
@@ -52,7 +44,6 @@ export default async function NewsArticle({ params }: PageProps) {
         {/* Date */}
         <p
           className="text-center text-sm text-foreground mb-10"
-          style={{ fontFamily: "'Georgia', serif" }}
         >
           {article.date}
         </p>
@@ -66,7 +57,6 @@ export default async function NewsArticle({ params }: PageProps) {
             <p
               key={i}
               className="text-lg md:text-xl leading-relaxed text-foreground"
-              style={{ fontFamily: "'Georgia', serif" }}
             >
               {paragraph}
             </p>

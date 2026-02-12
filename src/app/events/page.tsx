@@ -1,6 +1,7 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
 import { events } from "@/data/events";
 
@@ -10,10 +11,7 @@ export default function Events() {
       <SlideOutMenu />
 
       <div className="px-8 lg:px-12 pt-8">
-        <Link href="/" className="text-3xl font-black tracking-tight text-foreground leading-none no-underline block" style={{ fontFamily: "'Arial Black', 'Arial', sans-serif" }}>
-          <span className="inline">RCA </span>
-          <span className="inline">BLK</span>
-        </Link>
+        <Logo className="h-10" />
       </div>
 
       <div className="text-center py-8">
@@ -27,7 +25,6 @@ export default function Events() {
               <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" hoverOpacity sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
               <h3
                 className="mt-4 text-lg font-black text-foreground tracking-wide uppercase"
-                style={{ fontFamily: "'Arial Black', 'Arial', sans-serif" }}
               >
                 {event.name}
               </h3>

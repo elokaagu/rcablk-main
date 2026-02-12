@@ -56,7 +56,7 @@ export const events: EventData[] = [
     description: "Anthea Hamilton",
     venue: "",
     date: "",
-    image: "/assets/event-hamilton.jpg",
+    image: "/3_Website Images/anthea hamilton1.jpg",
   },
   {
     slug: "suleyman-wellings-longmore",
@@ -90,7 +90,7 @@ export const events: EventData[] = [
     description: "STELLATUNDRA | Group Exhibition | Sim-Smith Gallery",
     venue: "Sim Sim Gallery",
     date: "November 23, 2023 - December 16, 2023",
-    image: "/assets/event-kortei.jpg",
+    image: "/3_Website Images/Hilda Kortei9.jpg",
   },
   {
     slug: "bryant-van-low-jesse-akele-theresa-weber-joseph-aina",
@@ -106,7 +106,7 @@ export const events: EventData[] = [
     description: "Salon Paintings",
     venue: "Salon Paintings | Solo Exhibition | Hastings Contemporary",
     date: "November 18, 2023 - March 3, 2024",
-    image: "/assets/event-anderson.jpg",
+    image: "/3_Website Images/hurvin2.jpg",
   },
   {
     slug: "chris-ofili",
@@ -114,7 +114,7 @@ export const events: EventData[] = [
     description: "The Seven Deadly Sins",
     venue: "",
     date: "",
-    image: "/assets/event-ofili.jpg",
+    image: "/3_Website Images/Chris Ofili.jpg",
   },
   {
     slug: "david-adjaye",
@@ -122,6 +122,6 @@ export const events: EventData[] = [
     description: "Pavilion Venice Architecture Biennale",
     venue: "",
     date: "",
-    image: "/assets/event-adjaye.jpg",
+    image: "/3_Website Images/david-adjaye-triangular-timber-pavilion-venice-architecture-biennale-designboom-1200.jpg",
   },
 ];

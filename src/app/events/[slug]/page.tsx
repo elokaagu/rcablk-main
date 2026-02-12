@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
 import { events } from "@/data/events";
 
@@ -23,10 +24,7 @@ export default async function EventDetail({ params }: PageProps) {
 
       {/* RCA BLK Logo */}
       <div className="px-8 lg:px-12 pt-8">
-        <Link href="/" className="text-3xl font-black tracking-tight text-foreground leading-none no-underline block" style={{ fontFamily: "'Arial Black', 'Arial', sans-serif" }}>
-          <span className="inline">RCA </span>
-          <span className="inline">BLK</span>
-        </Link>
+        <Logo className="h-10" />
       </div>
 
       {/* Breadcrumb */}
@@ -40,7 +38,7 @@ export default async function EventDetail({ params }: PageProps) {
       <div className="text-center pb-6">
         <h2
           className="text-4xl lg:text-5xl font-black tracking-wide uppercase"
-          style={{ fontFamily: "'Arial Black', 'Arial', sans-serif", color: "hsl(24, 95%, 50%)" }}
+          style={{ color: "hsl(24, 95%, 50%)" }}
         >
           {event.name}
         </h2>

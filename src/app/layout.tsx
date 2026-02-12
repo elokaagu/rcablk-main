@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   },
 };
 
+const adobeFontKitId = process.env.NEXT_PUBLIC_ADOBE_FONT_KIT_ID || "bie4qun";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,6 +26,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {adobeFontKitId && (
+          <link
+            rel="stylesheet"
+            href={`https://use.typekit.net/${adobeFontKitId}.css`}
+          />
+        )}
+      </head>
       <body>
         <Providers>{children}</Providers>
       </body>
