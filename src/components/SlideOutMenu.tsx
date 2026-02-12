@@ -58,7 +58,7 @@ const SlideOutMenu = () => {
               key={item.label}
               href={item.href}
               onClick={() => setOpen(false)}
-              className="text-lg font-medium text-foreground hover:opacity-70 transition-opacity py-1"
+              className="text-lg font-display font-medium text-foreground hover:opacity-70 transition-opacity py-1"
             >
               {item.label}
             </Link>
@@ -68,7 +68,7 @@ const SlideOutMenu = () => {
             <a
               key={item.label}
               href={item.href}
-              className="text-lg font-medium text-foreground hover:opacity-70 transition-opacity py-1"
+              className="text-lg font-display font-medium text-foreground hover:opacity-70 transition-opacity py-1"
             >
               {item.label}
             </a>

@@ -13,7 +13,7 @@ export default function Resources() {
 
       {/* Title */}
       <div className="text-center py-8">
-        <h2 className="text-3xl font-normal text-foreground">Resources</h2>
+        <h2 className="text-3xl font-display font-normal text-foreground">Resources</h2>
       </div>
 
       {/* Content */}
@@ -57,7 +57,7 @@ export default function Resources() {
             some scholarships also offer support towards living expenses.
           </p>
 
-          <h3 className="text-2xl font-normal text-foreground pt-4">Links</h3>
+          <h3 className="text-2xl font-display font-normal text-foreground pt-4">Links</h3>
 
           <ul className="space-y-2 list-none p-0">
             <li>

@@ -12,7 +12,7 @@ export default function Support() {
       </div>
 
       <div className="text-center py-8">
-        <h2 className="text-3xl font-normal text-foreground">Support</h2>
+        <h2 className="text-3xl font-display font-normal text-foreground">Support</h2>
       </div>
 
       <main className="flex-1 max-w-3xl mx-auto px-8 pb-16">

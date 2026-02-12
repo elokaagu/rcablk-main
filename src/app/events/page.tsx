@@ -15,7 +15,7 @@ export default function Events() {
       </div>
 
       <div className="text-center py-8">
-        <h2 className="text-3xl font-normal text-foreground">Events</h2>
+        <h2 className="text-3xl font-display font-normal text-foreground">Events</h2>
       </div>
 
       <main className="flex-1 px-8 lg:px-12 pb-16">
@@ -23,9 +23,7 @@ export default function Events() {
           {events.map((event) => (
             <Link key={event.slug} href={`/events/${event.slug}`} className="flex flex-col group">
               <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" hoverOpacity sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
-              <h3
-                className="mt-4 text-lg font-black text-foreground tracking-wide uppercase"
-              >
+              <h3 className="mt-4 text-lg font-display font-black text-foreground tracking-wide uppercase">
                 {event.name}
               </h3>
               <p className="mt-1 text-sm italic text-foreground">{event.description}</p>

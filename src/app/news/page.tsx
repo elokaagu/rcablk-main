@@ -16,7 +16,7 @@ export default function News() {
 
       {/* Title */}
       <div className="text-center py-8">
-        <h2 className="text-3xl font-normal text-foreground">News</h2>
+        <h2 className="text-3xl font-display font-normal text-foreground">News</h2>
       </div>
 
       {/* News Grid - staggered 2-column */}
@@ -30,7 +30,7 @@ export default function News() {
             >
               <BlurImage src={item.image} alt={item.title} aspectRatio="4/5" sizes="(max-width: 768px) 100vw, 50vw" />
               <p className="mt-3 text-sm text-foreground">{item.date}</p>
-              <h3 className="text-xl font-normal text-foreground">{item.title}</h3>
+              <h3 className="text-xl font-display font-normal text-foreground uppercase tracking-wide">{item.title}</h3>
             </Link>
           ))}
         </div>

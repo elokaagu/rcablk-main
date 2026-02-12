@@ -49,7 +49,7 @@ const RCALetterforms = () => {
                   />
                   {isHovered && (
                     <div className="absolute inset-0 bg-white/90 flex items-center justify-center">
-                      <span className="text-black text-sm font-medium uppercase tracking-wider">
+                      <span className="text-black text-sm font-display font-medium uppercase tracking-wider">
                         {letter.label}
                       </span>
                     </div>

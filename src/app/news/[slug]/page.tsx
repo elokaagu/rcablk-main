@@ -28,16 +28,12 @@ export default async function NewsArticle({ params }: PageProps) {
 
       <article className="flex-1 px-8 lg:px-16 max-w-4xl mx-auto w-full pb-16">
         {/* Category */}
-        <p
-          className="text-center text-xl italic text-foreground mt-12 mb-6"
-        >
+        <p className="text-center text-xl italic text-foreground mt-12 mb-6">
           {article.category}
         </p>
 
         {/* Title */}
-        <h1
-          className="text-center text-3xl md:text-4xl font-normal text-foreground mb-4"
-        >
+        <h1 className="text-center text-3xl md:text-4xl font-display font-normal text-foreground mb-4 uppercase tracking-wide">
           {article.title}
         </h1>
 

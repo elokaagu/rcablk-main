@@ -49,7 +49,7 @@ export default function Alumni() {
       </div>
 
       <div className="text-center py-8">
-        <h2 className="text-3xl font-normal text-foreground">Alumni</h2>
+        <h2 className="text-3xl font-display font-normal text-foreground">Alumni</h2>
       </div>
 
       <main className="flex-1 px-8 lg:px-16 pb-16 space-y-16">

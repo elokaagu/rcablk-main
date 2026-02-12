@@ -29,7 +29,7 @@ export default async function EventDetail({ params }: PageProps) {
 
       {/* Breadcrumb */}
       <div className="text-center py-6">
-        <Link href="/events" className="text-2xl font-normal text-foreground hover:opacity-70 transition-opacity">
+        <Link href="/events" className="text-2xl font-display font-normal text-foreground hover:opacity-70 transition-opacity">
           Events
         </Link>
       </div>
@@ -37,7 +37,7 @@ export default async function EventDetail({ params }: PageProps) {
       {/* Event Name */}
       <div className="text-center pb-6">
         <h2
-          className="text-4xl lg:text-5xl font-black tracking-wide uppercase"
+          className="text-4xl lg:text-5xl font-display font-black tracking-wide uppercase"
           style={{ color: "hsl(24, 95%, 50%)" }}
         >
           {event.name}

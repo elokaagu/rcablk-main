@@ -12,7 +12,7 @@ export default function Accessibility() {
       </div>
 
       <div className="text-center py-8">
-        <h2 className="text-2xl font-normal text-foreground">RCA BLK Accessibility Statement</h2>
+        <h2 className="text-2xl font-display font-normal text-foreground">RCA BLK Accessibility Statement</h2>
       </div>
 
       <main className="flex-1 max-w-3xl mx-auto px-8 pb-16">

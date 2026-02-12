@@ -14,8 +14,10 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["RCABLK", "jubilat", "Georgia", "serif"],
-        serif: ["RCABLK", "jubilat", "Georgia", "serif"],
+        display: ["RCABLK", "sans-serif"],
+        body: ["jubilat", "Georgia", "serif"],
+        sans: ["jubilat", "Georgia", "serif"],
+        serif: ["jubilat", "Georgia", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",

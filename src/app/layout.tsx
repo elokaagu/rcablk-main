@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
 };
 
-const adobeFontKitId = process.env.NEXT_PUBLIC_ADOBE_FONT_KIT_ID || "bie4qun";
+const adobeFontKitId = process.env.NEXT_PUBLIC_ADOBE_FONT_KIT_ID || "zmg6wro";
 
 export default function RootLayout({
   children,
