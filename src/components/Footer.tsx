@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const Footer = () => {
   const columns = [
@@ -58,8 +59,13 @@ const Footer = () => {
           </div>
         ))}
         <div className="flex flex-col items-end justify-start gap-1">
-          <span className="text-2xl font-bold">♛</span>
-          <span className="text-xs font-semibold">Royal College of Art</span>
+          <Image
+            src="/rca_logo.png"
+            alt="Royal College of Art"
+            width={140}
+            height={40}
+            className="h-8 w-auto object-contain"
+          />
         </div>
       </div>
     </footer>

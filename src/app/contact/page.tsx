@@ -17,7 +17,7 @@ export default function Contact() {
         <div className="px-8 lg:px-0 pt-8 lg:pt-8 flex flex-col">
           {/* Address & links */}
           <div className="space-y-1 text-foreground text-lg">
-            <p className="font-display font-bold">RCA BLK</p>
+            <p className="font-display font-bold tracking-display-tight">RCA BLK</p>
             <p>Royal College of Art</p>
             <p>Kensington Gore</p>
             <p>South Kensington</p>

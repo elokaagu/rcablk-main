@@ -19,6 +19,9 @@ export default {
         sans: ["jubilat", "Georgia", "serif"],
         serif: ["jubilat", "Georgia", "serif"],
       },
+      letterSpacing: {
+        "display-tight": "-0.04em",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
