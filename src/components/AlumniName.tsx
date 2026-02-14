@@ -25,20 +25,16 @@ export function AlumniName({ name, snapshot, link }: AlumniNameProps) {
     setHovered(true);
   };
 
-  const Wrapper = link ? Link : "span";
-  const wrapperProps = link
-    ? { href: link, target: "_blank", rel: "noopener noreferrer" }
-    : {};
+  const sharedProps = {
+    className: "inline-block cursor-default",
+    onMouseEnter: handleEnter,
+    onMouseLeave: () => setHovered(false),
+    onTouchStart: handleEnter,
+    onTouchEnd: () => setTimeout(() => setHovered(false), 300),
+  };
 
-  return (
-    <Wrapper
-      {...wrapperProps}
-      className="inline-block cursor-default"
-      onMouseEnter={handleEnter}
-      onMouseLeave={() => setHovered(false)}
-      onTouchStart={handleEnter}
-      onTouchEnd={() => setTimeout(() => setHovered(false), 300)}
-    >
+  const content = (
+    <>
       <span
         className={`text-lg text-foreground ${link ? "underline underline-offset-2 hover:opacity-80" : ""}`}
       >
@@ -66,6 +62,15 @@ export function AlumniName({ name, snapshot, link }: AlumniNameProps) {
           )}
         </span>
       )}
-    </Wrapper>
+    </>
   );
+
+  if (link) {
+    return (
+      <Link href={link} target="_blank" rel="noopener noreferrer" {...sharedProps}>
+        {content}
+      </Link>
+    );
+  }
+  return <span {...sharedProps}>{content}</span>;
 }

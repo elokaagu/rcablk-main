@@ -69,19 +69,21 @@ const RCALetterforms = () => {
                     {isHovered && (
                       <div
                         className="absolute inset-0 transition-opacity duration-300 pointer-events-none"
-                        style={{
-                          background: `radial-gradient(ellipse 35% 45% at 50% 40%, rgba(255,255,255,0.35) 0%, transparent 70%)`,
-                          WebkitMaskImage: `url(${letter.svgHover || letter.svg})`,
-                          maskImage: `url(${letter.svgHover || letter.svg})`,
-                          WebkitMaskSize: "contain",
-                          maskSize: "contain",
-                          WebkitMaskPosition: "center",
-                          maskPosition: "center",
-                          WebkitMaskRepeat: "no-repeat",
-                          maskRepeat: "no-repeat",
-                          WebkitMaskType: "alpha",
-                          maskType: "alpha",
-                        }}
+                        style={
+                          {
+                            background: `radial-gradient(ellipse 35% 45% at 50% 40%, rgba(255,255,255,0.35) 0%, transparent 70%)`,
+                            WebkitMaskImage: `url(${letter.svgHover || letter.svg})`,
+                            maskImage: `url(${letter.svgHover || letter.svg})`,
+                            WebkitMaskSize: "contain",
+                            maskSize: "contain",
+                            WebkitMaskPosition: "center",
+                            maskPosition: "center",
+                            WebkitMaskRepeat: "no-repeat",
+                            maskRepeat: "no-repeat",
+                            WebkitMaskType: "alpha",
+                            maskType: "alpha",
+                          } as React.CSSProperties
+                        }
                       />
                     )}
                   </div>
