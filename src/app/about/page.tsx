@@ -5,10 +5,20 @@ import { BlurImage } from "@/components/BlurImage";
 
 export default function About() {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div
+      className="min-h-screen flex flex-col"
+      style={{
+        background: "linear-gradient(to right, white 0%, white 50%, hsl(207, 70%, 88%) 50%, hsl(207, 70%, 88%) 100%)",
+      }}
+    >
       <SlideOutMenu />
 
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen">
+      {/* RCA BLK logo - fixed at top, centered on white/blue boundary */}
+      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-30">
+        <Logo className="h-10 lg:h-12" />
+      </div>
+
+      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen pt-20">
         {/* Left column - Text */}
         <div className="px-8 lg:px-16 py-8 lg:py-12 bg-white">
           <h2 className="text-3xl font-display font-normal text-foreground mb-6">About Us</h2>
@@ -40,9 +50,6 @@ export default function About() {
 
         {/* Right column - Images (blue from top) */}
         <div className="px-8 lg:px-16 py-8 lg:py-12 flex flex-col gap-8 items-center pt-8" style={{ backgroundColor: "hsl(207, 70%, 88%)" }}>
-          <div className="flex justify-center pt-4 lg:pt-0">
-            <Logo className="h-12" />
-          </div>
           <div className="w-full max-w-sm">
             <BlurImage src="/3_Website Images/Chris Ofili.jpg" alt="Chris Ofili" aspectRatio="3/4" />
             <p className="mt-3 text-xl font-display font-black text-foreground tracking-wide uppercase">

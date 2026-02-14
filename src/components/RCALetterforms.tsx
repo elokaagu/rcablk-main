@@ -5,16 +5,13 @@ import Link from "next/link";
 import Image from "next/image";
 
 const letters = [
-  { id: "r", label: "RESOURCES", href: "/resources", row: 0, col: 0, svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg" },
-  { id: "c", label: "EVENTS", href: "/events", row: 0, col: 1, svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg" },
-  { id: "a", label: "ABOUT", href: "/about", row: 0, col: 2, svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg" },
-  { id: "b", label: "CONTACT", href: "/contact", row: 1, col: 0, svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg" },
-  { id: "l", label: "NEWS", href: "/news", row: 1, col: 1, svg: "/SVG Letterforms/RCA BLK–Letterforms-L.svg" },
-  { id: "k", label: "ALUMNI", href: "/alumni", row: 1, col: 2, svg: "/SVG Letterforms/RCA BLK–Letterforms-K.svg" },
+  { id: "r", label: "RESOURCES", href: "/resources", row: 0, col: 0, svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg", svgHover: "/SVG Letterforms/RCA BLK–Letterforms-R-White.svg" },
+  { id: "c", label: "EVENTS", href: "/events", row: 0, col: 1, svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg", svgHover: null },
+  { id: "a", label: "ABOUT", href: "/about", row: 0, col: 2, svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg", svgHover: null },
+  { id: "b", label: "CONTACT", href: "/contact", row: 1, col: 0, svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg", svgHover: null },
+  { id: "l", label: "NEWS", href: "/news", row: 1, col: 1, svg: "/SVG Letterforms/RCA BLK–Letterforms-L.svg", svgHover: null },
+  { id: "k", label: "ALUMNI", href: "/alumni", row: 1, col: 2, svg: "/SVG Letterforms/RCA BLK–Letterforms-K.svg", svgHover: null },
 ];
-
-const cellSize = 200;
-const gap = 10;
 
 const RCALetterforms = () => {
   const [hovered, setHovered] = useState<string | null>(null);
@@ -40,20 +37,22 @@ const RCALetterforms = () => {
                 onMouseEnter={() => setHovered(letter.id)}
                 onMouseLeave={() => setHovered(null)}
               >
-                <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-background">
-                  <Image
-                    src={letter.svg}
-                    alt={letter.label}
-                    fill
-                    className="object-contain p-2 transition-all duration-300 group-hover:opacity-90"
-                  />
+                <div
+                  className={`relative w-full h-full overflow-hidden transition-colors duration-300 ${isHovered ? "bg-accent" : "bg-background"}`}
+                >
                   {isHovered && (
-                    <div className="absolute inset-0 bg-white/95 flex items-center justify-center">
-                      <span className="text-black text-base font-display font-medium tracking-display-tight">
-                        {letter.label}
-                      </span>
-                    </div>
+                    <span className="absolute top-3 left-0 right-0 z-10 text-center text-black text-sm font-display font-medium tracking-display-tight uppercase">
+                      {letter.label}
+                    </span>
                   )}
+                  <div className={`absolute inset-0 p-2 ${isHovered ? "pt-10" : ""}`}>
+                    <Image
+                      src={isHovered && letter.svgHover ? letter.svgHover : letter.svg}
+                      alt={letter.label}
+                      fill
+                      className={`object-contain transition-all duration-300 ${isHovered && !letter.svgHover ? "brightness-0 invert" : ""}`}
+                    />
+                  </div>
                 </div>
               </Link>
             );
