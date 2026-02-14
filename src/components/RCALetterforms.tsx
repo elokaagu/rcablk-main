@@ -15,10 +15,11 @@ const letters = [
 
 const RCALetterforms = () => {
   const [hovered, setHovered] = useState<string | null>(null);
+  const [loadedSrcs, setLoadedSrcs] = useState<Record<string, boolean>>({});
 
   return (
-    <div className="flex items-center justify-center px-8 lg:px-16 w-full relative">
-      <div className="w-full relative" style={{ maxWidth: "min(90vw, 80vh * 1.51)" }}>
+    <div className="flex items-center justify-center px-4 sm:px-8 lg:px-16 w-full relative max-w-full min-w-0">
+      <div className="w-full relative max-w-full" style={{ maxWidth: "min(90vw, min(80vh, 100vw - 2rem) * 1.51)" }}>
         <div
           className="grid gap-0.5"
           style={{
@@ -33,25 +34,54 @@ const RCALetterforms = () => {
               <Link
                 key={letter.id}
                 href={letter.href}
-                className="relative aspect-square group"
+                className="relative aspect-square group min-h-[44px] min-w-[44px] touch-manipulation"
                 onMouseEnter={() => setHovered(letter.id)}
                 onMouseLeave={() => setHovered(null)}
+                onTouchStart={() => setHovered(letter.id)}
+                onTouchEnd={() => setHovered(null)}
+                onTouchCancel={() => setHovered(null)}
               >
                 <div
                   className={`relative w-full h-full overflow-hidden transition-colors duration-300 ${isHovered ? "bg-accent" : "bg-background"}`}
                 >
                   {isHovered && (
-                    <span className="absolute top-3 left-0 right-0 z-10 text-center text-black text-sm font-display font-medium tracking-display-tight uppercase">
+                    <span className="absolute top-2 sm:top-3 left-0 right-0 z-10 text-center text-black text-xs sm:text-sm font-display font-medium tracking-display-tight uppercase px-1">
                       {letter.label}
                     </span>
                   )}
                   <div className={`absolute inset-0 p-2 ${isHovered ? "pt-10" : ""}`}>
-                    <Image
-                      src={isHovered && letter.svgHover ? letter.svgHover : letter.svg}
-                      alt={letter.label}
-                      fill
-                      className={`object-contain transition-all duration-300 ${isHovered && !letter.svgHover ? "brightness-0 invert" : ""}`}
-                    />
+                    {(() => {
+                      const src = isHovered && letter.svgHover ? letter.svgHover : letter.svg;
+                      return (
+                        <Image
+                          src={src}
+                          alt={letter.label}
+                          fill
+                          loading="lazy"
+                          onLoad={() => setLoadedSrcs((p) => ({ ...p, [src]: true }))}
+                          className={`object-contain transition-all duration-700 ease-out ${
+                            isHovered && !letter.svgHover ? "brightness-0 invert" : ""
+                          } ${loadedSrcs[src] ? "opacity-100 blur-0" : "opacity-60 blur-md"}`}
+                        />
+                      );
+                    })()}
+                    {/* Gradient highlight - clipped to letter shape, soft fade */}
+                    {isHovered && (
+                      <div
+                        className="absolute inset-0 transition-opacity duration-300"
+                        style={{
+                          background: "radial-gradient(circle at 50% 35%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.06) 50%, transparent 80%)",
+                          maskImage: `url(${letter.svgHover || letter.svg})`,
+                          WebkitMaskImage: `url(${letter.svgHover || letter.svg})`,
+                          maskSize: "contain",
+                          maskPosition: "center",
+                          maskRepeat: "no-repeat",
+                          WebkitMaskSize: "contain",
+                          WebkitMaskPosition: "center",
+                          WebkitMaskRepeat: "no-repeat",
+                        }}
+                      />
+                    )}
                   </div>
                 </div>
               </Link>

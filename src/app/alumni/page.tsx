@@ -28,7 +28,7 @@ const NameList = ({ names }: { names: string[] }) => {
   const col1 = names.filter((_, i) => i % 2 === 0);
   const col2 = names.filter((_, i) => i % 2 === 1);
   return (
-    <div className="grid grid-cols-2 gap-x-16 gap-y-1">
+    <div className="grid grid-cols-2 gap-x-4 sm:gap-x-16 gap-y-1">
       <div className="flex flex-col gap-1">
         {col1.map((n, i) => <p key={i} className="text-base text-foreground">{n}</p>)}
       </div>
@@ -41,18 +41,18 @@ const NameList = ({ names }: { names: string[] }) => {
 
 export default function Alumni() {
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "hsl(207, 70%, 85%)" }}>
+    <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(207, 70%, 85%)" }}>
       <SlideOutMenu />
 
-      <div className="px-8 lg:px-12 pt-8">
+      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
         <Logo className="h-10" />
       </div>
 
       <div className="text-center py-8">
-        <h2 className="text-3xl font-display font-normal text-foreground">Alumni</h2>
+        <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">Alumni</h2>
       </div>
 
-      <main className="flex-1 px-8 lg:px-16 pb-16 space-y-16">
+      <main className="flex-1 px-4 sm:px-8 lg:px-16 pb-12 sm:pb-16 space-y-12 sm:space-y-16">
         {/* Founding Members */}
         <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-8">
           <h3 className="text-lg italic text-foreground font-medium">Founding Members</h3>

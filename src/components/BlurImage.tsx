@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 
 // Minimal gray blur placeholder
@@ -25,6 +26,8 @@ export function BlurImage({
   priority = false,
   hoverOpacity = false,
 }: BlurImageProps) {
+  const [loaded, setLoaded] = useState(false);
+
   const aspectClass =
     aspectRatio === "4/3"
       ? "aspect-[4/3]"
@@ -41,12 +44,16 @@ export function BlurImage({
       <Image
         src={src}
         alt={alt}
-        className={`object-cover transition-opacity duration-500 ${hoverOpacity ? "group-hover:opacity-80" : ""}`}
         fill
         sizes={sizes}
+        loading={priority ? "eager" : "lazy"}
         placeholder="blur"
         blurDataURL={BLUR_DATA_URL}
         priority={priority}
+        onLoad={() => setLoaded(true)}
+        className={`object-cover transition-all duration-700 ease-out ${
+          loaded ? "opacity-100 blur-0" : "opacity-60 blur-md"
+        } ${hoverOpacity ? "group-hover:opacity-80" : ""}`}
       />
     </div>
   );

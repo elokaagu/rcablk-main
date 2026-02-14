@@ -4,21 +4,21 @@ import { Logo } from "@/components/Logo";
 
 export default function Resources() {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
       <SlideOutMenu />
 
-      <div className="px-8 lg:px-12 pt-8">
+      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
         <Logo className="h-10" />
       </div>
 
       {/* Title */}
       <div className="text-center py-8">
-        <h2 className="text-3xl font-display font-normal text-foreground">Resources</h2>
+        <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">Resources</h2>
       </div>
 
       {/* Content */}
-      <main className="flex-1 max-w-3xl mx-auto px-8 pb-16">
-        <div className="space-y-8 text-foreground text-lg leading-relaxed">
+      <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-8 pb-12 sm:pb-16 w-full">
+        <div className="space-y-6 sm:space-y-8 text-foreground text-base sm:text-lg leading-relaxed">
           <p>
             The RCA is committed to celebrating diversity, eliminating discrimination and
             promoting equality of opportunity to all.

@@ -61,6 +61,8 @@
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
@@ -68,5 +70,7 @@
     font-family: jubilat, Georgia, serif;
     margin: 0;
     padding: 0;
+    overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
   }
 }

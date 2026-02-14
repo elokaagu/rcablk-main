@@ -4,17 +4,17 @@ import { BlurImage } from "@/components/BlurImage";
 
 export default function Contact() {
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "hsl(4, 70%, 65%)" }}>
+    <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(4, 70%, 65%)" }}>
       <SlideOutMenu />
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[250px_1fr] min-h-screen">
         {/* Left - Logo */}
-        <div className="px-8 pt-8">
+        <div className="px-4 sm:px-8 pt-6 sm:pt-8">
           <Logo className="h-10" />
         </div>
 
         {/* Main content */}
-        <div className="px-8 lg:px-0 pt-8 lg:pt-8 flex flex-col">
+        <div className="px-4 sm:px-8 lg:px-0 pt-6 sm:pt-8 flex flex-col">
           {/* Address & links */}
           <div className="space-y-1 text-foreground text-lg">
             <p className="font-display font-bold tracking-display-tight">RCA BLK</p>
@@ -29,14 +29,14 @@ export default function Contact() {
           </div>
 
           {/* Central circle image */}
-          <div className="flex-1 flex items-center justify-center py-12">
-            <div className="relative w-[400px] h-[400px] lg:w-[500px] lg:h-[500px] rounded-full overflow-hidden">
+          <div className="flex-1 flex items-center justify-center py-8 sm:py-12">
+            <div className="relative w-full max-w-[min(400px,85vw)] aspect-square rounded-full overflow-hidden">
               <BlurImage src="/RCA-BLACK-SQUARE.jpg" alt="RCA BLK" aspectRatio="1/1" className="rounded-full w-full h-full" />
             </div>
           </div>
 
           {/* Bottom row */}
-          <div className="flex justify-between items-end pb-8 pr-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-8 pr-0 sm:pr-8">
             <div className="space-y-1 text-foreground text-base">
               <p>Email Address</p>
               <p className="underline cursor-pointer hover:opacity-70 transition-opacity">Sign Up</p>

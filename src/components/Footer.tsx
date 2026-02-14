@@ -1,7 +1,11 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 const Footer = () => {
+  const [logoLoaded, setLogoLoaded] = useState(false);
   const columns = [
     {
       items: ["Royal College of Art", "Kensington Gore", "London, SW7 2EU"],
@@ -29,8 +33,8 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-secondary text-secondary-foreground px-8 py-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-6 text-sm">
+    <footer className="bg-secondary text-secondary-foreground px-4 sm:px-8 py-8">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 text-sm">
         {columns.map((col, i) => (
           <div key={i} className="flex flex-col gap-2">
             {col.items.map((item, j) =>
@@ -64,7 +68,11 @@ const Footer = () => {
             alt="Royal College of Art"
             width={140}
             height={40}
-            className="h-8 w-auto object-contain"
+            loading="lazy"
+            onLoad={() => setLogoLoaded(true)}
+            className={`h-8 w-auto object-contain transition-all duration-700 ease-out ${
+              logoLoaded ? "opacity-100 blur-0" : "opacity-60 blur-md"
+            }`}
           />
         </div>
       </div>

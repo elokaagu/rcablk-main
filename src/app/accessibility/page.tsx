@@ -4,18 +4,18 @@ import { Logo } from "@/components/Logo";
 
 export default function Accessibility() {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
       <SlideOutMenu />
 
-      <div className="px-8 lg:px-12 pt-8">
+      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
         <Logo className="h-10" />
       </div>
 
       <div className="text-center py-8">
-        <h2 className="text-2xl font-display font-normal text-foreground">RCA BLK Accessibility Statement</h2>
+        <h2 className="text-xl sm:text-2xl font-display font-normal text-foreground px-4">RCA BLK Accessibility Statement</h2>
       </div>
 
-      <main className="flex-1 max-w-3xl mx-auto px-8 pb-16">
+      <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-8 pb-12 sm:pb-16 w-full">
         <div className="space-y-8 text-foreground text-lg leading-relaxed">
           <p>
             This website is run by the Royal College of Art and this statement applies to

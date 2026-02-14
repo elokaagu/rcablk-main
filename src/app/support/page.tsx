@@ -4,19 +4,19 @@ import { Logo } from "@/components/Logo";
 
 export default function Support() {
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "hsl(18, 70%, 65%)" }}>
+    <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(18, 70%, 65%)" }}>
       <SlideOutMenu />
 
-      <div className="px-8 lg:px-12 pt-8">
+      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
         <Logo className="h-10" />
       </div>
 
       <div className="text-center py-8">
-        <h2 className="text-3xl font-display font-normal text-foreground">Support</h2>
+        <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">Support</h2>
       </div>
 
-      <main className="flex-1 max-w-3xl mx-auto px-8 pb-16">
-        <div className="space-y-8 text-foreground text-lg leading-relaxed">
+      <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-8 pb-12 sm:pb-16 w-full">
+        <div className="space-y-6 sm:space-y-8 text-foreground text-base sm:text-lg leading-relaxed">
           <p>
             RCA BLK&apos;s supporters play a vital role in sustaining our key activities, from the
             commissioning of major new exhibitions and events, and the development of our

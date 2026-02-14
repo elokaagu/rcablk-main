@@ -19,11 +19,11 @@ export default async function EventDetail({ params }: PageProps) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ backgroundColor: "hsl(140, 30%, 70%)" }}>
+    <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(140, 30%, 70%)" }}>
       <SlideOutMenu />
 
       {/* RCA BLK Logo */}
-      <div className="px-8 lg:px-12 pt-8">
+      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
         <Logo className="h-10" />
       </div>
 
@@ -37,7 +37,7 @@ export default async function EventDetail({ params }: PageProps) {
       {/* Event Name */}
       <div className="text-center pb-6">
         <h2
-          className="text-4xl lg:text-5xl font-display font-black tracking-wide uppercase"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-black tracking-wide uppercase px-4"
           style={{ color: "hsl(24, 95%, 50%)" }}
         >
           {event.name}
@@ -45,7 +45,7 @@ export default async function EventDetail({ params }: PageProps) {
       </div>
 
       {/* Event Image */}
-      <div className="flex justify-center px-8 pb-6">
+      <div className="flex justify-center px-4 sm:px-8 pb-6">
         <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" className="max-w-2xl mx-auto" sizes="(max-width: 768px) 100vw, 672px" />
       </div>
 
@@ -55,7 +55,7 @@ export default async function EventDetail({ params }: PageProps) {
       </div>
 
       {/* Body */}
-      <div className="max-w-2xl mx-auto px-8 pb-16 text-center">
+      <div className="max-w-2xl mx-auto px-4 sm:px-8 pb-12 sm:pb-16 text-center">
         <p className="text-lg leading-relaxed text-foreground">{event.body}</p>
       </div>
 

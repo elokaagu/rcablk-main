@@ -6,7 +6,7 @@ import { BlurImage } from "@/components/BlurImage";
 export default function About() {
   return (
     <div
-      className="min-h-screen flex flex-col"
+      className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0"
       style={{
         background: "linear-gradient(to right, white 0%, white 50%, hsl(207, 70%, 88%) 50%, hsl(207, 70%, 88%) 100%)",
       }}
@@ -14,14 +14,17 @@ export default function About() {
       <SlideOutMenu />
 
       {/* RCA BLK logo - fixed at top, centered on white/blue boundary */}
-      <div className="fixed top-6 left-1/2 -translate-x-1/2 z-30">
+      <div
+        className="fixed left-1/2 -translate-x-1/2 z-30"
+        style={{ top: "max(1.5rem, env(safe-area-inset-top))" }}
+      >
         <Logo className="h-10 lg:h-12" />
       </div>
 
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen pt-20">
+      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen pt-16 sm:pt-20">
         {/* Left column - Text */}
-        <div className="px-8 lg:px-16 py-8 lg:py-12 bg-white">
-          <h2 className="text-3xl font-display font-normal text-foreground mb-6">About Us</h2>
+        <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 bg-white">
+          <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground mb-4 sm:mb-6">About Us</h2>
 
           <div className="space-y-6 text-foreground text-base leading-relaxed max-w-xl">
             <p>
@@ -49,7 +52,7 @@ export default function About() {
         </div>
 
         {/* Right column - Images (blue from top) */}
-        <div className="px-8 lg:px-16 py-8 lg:py-12 flex flex-col gap-8 items-center pt-8" style={{ backgroundColor: "hsl(207, 70%, 88%)" }}>
+        <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 flex flex-col gap-6 sm:gap-8 items-center pt-6 sm:pt-8" style={{ backgroundColor: "hsl(207, 70%, 88%)" }}>
           <div className="w-full max-w-sm">
             <BlurImage src="/3_Website Images/Chris Ofili.jpg" alt="Chris Ofili" aspectRatio="3/4" />
             <p className="mt-3 text-xl font-display font-black text-foreground tracking-wide uppercase">

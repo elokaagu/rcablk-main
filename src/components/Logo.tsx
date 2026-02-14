@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -7,6 +10,8 @@ interface LogoProps {
 }
 
 export function Logo({ className = "", variant = "black" }: LogoProps) {
+  const [loaded, setLoaded] = useState(false);
+
   const logotypePath =
     variant === "white"
       ? "/1_RGB Logotype/Stepped Logotype/RCA BLK–Logotype-White.png"
@@ -19,7 +24,11 @@ export function Logo({ className = "", variant = "black" }: LogoProps) {
         alt="RCA BLK"
         width={200}
         height={60}
-        className="h-full w-auto object-contain"
+        loading="lazy"
+        onLoad={() => setLoaded(true)}
+        className={`h-full w-auto object-contain transition-all duration-700 ease-out ${
+          loaded ? "opacity-100 blur-0" : "opacity-60 blur-md"
+        }`}
       />
     </Link>
   );

@@ -7,21 +7,21 @@ import { newsArticles } from "@/data/news";
 
 export default function News() {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
       <SlideOutMenu />
 
-      <div className="px-8 lg:px-12 pt-8">
+      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
         <Logo className="h-10" />
       </div>
 
       {/* Title */}
       <div className="text-center py-8">
-        <h2 className="text-3xl font-display font-normal text-foreground">News</h2>
+        <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">News</h2>
       </div>
 
       {/* News Grid - staggered 2-column */}
-      <main className="flex-1 px-8 lg:px-16 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
+      <main className="flex-1 px-4 sm:px-8 lg:px-16 pb-12 sm:pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-12 gap-y-10 sm:gap-y-16">
           {newsArticles.map((item, i) => (
             <Link
               key={item.slug}

@@ -7,6 +7,8 @@ import Image from "next/image";
 
 const SlideOutMenu = () => {
   const [open, setOpen] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const [menuIconLoaded, setMenuIconLoaded] = useState(false);
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -21,17 +23,28 @@ const SlideOutMenu = () => {
   ];
 
   const linkClass =
-    "text-lg font-display font-medium text-black hover:opacity-70 transition-opacity py-2 block uppercase tracking-display-tight";
+    "text-lg font-display font-medium text-black hover:opacity-70 transition-opacity py-3 min-h-[44px] flex items-center touch-manipulation block uppercase tracking-display-tight";
 
   return (
     <>
       {/* Toggle button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed top-4 right-4 z-50 text-foreground hover:opacity-70 transition-opacity flex items-center justify-center"
+        className="fixed z-50 text-foreground hover:opacity-70 transition-opacity flex items-center justify-center w-12 h-12 min-w-[44px] min-h-[44px]"
+        style={{ top: "max(1rem, env(safe-area-inset-top))", right: "max(1rem, env(safe-area-inset-right))" }}
         aria-label="Open menu"
       >
-        <Image src="/RCA BLK–MENU ICON.svg" alt="Menu" width={32} height={32} />
+        <Image
+          src="/RCA BLK–MENU ICON.svg"
+          alt="Menu"
+          width={32}
+          height={32}
+          loading="lazy"
+          onLoad={() => setMenuIconLoaded(true)}
+          className={`flex-shrink-0 transition-all duration-700 ease-out ${
+            menuIconLoaded ? "opacity-100 blur-0" : "opacity-60 blur-sm"
+          }`}
+        />
       </button>
 
       {/* Overlay */}
@@ -42,27 +55,21 @@ const SlideOutMenu = () => {
         />
       )}
 
-      {/* Slide-out panel: two columns - gold strip + orange panel */}
+      {/* Slide-out panel */}
       <div
-        className={`fixed top-0 right-0 h-full z-40 transform transition-transform duration-300 ease-in-out flex ${
+        className={`fixed top-0 right-0 h-full z-40 transform transition-transform duration-300 ease-in-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        {/* Left: narrow golden-yellow strip */}
         <div
-          className="w-12 sm:w-16 flex-shrink-0"
-          style={{ backgroundColor: "#F3A721" }}
-        />
-
-        {/* Right: main orange panel with content */}
-        <div
-          className="relative w-64 sm:w-80 flex flex-col"
-          style={{ backgroundColor: "#D95E26" }}
+          className="relative w-[min(85vw,20rem)] sm:w-80 flex flex-col"
+          style={{ backgroundColor: "#D95E26", paddingRight: "env(safe-area-inset-right)", paddingBottom: "env(safe-area-inset-bottom)" }}
         >
           {/* Close button - top right */}
           <button
             onClick={() => setOpen(false)}
-            className="absolute top-6 right-6 text-black hover:opacity-70 transition-opacity p-1"
+            className="absolute text-black hover:opacity-70 transition-opacity p-3 min-w-[44px] min-h-[44px] flex items-center justify-center"
+            style={{ top: "max(1.5rem, env(safe-area-inset-top))", right: "max(1.5rem, env(safe-area-inset-right))" }}
             aria-label="Close menu"
           >
             <X size={28} strokeWidth={2.5} />
@@ -94,16 +101,19 @@ const SlideOutMenu = () => {
             )}
           </nav>
 
-          {/* Footer: RCA logo + text */}
-          <div className="px-8 pb-8 flex items-center gap-3">
+          {/* Footer: RCA logo */}
+          <div className="px-8 pb-8">
             <Image
               src="/rca_logo.png"
-              alt=""
+              alt="Royal College of Art"
               width={120}
               height={120}
-              className="h-16 w-auto object-contain opacity-90"
+              loading="lazy"
+              onLoad={() => setLogoLoaded(true)}
+              className={`h-16 w-auto object-contain transition-all duration-700 ease-out ${
+                logoLoaded ? "opacity-90 blur-0" : "opacity-50 blur-md"
+              }`}
             />
-            <span className="text-black text-sm font-body">Royal College of Art</span>
           </div>
         </div>
       </div>
