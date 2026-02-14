@@ -4,6 +4,7 @@ export interface NewsArticle {
   category: string;
   date: string;
   image: string;
+  gallery?: string[];
   body: string[];
 }
 
@@ -14,6 +15,15 @@ export const newsArticles: NewsArticle[] = [
     category: "Announcement",
     date: "March 26, 2025",
     image: "/assets/news-tintype-archive.jpg",
+    gallery: [
+      "/assets/news-tintype-archive.jpg",
+      "/3_Website Images/Chris Ofili.jpg",
+      "/3_Website Images/magdalene odundo2.jpeg",
+      "/3_Website Images/Hilda Kortei9.jpg",
+      "/3_Website Images/hurvin2.jpg",
+      "/3_Website Images/anthea hamilton1.jpg",
+      "/3_Website Images/FrankBowling_CreditMathildeAgius_725px.jpg",
+    ],
     body: [
       "The Tintype Archive Black Skin on Tin x RCA BLK by 2024 graduate Shayla Marshall @shaylamonii",
       "Supported through The RCA BLK Research Hub: The Tintype archive offers a unique opportunity to create an archival collection of work.",

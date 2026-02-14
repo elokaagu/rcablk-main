@@ -45,10 +45,10 @@ function LetterCell({
       {/* Letter image */}
       <div className="absolute inset-0 flex items-center justify-center p-0.5 sm:p-1">
         <div className="relative w-full h-full flex items-center justify-center">
-          {/* Label: centered inside the letter (on hover) */}
+          {/* Label: scaled to fit inside each letter (on hover) */}
           {showLabel && (
             <span
-              className="absolute inset-0 flex items-center justify-center z-10 font-serif font-medium text-black text-xs sm:text-sm text-center px-2 leading-tight"
+              className="absolute inset-0 flex items-center justify-center z-10 font-serif font-bold text-black text-base sm:text-lg text-center leading-tight whitespace-nowrap"
               style={{
                 maskImage: `url('${letter.svg}')`,
                 maskSize: "contain",
@@ -58,6 +58,7 @@ function LetterCell({
                 WebkitMaskSize: "contain",
                 WebkitMaskPosition: "center",
                 WebkitMaskRepeat: "no-repeat",
+                transform: "scale(0.5)",
               } as React.CSSProperties}
             >
               {letter.label}

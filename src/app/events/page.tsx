@@ -33,17 +33,20 @@ export default function Events() {
 
       <main className="flex-1 px-6 sm:px-10 lg:px-12 max-w-7xl mx-auto w-full pb-12 sm:pb-16">
         <AnimateStagger delay={0.3} stagger={0.06} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {events.map((event) => (
-            <Link key={event.slug} href={`/events/${event.slug}`} className="flex flex-col group">
-              <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" hoverOpacity sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
-              <h3 className="mt-4 text-lg font-display font-black text-foreground tracking-wide uppercase">
-                {event.name}
-              </h3>
-              <p className="mt-1 text-base italic text-foreground">{event.description}</p>
-              <p className="mt-1 text-base text-foreground">{event.venue}</p>
-              <p className="text-base text-foreground">{event.date}</p>
-            </Link>
-          ))}
+          {events.map((event) => {
+            const details = [event.description, event.venue, event.date].filter(Boolean).join(" ");
+            return (
+              <Link key={event.slug} href={`/events/${event.slug}`} className="flex flex-col group">
+                <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" hoverOpacity sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
+                <h3 className="mt-4 text-lg font-display font-black text-foreground tracking-wide uppercase">
+                  {event.name}
+                </h3>
+                {details && (
+                  <p className="mt-1 text-base text-foreground leading-relaxed">{details}</p>
+                )}
+              </Link>
+            );
+          })}
         </AnimateStagger>
       </main>
 

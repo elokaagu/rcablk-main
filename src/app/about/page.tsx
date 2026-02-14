@@ -68,14 +68,14 @@ export default function About() {
         {/* Right column - Images (blue from top) */}
         <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 flex flex-col gap-6 sm:gap-8 items-center pt-6 sm:pt-8" style={{ backgroundColor: "hsl(207, 70%, 88%)" }}>
           <AnimateStagger delay={0.35} stagger={0.1} className="flex flex-col gap-6 sm:gap-8 items-center w-full">
-          <div className="w-full max-w-sm">
+          <div className="w-full max-w-sm self-start">
             <BlurImage src="/3_Website Images/Chris Ofili.jpg" alt="Chris Ofili" aspectRatio="3/4" />
             <p className="mt-3 text-xl font-display font-black text-foreground tracking-wide uppercase">
               Chris Ofili
             </p>
           </div>
 
-          <div className="w-full max-w-sm">
+          <div className="w-full max-w-sm self-end">
             <BlurImage src="/3_Website Images/magdalene odundo2.jpeg" alt="Magdalene Odundo" aspectRatio="3/4" />
             <p className="mt-3 text-xl font-display font-black text-foreground tracking-wide uppercase">
               Magdalene Odundo

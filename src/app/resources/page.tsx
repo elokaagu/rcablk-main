@@ -13,7 +13,10 @@ export const metadata: Metadata = {
 
 export default function Resources() {
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
+    <div
+      className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0"
+      style={{ backgroundColor: "#FAF05A" }}
+    >
       <SlideOutMenu />
 
       <AnimateIn delay={0.1} duration={0.5} y={16}>

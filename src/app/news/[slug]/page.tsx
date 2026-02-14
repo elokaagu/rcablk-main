@@ -4,7 +4,6 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { newsArticles } from "@/data/news";
 import type { Metadata } from "next";
 
@@ -36,9 +35,13 @@ export default async function NewsArticle({ params }: PageProps) {
   }
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://rcablk.com";
+  const hasGallery = article.gallery && article.gallery.length > 0;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
+    <div
+      className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0"
+      style={{ backgroundColor: "#FFC107" }}
+    >
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -53,50 +56,81 @@ export default async function NewsArticle({ params }: PageProps) {
       />
       <SlideOutMenu />
 
-      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
-        <Logo className="h-10" />
-      </div>
+      {/* Yellow sidebars layout - content in center */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_minmax(0,900px)_1fr] min-h-0">
+        <div className="hidden lg:block" style={{ backgroundColor: "#FFC107" }} />
+        <div className="flex flex-col min-w-0">
+          <div className="px-4 sm:px-8 pt-6 sm:pt-8">
+            <Logo className="h-10" />
+          </div>
 
-      <div className="px-4 sm:px-8 lg:px-12 mb-4">
-        <Breadcrumbs items={[{ label: "News", href: "/news" }, { label: article.title }]} />
-        <Link href="/news" className="text-foreground underline hover:opacity-70 transition-opacity inline-flex items-center gap-2">
-          ← Back to News
-        </Link>
-      </div>
+          <Link
+            href="/news"
+            className="px-4 sm:px-8 mt-2 text-foreground underline hover:opacity-70 transition-opacity inline-flex"
+          >
+            ← Back to News
+          </Link>
 
-      <article className="flex-1 px-6 sm:px-10 lg:px-16 max-w-3xl mx-auto w-full pb-12 sm:pb-16">
-        {/* Category */}
-        <p className="text-center text-xl italic text-foreground mt-12 mb-6">
-          {article.category}
-        </p>
+          <article className="flex-1 pt-6 pb-12 sm:pb-16">
+            {/* Featured image - large */}
+            <div className="w-full mb-4">
+              <BlurImage
+                src={article.image}
+                alt={article.title}
+                aspectRatio="3/4"
+                className="w-full max-w-2xl mx-auto"
+                sizes="(max-width: 768px) 100vw, 672px"
+              />
+            </div>
 
-        {/* Title */}
-        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl font-display font-normal text-foreground mb-4 uppercase tracking-wide px-2">
-          {article.title}
-        </h1>
+            {/* Horizontal gallery - when available */}
+            {hasGallery && (
+              <div className="w-full overflow-x-auto overflow-y-hidden flex gap-2 py-4 mb-8">
+                <div className="flex gap-1 min-w-max px-4 sm:px-8">
+                  {article.gallery!.map((img, i) => (
+                    <div
+                      key={i}
+                      className="relative w-24 sm:w-32 aspect-[3/4] shrink-0 overflow-hidden"
+                    >
+                      <BlurImage
+                        src={img}
+                        alt={`${article.title} gallery ${i + 1}`}
+                        aspectRatio="3/4"
+                        sizes="128px"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-        {/* Date */}
-        <p
-          className="text-center text-base text-foreground mb-10"
-        >
-          {article.date}
-        </p>
-
-        {/* Hero image */}
-        <BlurImage src={article.image} alt={article.title} aspectRatio="3/4" className="max-w-lg mx-auto mb-12" sizes="(max-width: 768px) 100vw, 512px" />
-
-        {/* Body paragraphs */}
-        <div className="space-y-6">
-          {article.body.map((paragraph, i) => (
-            <p
-              key={i}
-              className="text-xl md:text-2xl leading-relaxed text-foreground"
-            >
-              {paragraph}
-            </p>
-          ))}
+            {/* Title / description - from first body paragraph when gallery present */}
+            <div className="px-4 sm:px-8 max-w-2xl">
+              {hasGallery && article.body[0] && (
+                <h2 className="text-xl sm:text-2xl font-serif font-bold text-foreground mb-8">
+                  {article.body[0]}
+                </h2>
+              )}
+              {!hasGallery && (
+                <>
+                  <h1 className="text-2xl sm:text-3xl font-serif font-bold text-foreground mb-4">
+                    {article.title}
+                  </h1>
+                  <p className="text-base text-foreground mb-6">{article.date}</p>
+                </>
+              )}
+              <div className="space-y-6">
+                {(hasGallery ? article.body.slice(1) : article.body).map((paragraph, i) => (
+                  <p key={i} className="text-lg leading-relaxed text-foreground">
+                    {paragraph}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </article>
         </div>
-      </article>
+        <div className="hidden lg:block" style={{ backgroundColor: "#FFC107" }} />
+      </div>
 
       <Footer />
     </div>

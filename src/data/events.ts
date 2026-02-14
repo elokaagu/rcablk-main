@@ -73,7 +73,7 @@ export const events: EventData[] = [
     venue: "Bochum Art Museum, Germany",
     date: "June 8, 2024 - October 13, 2024",
     image: "/assets/event-weber.jpg",
-    body: "In the summer of 2024, the Bochum Art Museum shows Theresa Weber's first major solo exhibition in a museum context. Under the title Chaosmos, an expansive, organic landscape is being created on the ground floor of the art museum.",
+    body: "In the summer of 2024, the Bochum Art Museum shows Theresa Weber's first major solo exhibition in a museum context. Under the title *Chaosmos*, an expansive, organic landscape is being created on the ground floor of the art museum. Textile sculptures form the core of the exhibition, creating an immersive environment that invites reflection.",
   },
   {
     slug: "julianknxx",

@@ -31,29 +31,27 @@ export function CookieBanner() {
       role="dialog"
       aria-labelledby="cookie-banner-title"
       aria-describedby="cookie-banner-desc"
-      className="fixed bottom-0 left-0 right-0 z-50 bg-black text-white px-4 sm:px-6 py-2 sm:py-2.5 shadow-[0_-2px_10px_rgba(0,0,0,0.2)]"
-      style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
+      className="fixed bottom-0 left-0 right-0 z-50 bg-black text-white/90 px-4 sm:px-6 py-4 sm:py-4 rounded-t-2xl shadow-[0_-2px_10px_rgba(0,0,0,0.2)]"
+      style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
     >
-      <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
-        <p id="cookie-banner-desc" className="text-sm text-white/95 leading-snug flex-1">
-          <span id="cookie-banner-title" className="font-display font-medium uppercase tracking-wide text-white">
-            Cookies.{" "}
-          </span>
-          We use cookies to improve your experience.{" "}
-          <Link href="/cookie-policy" className="underline underline-offset-2 hover:opacity-80 transition-opacity">
-            Cookie Policy
+      <div className="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <p id="cookie-banner-desc" className="text-sm leading-relaxed flex-1">
+          <span id="cookie-banner-title" className="sr-only">Cookie consent</span>
+          We use cookies to enhance your browsing experience. You can accept all cookies, manage your preferences, or decline non-essential cookies.{" "}
+          <Link href="/cookie-policy" className="text-white hover:opacity-80 transition-opacity">
+            Learn more
           </Link>
         </p>
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={accept}
-            className="px-4 py-1.5 text-sm font-display font-medium bg-white text-black hover:opacity-90 transition-opacity uppercase tracking-wide"
+            className="px-5 py-2.5 text-sm font-medium bg-white text-black rounded-full hover:opacity-90 transition-opacity"
           >
-            Accept
+            Allow Cookies
           </button>
           <button
             onClick={decline}
-            className="px-4 py-1.5 text-sm font-display font-medium border border-white text-white hover:opacity-80 transition-opacity uppercase tracking-wide"
+            className="px-5 py-2.5 text-sm font-medium bg-transparent border border-white/80 text-white rounded-full hover:opacity-80 transition-opacity"
           >
             Decline
           </button>

@@ -1,10 +1,7 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
-import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
-import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { events } from "@/data/events";
 import type { Metadata } from "next";
 
@@ -54,24 +51,13 @@ export default async function EventDetail({ params }: PageProps) {
       />
       <SlideOutMenu />
 
-      {/* RCA BLK Logo */}
-      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
-        <Logo className="h-10" />
-      </div>
-
-      {/* Breadcrumb & Back link */}
-      <div className="px-4 sm:px-8 lg:px-12">
-        <Breadcrumbs items={[{ label: "Events", href: "/events" }, { label: event.name }]} />
-        <Link
-          href="/events"
-          className="text-foreground underline hover:opacity-70 transition-opacity inline-flex items-center gap-2"
-        >
-          ← Back to Events
-        </Link>
+      {/* Section heading: Events */}
+      <div className="text-center pt-6 sm:pt-8 pb-2">
+        <h2 className="text-xl font-serif font-normal text-foreground">Events</h2>
       </div>
 
       {/* Event Name */}
-      <div className="text-center py-6">
+      <div className="text-center py-4">
         <h1
           className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-black tracking-wide uppercase px-4"
           style={{ color: "hsl(24, 95%, 50%)" }}
@@ -86,14 +72,23 @@ export default async function EventDetail({ params }: PageProps) {
       </div>
 
       {/* Date */}
-      <div className="text-center pb-6">
-        <p className="text-lg text-foreground">{event.date}</p>
-      </div>
+      {event.date && (
+        <div className="text-center pb-6">
+          <p className="text-lg text-foreground">{event.date}</p>
+        </div>
+      )}
 
-      {/* Body */}
-      <div className="max-w-xl mx-auto px-6 sm:px-10 pb-12 sm:pb-16 text-center">
-        <p className="text-xl leading-relaxed text-foreground">{event.body}</p>
-      </div>
+      {/* Body - left-aligned */}
+      {event.body && (
+        <div className="max-w-2xl mx-auto px-6 sm:px-10 pb-12 sm:pb-16 text-left">
+          <div
+            className="text-xl leading-relaxed text-foreground whitespace-pre-line [&_em]:italic"
+            dangerouslySetInnerHTML={{
+              __html: event.body.replace(/\*([^*]+)\*/g, "<em>$1</em>"),
+            }}
+          />
+        </div>
+      )}
 
       <Footer />
     </div>

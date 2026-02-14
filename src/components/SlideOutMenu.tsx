@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-const SlideOutMenu = () => {
+const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
   const [open, setOpen] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(false);
   const [menuIconLoaded, setMenuIconLoaded] = useState(false);
@@ -44,7 +44,7 @@ const SlideOutMenu = () => {
           onLoad={() => setMenuIconLoaded(true)}
           className={`flex-shrink-0 transition-all duration-700 ease-out ${
             menuIconLoaded ? "opacity-100 blur-0" : "opacity-60 blur-sm"
-          }`}
+          } ${iconOnDark ? "invert" : ""}`}
         />
       </button>
 
@@ -64,7 +64,7 @@ const SlideOutMenu = () => {
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div
-          className="relative w-[min(85vw,20rem)] sm:w-80 h-full flex flex-col bg-secondary"
+          className="relative w-[33vw] min-w-[260px] max-w-[400px] h-full flex flex-col bg-secondary"
           style={{ paddingRight: "env(safe-area-inset-right)" }}
         >
           {/* Close button - top right */}
