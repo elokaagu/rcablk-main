@@ -20,6 +20,7 @@ const Footer = () => {
     {
       items: [
         { label: "Accessibility", href: "/accessibility" },
+        { label: "Cookie Policy", href: "/cookie-policy" },
         { label: "Terms & Conditions", href: "#" },
         { label: "Privacy Policy", href: "#" },
       ],
@@ -34,7 +35,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-secondary text-secondary-foreground px-4 sm:px-8 py-8">
-      <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 text-sm">
+      <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 text-base">
         {columns.map((col, i) => (
           <div key={i} className="flex flex-col gap-2">
             {col.items.map((item, j) =>

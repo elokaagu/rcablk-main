@@ -1,6 +1,13 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Support | RCA BLK",
+  description: "Support RCA BLK. Help sustain our exhibitions, events, residencies, and artist programmes.",
+  openGraph: { title: "Support | RCA BLK" },
+};
 
 export default function Support() {
   return (
@@ -15,8 +22,8 @@ export default function Support() {
         <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">Support</h2>
       </div>
 
-      <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-8 pb-12 sm:pb-16 w-full">
-        <div className="space-y-6 sm:space-y-8 text-foreground text-base sm:text-lg leading-relaxed">
+      <main className="flex-1 max-w-2xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 w-full">
+        <div className="space-y-6 sm:space-y-8 text-foreground text-lg sm:text-xl leading-relaxed">
           <p>
             RCA BLK&apos;s supporters play a vital role in sustaining our key activities, from the
             commissioning of major new exhibitions and events, and the development of our

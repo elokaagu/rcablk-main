@@ -2,6 +2,14 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Us | RCA BLK",
+  description:
+    "The Royal College of Art Association of Black Students, Alumni & Friends. Founded in 2020, we promote and support contemporary visual arts for artists of Black and African heritage.",
+  openGraph: { title: "About Us | RCA BLK" },
+};
 
 export default function About() {
   return (
@@ -26,7 +34,7 @@ export default function About() {
         <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 bg-white">
           <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground mb-4 sm:mb-6">About Us</h2>
 
-          <div className="space-y-6 text-foreground text-base leading-relaxed max-w-xl">
+          <div className="space-y-6 text-foreground text-lg leading-relaxed max-w-xl">
             <p>
               The Royal College of Art Association of Black Students, Alumni & Friends started as a grassroots organisation and community group in 2020.
             </p>

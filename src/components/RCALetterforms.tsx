@@ -65,20 +65,22 @@ const RCALetterforms = () => {
                         />
                       );
                     })()}
-                    {/* Gradient highlight - clipped to letter shape, soft fade */}
+                    {/* Subtle gradient highlight - only inside letter, no box */}
                     {isHovered && (
                       <div
-                        className="absolute inset-0 transition-opacity duration-300"
+                        className="absolute inset-0 transition-opacity duration-300 pointer-events-none"
                         style={{
-                          background: "radial-gradient(circle at 50% 35%, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.06) 50%, transparent 80%)",
-                          maskImage: `url(${letter.svgHover || letter.svg})`,
+                          background: `radial-gradient(ellipse 35% 45% at 50% 40%, rgba(255,255,255,0.35) 0%, transparent 70%)`,
                           WebkitMaskImage: `url(${letter.svgHover || letter.svg})`,
-                          maskSize: "contain",
-                          maskPosition: "center",
-                          maskRepeat: "no-repeat",
+                          maskImage: `url(${letter.svgHover || letter.svg})`,
                           WebkitMaskSize: "contain",
+                          maskSize: "contain",
                           WebkitMaskPosition: "center",
+                          maskPosition: "center",
                           WebkitMaskRepeat: "no-repeat",
+                          maskRepeat: "no-repeat",
+                          WebkitMaskType: "alpha",
+                          maskType: "alpha",
                         }}
                       />
                     )}

@@ -1,6 +1,15 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
+import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
+import { ContactForm } from "@/components/ContactForm";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Contact | RCA BLK",
+  description: "Get in touch with RCA BLK. Royal College of Art, Kensington Gore, London SW7 2EU.",
+  openGraph: { title: "Contact | RCA BLK" },
+};
 
 export default function Contact() {
   return (
@@ -16,7 +25,7 @@ export default function Contact() {
         {/* Main content */}
         <div className="px-4 sm:px-8 lg:px-0 pt-6 sm:pt-8 flex flex-col">
           {/* Address & links */}
-          <div className="space-y-1 text-foreground text-lg">
+          <div className="space-y-1 text-foreground text-xl">
             <p className="font-display font-bold tracking-display-tight">RCA BLK</p>
             <p>Royal College of Art</p>
             <p>Kensington Gore</p>
@@ -29,25 +38,27 @@ export default function Contact() {
           </div>
 
           {/* Central circle image */}
-          <div className="flex-1 flex items-center justify-center py-8 sm:py-12">
-            <div className="relative w-full max-w-[min(400px,85vw)] aspect-square rounded-full overflow-hidden">
+          <div className="flex-1 flex flex-col items-center justify-center gap-8 py-8 sm:py-12">
+            <div className="relative w-full max-w-[min(400px,85vw)] aspect-square rounded-full overflow-hidden shrink-0">
               <BlurImage src="/RCA-BLACK-SQUARE.jpg" alt="RCA BLK" aspectRatio="1/1" className="rounded-full w-full h-full" />
             </div>
+            <ContactForm />
           </div>
 
           {/* Bottom row */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 pb-8 pr-0 sm:pr-8">
-            <div className="space-y-1 text-foreground text-base">
+            <div className="space-y-1 text-foreground text-lg">
               <p>Email Address</p>
-              <p className="underline cursor-pointer hover:opacity-70 transition-opacity">Sign Up</p>
+              <a href="mailto:rcablk@rca.ac.uk" className="underline underline-offset-2 hover:opacity-70 transition-opacity">rcablk@rca.ac.uk</a>
             </div>
-            <div className="text-right space-y-1 text-foreground text-base">
+            <div className="text-right space-y-1 text-foreground text-lg">
               <p>Identity: Studio Frith</p>
               <p>Web Development : Eloka Agu</p>
             </div>
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }

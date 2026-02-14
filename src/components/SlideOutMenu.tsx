@@ -32,7 +32,8 @@ const SlideOutMenu = () => {
         onClick={() => setOpen(!open)}
         className="fixed z-50 text-foreground hover:opacity-70 transition-opacity flex items-center justify-center w-12 h-12 min-w-[44px] min-h-[44px]"
         style={{ top: "max(1rem, env(safe-area-inset-top))", right: "max(1rem, env(safe-area-inset-right))" }}
-        aria-label="Open menu"
+        aria-label={open ? "Close menu" : "Open menu"}
+        aria-expanded={open}
       >
         <Image
           src="/RCA BLK–MENU ICON.svg"
@@ -76,7 +77,7 @@ const SlideOutMenu = () => {
           </button>
 
           {/* Nav links */}
-          <nav className="flex-1 pt-20 px-8 pb-8 flex flex-col gap-1">
+          <nav className="flex-1 pt-20 px-8 pb-8 flex flex-col gap-1" aria-label="Main navigation">
             {navItems.map((item) =>
               item.external ? (
                 <a

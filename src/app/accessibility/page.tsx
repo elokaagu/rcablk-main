@@ -1,6 +1,13 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Accessibility | RCA BLK",
+  description: "RCA BLK accessibility statement. We aim to meet WCAG 2.2 Level AA.",
+  openGraph: { title: "Accessibility | RCA BLK" },
+};
 
 export default function Accessibility() {
   return (
@@ -15,8 +22,8 @@ export default function Accessibility() {
         <h2 className="text-xl sm:text-2xl font-display font-normal text-foreground px-4">RCA BLK Accessibility Statement</h2>
       </div>
 
-      <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-8 pb-12 sm:pb-16 w-full">
-        <div className="space-y-8 text-foreground text-lg leading-relaxed">
+      <main className="flex-1 max-w-2xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 w-full">
+        <div className="space-y-8 text-foreground text-xl leading-relaxed">
           <p>
             This website is run by the Royal College of Art and this statement applies to
             rcablk.com. We aim to meet the requirements of the Web Content Accessibility

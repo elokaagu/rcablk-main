@@ -54,12 +54,15 @@
   }
 }
 
+/* Focus styles for accessibility */
 @layer base {
-  * {
-    @apply border-border;
+  *:focus-visible {
+    outline: 2px solid hsl(24, 95%, 53%);
+    outline-offset: 2px;
   }
 
   html {
+    font-size: 18px;
     scroll-behavior: smooth;
     overflow-x: hidden;
     -webkit-text-size-adjust: 100%;

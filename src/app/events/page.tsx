@@ -4,6 +4,13 @@ import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
 import { events } from "@/data/events";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Events | RCA BLK",
+  description: "Discover exhibitions, talks, and events by RCA BLK and the Royal College of Art community.",
+  openGraph: { title: "Events | RCA BLK" },
+};
 
 export default function Events() {
   return (
@@ -18,7 +25,7 @@ export default function Events() {
         <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">Events</h2>
       </div>
 
-      <main className="flex-1 px-4 sm:px-8 lg:px-12 pb-12 sm:pb-16">
+      <main className="flex-1 px-6 sm:px-10 lg:px-12 max-w-7xl mx-auto w-full pb-12 sm:pb-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {events.map((event) => (
             <Link key={event.slug} href={`/events/${event.slug}`} className="flex flex-col group">
@@ -26,9 +33,9 @@ export default function Events() {
               <h3 className="mt-4 text-lg font-display font-black text-foreground tracking-wide uppercase">
                 {event.name}
               </h3>
-              <p className="mt-1 text-sm italic text-foreground">{event.description}</p>
-              <p className="mt-1 text-sm text-foreground">{event.venue}</p>
-              <p className="text-sm text-foreground">{event.date}</p>
+              <p className="mt-1 text-base italic text-foreground">{event.description}</p>
+              <p className="mt-1 text-base text-foreground">{event.venue}</p>
+              <p className="text-base text-foreground">{event.date}</p>
             </Link>
           ))}
         </div>

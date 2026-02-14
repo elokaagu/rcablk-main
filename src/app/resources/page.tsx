@@ -1,6 +1,13 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Resources | RCA BLK",
+  description: "Scholarships, funding, and resources for students. Sir Frank Bowling Scholarship, refugee and asylum seeker scholarships.",
+  openGraph: { title: "Resources | RCA BLK" },
+};
 
 export default function Resources() {
   return (
@@ -17,8 +24,8 @@ export default function Resources() {
       </div>
 
       {/* Content */}
-      <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-8 pb-12 sm:pb-16 w-full">
-        <div className="space-y-6 sm:space-y-8 text-foreground text-base sm:text-lg leading-relaxed">
+      <main className="flex-1 max-w-2xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 w-full">
+        <div className="space-y-6 sm:space-y-8 text-foreground text-lg sm:text-xl leading-relaxed">
           <p>
             The RCA is committed to celebrating diversity, eliminating discrimination and
             promoting equality of opportunity to all.
@@ -61,17 +68,17 @@ export default function Resources() {
 
           <ul className="space-y-2 list-none p-0">
             <li>
-              <a href="https://www.rca.ac.uk/studying-at-the-rca/fees-and-funding/scholarships/" target="_blank" rel="noopener noreferrer" className="underline text-foreground hover:opacity-70">
+              <a href="https://www.rca.ac.uk/studying-at-the-rca/fees-and-funding/scholarships/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 text-foreground hover:opacity-70 transition-opacity decoration-2">
                 Scholarships
               </a>
             </li>
             <li>
-              <a href="#" className="underline text-foreground hover:opacity-70">
+              <a href="#" className="underline underline-offset-2 text-foreground hover:opacity-70 transition-opacity decoration-2">
                 Online Resources
               </a>
             </li>
             <li>
-              <a href="#" className="underline text-foreground hover:opacity-70">
+              <a href="#" className="underline underline-offset-2 text-foreground hover:opacity-70 transition-opacity decoration-2">
                 Join RCA BLK
               </a>
             </li>
