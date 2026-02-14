@@ -21,8 +21,8 @@ const Footer = () => {
       items: [
         { label: "Accessibility", href: "/accessibility" },
         { label: "Cookie Policy", href: "/cookie-policy" },
-        { label: "Terms & Conditions", href: "#" },
-        { label: "Privacy Policy", href: "#" },
+        { label: "Terms & Conditions", href: "/terms" },
+        { label: "Privacy Policy", href: "/privacy-policy" },
       ],
     },
     {

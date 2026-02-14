@@ -31,31 +31,29 @@ export function CookieBanner() {
       role="dialog"
       aria-labelledby="cookie-banner-title"
       aria-describedby="cookie-banner-desc"
-      className="fixed bottom-0 left-0 right-0 z-50 bg-secondary text-secondary-foreground px-4 sm:px-6 py-4 sm:py-5 shadow-[0_-4px_20px_rgba(0,0,0,0.15)]"
-      style={{ paddingBottom: "max(1rem, env(safe-area-inset-bottom))" }}
+      className="fixed bottom-0 left-0 right-0 z-50 bg-black text-white px-4 sm:px-6 py-2 sm:py-2.5 shadow-[0_-2px_10px_rgba(0,0,0,0.2)]"
+      style={{ paddingBottom: "max(0.5rem, env(safe-area-inset-bottom))" }}
     >
-      <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div className="flex-1">
-          <h2 id="cookie-banner-title" className="text-base sm:text-lg font-display font-medium uppercase tracking-wide mb-1">
-            Cookies
-          </h2>
-          <p id="cookie-banner-desc" className="text-sm sm:text-base text-secondary-foreground/95 leading-relaxed">
-            We use cookies to make our site work and to improve your experience. By using this site, you agree to our use of cookies.{" "}
-            <Link href="/cookie-policy" className="underline underline-offset-2 hover:opacity-80 transition-opacity">
-              Read our Cookie Policy
-            </Link>
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-3 shrink-0">
+      <div className="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4">
+        <p id="cookie-banner-desc" className="text-sm text-white/95 leading-snug flex-1">
+          <span id="cookie-banner-title" className="font-display font-medium uppercase tracking-wide text-white">
+            Cookies.{" "}
+          </span>
+          We use cookies to improve your experience.{" "}
+          <Link href="/cookie-policy" className="underline underline-offset-2 hover:opacity-80 transition-opacity">
+            Cookie Policy
+          </Link>
+        </p>
+        <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={accept}
-            className="px-5 py-2.5 font-display font-medium bg-secondary-foreground text-primary-foreground hover:opacity-90 transition-opacity uppercase tracking-wide"
+            className="px-4 py-1.5 text-sm font-display font-medium bg-white text-black hover:opacity-90 transition-opacity uppercase tracking-wide"
           >
             Accept
           </button>
           <button
             onClick={decline}
-            className="px-5 py-2.5 font-display font-medium text-secondary-foreground border-2 border-secondary-foreground hover:opacity-80 transition-opacity uppercase tracking-wide"
+            className="px-4 py-1.5 text-sm font-display font-medium border border-white text-white hover:opacity-80 transition-opacity uppercase tracking-wide"
           >
             Decline
           </button>

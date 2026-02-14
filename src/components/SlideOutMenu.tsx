@@ -23,14 +23,14 @@ const SlideOutMenu = () => {
   ];
 
   const linkClass =
-    "text-lg font-display font-medium text-black hover:opacity-70 transition-opacity py-3 min-h-[44px] flex items-center touch-manipulation block uppercase tracking-display-tight";
+    "text-lg font-serif font-medium text-black hover:opacity-70 transition-opacity py-3 min-h-[44px] flex items-center touch-manipulation block uppercase";
 
   return (
     <>
-      {/* Toggle button */}
+      {/* Toggle button - hidden when menu is open to avoid overlap with close button */}
       <button
         onClick={() => setOpen(!open)}
-        className="fixed z-50 text-foreground hover:opacity-70 transition-opacity flex items-center justify-center w-12 h-12 min-w-[44px] min-h-[44px]"
+        className={`fixed z-50 text-foreground hover:opacity-70 transition-opacity flex items-center justify-center w-12 h-12 min-w-[44px] min-h-[44px] ${open ? "pointer-events-none opacity-0" : ""}`}
         style={{ top: "max(1rem, env(safe-area-inset-top))", right: "max(1rem, env(safe-area-inset-right))" }}
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
@@ -48,23 +48,24 @@ const SlideOutMenu = () => {
         />
       </button>
 
-      {/* Overlay */}
+      {/* Overlay - transparent, click to close */}
       {open && (
         <div
-          className="fixed inset-0 z-30 bg-black"
+          className="fixed inset-0 z-30 bg-transparent"
           onClick={() => setOpen(false)}
         />
       )}
 
       {/* Slide-out panel */}
       <div
-        className={`fixed top-0 right-0 h-full z-40 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-y-0 right-0 h-screen z-40 transform transition-transform duration-300 ease-in-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div
-          className="relative w-[min(85vw,20rem)] sm:w-80 flex flex-col"
-          style={{ backgroundColor: "#D95E26", paddingRight: "env(safe-area-inset-right)", paddingBottom: "env(safe-area-inset-bottom)" }}
+          className="relative w-[min(85vw,20rem)] sm:w-80 h-full flex flex-col"
+          style={{ backgroundColor: "#D95E26", paddingRight: "env(safe-area-inset-right)" }}
         >
           {/* Close button - top right */}
           <button
