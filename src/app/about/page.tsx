@@ -5,45 +5,25 @@ import { BlurImage } from "@/components/BlurImage";
 
 export default function About() {
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col">
       <SlideOutMenu />
 
-      {/* RCA BLK Logo */}
-      <div className="flex justify-center pt-8 pb-4">
-        <Logo className="h-12" />
-      </div>
-
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0">
+      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen">
         {/* Left column - Text */}
         <div className="px-8 lg:px-16 py-8 lg:py-12 bg-white">
           <h2 className="text-3xl font-display font-normal text-foreground mb-6">About Us</h2>
 
           <div className="space-y-6 text-foreground text-base leading-relaxed max-w-xl">
             <p>
-              The Royal College of Art Association of Black Students, Alumni &amp;
-              Friends started as a grassroots organisation and community
-              group in 2020.
+              The Royal College of Art Association of Black Students, Alumni & Friends started as a grassroots organisation and community group in 2020.
             </p>
 
             <p>
-              Since its inception RCA BLK has evolved after a successful tenure
-              of partnerships and involvement. We&apos;re happy to be the first
-              association in the country to action incremental change within an
-              institutional ecosystem. Thus far, we are the proud initiators of the
-              Sir Frank Bowling Scholarship, the RCA BLK x Yinka Shonibare
-              Residency, BLACK STAR Time Capsule and the proud recipients
-              of the Black British Artist Grant 2023.
+              Since its inception RCA BLK has evolved after a successful tenure of partnerships and involvement. We&apos;re happy to be the first association in the country to action incremental change within an institutional ecosystem. Thus far, we are the proud initiators of the Sir Frank Bowling Scholarship, the RCA BLK x Yinka Shonibare Residency, BLACK STAR Time Capsule and the proud recipients of the Black British Artist Grant 2023.
             </p>
 
             <p>
-              Our core objectives are to promote, improve and advance
-              education by encouraging and supporting the practice of
-              contemporary visual arts for artists who identify as Black and or
-              of African heritage within the RCA community. We aim to do so by
-              fostering relationships with pre-enrolled students, current
-              students as well as alumni. RCA BLK has positively impacted the
-              Black student experience and has built upon the rich legacies of
-              the RCA Student and Alumni body.
+              Our core objectives are to promote, improve and advance education by encouraging and supporting the practice of contemporary visual arts for artists who identify as Black and or of African heritage within the RCA community. We aim to do so by fostering relationships with pre-enrolled students, current students as well as alumni. RCA BLK has positively impacted the Black student experience and has built upon the rich legacies of the RCA Student and Alumni body.
             </p>
 
             <h3 className="text-2xl font-display font-normal text-foreground pt-4">Stakeholders</h3>
@@ -58,8 +38,11 @@ export default function About() {
           </div>
         </div>
 
-        {/* Right column - Images */}
-        <div className="px-8 lg:px-16 py-8 lg:py-12 flex flex-col gap-8 items-center" style={{ backgroundColor: "hsl(207, 70%, 88%)" }}>
+        {/* Right column - Images (blue from top) */}
+        <div className="px-8 lg:px-16 py-8 lg:py-12 flex flex-col gap-8 items-center pt-8" style={{ backgroundColor: "hsl(207, 70%, 88%)" }}>
+          <div className="flex justify-center pt-4 lg:pt-0">
+            <Logo className="h-12" />
+          </div>
           <div className="w-full max-w-sm">
             <BlurImage src="/3_Website Images/Chris Ofili.jpg" alt="Chris Ofili" aspectRatio="3/4" />
             <p className="mt-3 text-xl font-display font-black text-foreground tracking-wide uppercase">

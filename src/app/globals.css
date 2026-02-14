@@ -66,5 +66,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: jubilat, Georgia, serif;
+    margin: 0;
+    padding: 0;
   }
 }
