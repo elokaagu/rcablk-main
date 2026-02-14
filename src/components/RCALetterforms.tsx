@@ -6,7 +6,7 @@ import Image from "next/image";
 
 const LETTERS = [
   { id: "r", label: "RESOURCES", href: "/resources", svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg", svgHover: "/SVG Letterforms/RCA BLK–Letterforms-R-White.svg", isDefaultActive: false },
-  { id: "c", label: "EVENTS", href: "/events", svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg", svgHover: null, isDefaultActive: true },
+  { id: "c", label: "EVENTS", href: "/events", svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg", svgHover: null, isDefaultActive: false },
   { id: "a", label: "ABOUT", href: "/about", svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg", svgHover: null, isDefaultActive: false },
   { id: "b", label: "CONTACT", href: "/contact", svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg", svgHover: null, isDefaultActive: false },
   { id: "l", label: "NEWS", href: "/news", svg: "/SVG Letterforms/RCA BLK–Letterforms-L.svg", svgHover: null, isDefaultActive: false },
@@ -42,39 +42,42 @@ function LetterCell({
       onTouchStart={onHover}
       onTouchEnd={() => setTimeout(onHoverEnd, 150)}
     >
-      {/* Label: EVENTS always on C, others on hover */}
-      {showLabel && (
-        <div className="absolute top-0 left-0 right-0 z-10 flex justify-center pt-3 sm:pt-4">
-          <span className="font-display font-black text-black uppercase tracking-tight text-sm sm:text-base">
-            {letter.label}
-          </span>
-        </div>
-      )}
-
       {/* Letter image */}
-      <div
-        className={`absolute inset-0 flex items-center justify-center p-4 sm:p-5 ${showLabel ? "pt-12 sm:pt-14" : ""}`}
-      >
-        <div className="relative w-full h-full">
-          {/* C: white fill with orange radial gradient (no Image, use SVG mask) */}
+      <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-5">
+        <div className="relative w-full h-full flex items-center justify-center">
+          {/* Label: centered inside the letter (on hover) */}
+          {showLabel && (
+            <span
+              className="absolute inset-0 flex items-center justify-center z-10 font-serif font-medium text-black text-xs sm:text-sm text-center px-2 leading-tight"
+              style={{
+                maskImage: `url('${letter.svg}')`,
+                maskSize: "contain",
+                maskPosition: "center",
+                maskRepeat: "no-repeat",
+                WebkitMaskImage: `url('${letter.svg}')`,
+                WebkitMaskSize: "contain",
+                WebkitMaskPosition: "center",
+                WebkitMaskRepeat: "no-repeat",
+              } as React.CSSProperties}
+            >
+              {letter.label}
+            </span>
+          )}
+          {/* C: solid white fill (no gradient) */}
           {isC ? (
-            <div className="absolute inset-0 flex items-center justify-center">
-              {/* White C with orange radial gradient in center (light orange center, white edges) */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  maskImage: `url('${letter.svg}')`,
-                  maskSize: "contain",
-                  maskPosition: "center",
-                  maskRepeat: "no-repeat",
-                  WebkitMaskImage: `url('${letter.svg}')`,
-                  WebkitMaskSize: "contain",
-                  WebkitMaskPosition: "center",
-                  WebkitMaskRepeat: "no-repeat",
-                  background: "radial-gradient(ellipse 50% 60% at 50% 50%, hsl(24 95% 65%) 0%, hsl(24 95% 82%) 30%, hsl(24 95% 95%) 55%, white 80%)",
-                } as React.CSSProperties}
-              />
-            </div>
+            <div
+              className="absolute inset-0 bg-white"
+              style={{
+                maskImage: `url('${letter.svg}')`,
+                maskSize: "contain",
+                maskPosition: "center",
+                maskRepeat: "no-repeat",
+                WebkitMaskImage: `url('${letter.svg}')`,
+                WebkitMaskSize: "contain",
+                WebkitMaskPosition: "center",
+                WebkitMaskRepeat: "no-repeat",
+              } as React.CSSProperties}
+            />
           ) : (
             <>
               <Image
@@ -127,7 +130,7 @@ export default function RCALetterforms() {
       }}
     >
       <div
-        className="grid w-full max-w-full gap-0.5 sm:gap-1"
+        className="grid w-full max-w-full gap-0"
         style={{
           width: "min(150vh, 100vw - 2rem)",
           aspectRatio: "3 / 2",

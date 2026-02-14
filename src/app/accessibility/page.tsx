@@ -1,6 +1,8 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
+import { AnimateIn } from "@/components/AnimateIn";
+import { AnimateStagger } from "@/components/AnimateStagger";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,16 +16,20 @@ export default function Accessibility() {
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
       <SlideOutMenu />
 
-      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
-        <Logo className="h-10" />
-      </div>
+      <AnimateIn delay={0.1} duration={0.5} y={16}>
+        <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
+          <Logo className="h-10" />
+        </div>
+      </AnimateIn>
 
-      <div className="text-center py-8">
-        <h2 className="text-xl sm:text-2xl font-display font-normal text-foreground px-4">RCA BLK Accessibility Statement</h2>
-      </div>
+      <AnimateIn delay={0.2} duration={0.6} y={20}>
+        <div className="text-center py-8">
+          <h2 className="text-xl sm:text-2xl font-display font-normal text-foreground px-4">RCA BLK Accessibility Statement</h2>
+        </div>
+      </AnimateIn>
 
       <main className="flex-1 max-w-2xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 w-full">
-        <div className="space-y-8 text-foreground text-xl leading-relaxed">
+        <AnimateStagger delay={0.3} stagger={0.1} className="space-y-8 text-foreground text-xl leading-relaxed">
           <p>
             This website is run by the Royal College of Art and this statement applies to
             rcablk.com. We aim to meet the requirements of the Web Content Accessibility
@@ -74,7 +80,7 @@ export default function Accessibility() {
               <li>See our main website for details on how to contact us.</li>
             </ul>
           </div>
-        </div>
+        </AnimateStagger>
       </main>
 
       <Footer />

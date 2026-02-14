@@ -23,7 +23,7 @@ const SlideOutMenu = () => {
   ];
 
   const linkClass =
-    "text-lg font-serif font-medium text-black hover:opacity-70 transition-opacity py-3 min-h-[44px] flex items-center touch-manipulation block uppercase";
+    "text-base font-serif font-medium text-black hover:opacity-70 transition-opacity py-2 min-h-[40px] flex items-center touch-manipulation block uppercase";
 
   return (
     <>
@@ -64,8 +64,8 @@ const SlideOutMenu = () => {
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div
-          className="relative w-[min(85vw,20rem)] sm:w-80 h-full flex flex-col"
-          style={{ backgroundColor: "#D95E26", paddingRight: "env(safe-area-inset-right)" }}
+          className="relative w-[min(85vw,20rem)] sm:w-80 h-full flex flex-col bg-secondary"
+          style={{ paddingRight: "env(safe-area-inset-right)" }}
         >
           {/* Close button - top right */}
           <button
@@ -78,7 +78,7 @@ const SlideOutMenu = () => {
           </button>
 
           {/* Nav links */}
-          <nav className="flex-1 pt-20 px-8 pb-8 flex flex-col gap-1" aria-label="Main navigation">
+          <nav className="flex-1 pt-20 px-8 pb-8 flex flex-col gap-0.5" aria-label="Main navigation">
             {navItems.map((item) =>
               item.external ? (
                 <a

@@ -2,6 +2,8 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
 import { AlumniName } from "@/components/AlumniName";
+import { AnimateIn } from "@/components/AnimateIn";
+import { AnimateStagger } from "@/components/AnimateStagger";
 import { foundingMembers, alumni } from "@/data/alumni";
 import type { Metadata } from "next";
 
@@ -35,15 +37,20 @@ export default function Alumni() {
     <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(207, 70%, 85%)" }}>
       <SlideOutMenu />
 
-      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
-        <Logo className="h-10" />
-      </div>
+      <AnimateIn delay={0.1} duration={0.5} y={16}>
+        <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
+          <Logo className="h-10" />
+        </div>
+      </AnimateIn>
 
-      <div className="text-center py-8">
-        <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">Alumni</h2>
-      </div>
+      <AnimateIn delay={0.2} duration={0.6} y={20}>
+        <div className="text-center py-8">
+          <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">Alumni</h2>
+        </div>
+      </AnimateIn>
 
-      <main className="flex-1 px-6 sm:px-10 lg:px-16 max-w-4xl mx-auto w-full pb-12 sm:pb-16 space-y-12 sm:space-y-16">
+      <main className="flex-1 px-6 sm:px-10 lg:px-16 max-w-4xl mx-auto w-full pb-12 sm:pb-16">
+        <AnimateStagger delay={0.3} stagger={0.08} className="space-y-12 sm:space-y-16">
         {/* Founding Members */}
         <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-8">
           <h3 className="text-xl italic text-foreground font-medium">Founding Members</h3>
@@ -55,6 +62,7 @@ export default function Alumni() {
           <h3 className="text-xl italic text-foreground font-medium">Alumni</h3>
           <NameList members={alumni} />
         </div>
+        </AnimateStagger>
       </main>
 
       <Footer />

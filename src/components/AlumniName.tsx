@@ -4,8 +4,8 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import { BlurImage } from "@/components/BlurImage";
 
-const IMG_WIDTH = 256;
-const IMG_HEIGHT = 192;
+const IMG_WIDTH = 280;
+const IMG_HEIGHT = 373;
 const GAP = 16;
 
 interface AlumniNameProps {
@@ -81,17 +81,17 @@ export function AlumniName({ name, snapshot, link }: AlumniNameProps) {
           className="fixed z-50 pointer-events-none animate-in fade-in-0 zoom-in-95 duration-200"
           style={{ left: position.x, top: position.y }}
         >
-          <span className="block w-64 aspect-[4/3] overflow-hidden bg-white shadow-lg border border-foreground/10 rounded-sm">
+          <span className="block w-[280px] aspect-[3/4] overflow-hidden bg-white shadow-lg border border-foreground/10 rounded-xl">
             <BlurImage
               src={snapshot}
               alt={`${name} – work`}
-              aspectRatio="4/3"
-              sizes="256px"
+              aspectRatio="3/4"
+              sizes="280px"
               priority={false}
             />
           </span>
           {link && (
-            <span className="block mt-1.5 text-sm text-foreground/80 truncate max-w-64">
+            <span className="block mt-1.5 text-sm text-foreground/80 truncate max-w-[280px]">
               View work →
             </span>
           )}

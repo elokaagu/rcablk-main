@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
 import { ContactForm } from "@/components/ContactForm";
+import { AnimateIn } from "@/components/AnimateIn";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,13 +18,14 @@ export default function Contact() {
       <SlideOutMenu />
 
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[250px_1fr] min-h-screen">
-        {/* Left - Logo */}
-        <div className="px-4 sm:px-8 pt-6 sm:pt-8">
-          <Logo className="h-10" />
-        </div>
+        <AnimateIn delay={0.1} duration={0.5} y={16}>
+          <div className="px-4 sm:px-8 pt-6 sm:pt-8">
+            <Logo className="h-10" />
+          </div>
+        </AnimateIn>
 
         {/* Main content */}
-        <div className="px-4 sm:px-8 lg:px-0 pt-6 sm:pt-8 flex flex-col">
+        <AnimateIn delay={0.2} duration={0.6} y={20} className="px-4 sm:px-8 lg:px-0 pt-6 sm:pt-8 flex flex-col">
           {/* Address & links */}
           <div className="space-y-1 text-foreground text-xl">
             <p className="font-display font-bold tracking-display-tight">RCA BLK</p>
@@ -56,7 +58,7 @@ export default function Contact() {
               <p>Web Development : Eloka Agu</p>
             </div>
           </div>
-        </div>
+        </AnimateIn>
       </div>
       <Footer />
     </div>

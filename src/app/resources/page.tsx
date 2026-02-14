@@ -1,6 +1,8 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
+import { AnimateIn } from "@/components/AnimateIn";
+import { AnimateStagger } from "@/components/AnimateStagger";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,18 +16,21 @@ export default function Resources() {
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
       <SlideOutMenu />
 
-      <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
-        <Logo className="h-10" />
-      </div>
+      <AnimateIn delay={0.1} duration={0.5} y={16}>
+        <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
+          <Logo className="h-10" />
+        </div>
+      </AnimateIn>
 
-      {/* Title */}
-      <div className="text-center py-8">
-        <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">Resources</h2>
-      </div>
+      <AnimateIn delay={0.2} duration={0.6} y={20}>
+        <div className="text-center py-8">
+          <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">Resources</h2>
+        </div>
+      </AnimateIn>
 
       {/* Content */}
       <main className="flex-1 max-w-2xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 w-full">
-        <div className="space-y-6 sm:space-y-8 text-foreground text-lg sm:text-xl leading-relaxed">
+        <AnimateStagger delay={0.3} stagger={0.08} className="space-y-6 sm:space-y-8 text-foreground text-lg sm:text-xl leading-relaxed">
           <p>
             The RCA is committed to celebrating diversity, eliminating discrimination and
             promoting equality of opportunity to all.
@@ -83,7 +88,7 @@ export default function Resources() {
               </a>
             </li>
           </ul>
-        </div>
+        </AnimateStagger>
       </main>
 
       <Footer />
