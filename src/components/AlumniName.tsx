@@ -31,7 +31,9 @@ export function AlumniName({ name, snapshot, link }: AlumniNameProps) {
 
     // Vertically center with the name when placing beside it
     const yCentered = rect.top + rect.height / 2 - IMG_HEIGHT / 2;
-    const yClamped = Math.max(GAP, Math.min(yCentered, vh - IMG_HEIGHT - GAP));
+    // Keep image in upper portion of viewport – max bottom at ~45% to avoid overlapping footer
+    const yMax = Math.max(GAP, vh * 0.45 - IMG_HEIGHT);
+    const yClamped = Math.max(GAP, Math.min(yCentered, yMax, vh - IMG_HEIGHT - GAP));
 
     // Prefer beside the name (never covers it): right first, then left
     if (rect.right + GAP + IMG_WIDTH <= vw - GAP) {
@@ -45,7 +47,7 @@ export function AlumniName({ name, snapshot, link }: AlumniNameProps) {
       if (rect.top >= IMG_HEIGHT + GAP) {
         y = rect.top - IMG_HEIGHT - GAP;
       } else if (rect.bottom + IMG_HEIGHT + GAP <= vh) {
-        y = rect.bottom + GAP;
+        y = Math.min(rect.bottom + GAP, yMax);
       } else {
         y = yClamped;
       }

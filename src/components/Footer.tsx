@@ -67,11 +67,11 @@ const Footer = () => {
           <Image
             src="/rca_logo.png"
             alt="Royal College of Art"
-            width={140}
-            height={40}
+            width={210}
+            height={60}
             loading="lazy"
             onLoad={() => setLogoLoaded(true)}
-            className={`h-8 w-auto object-contain transition-all duration-700 ease-out ${
+            className={`h-12 sm:h-14 w-auto object-contain transition-all duration-700 ease-out ${
               logoLoaded ? "opacity-100 blur-0" : "opacity-60 blur-md"
             }`}
           />

@@ -43,7 +43,7 @@ function LetterCell({
       onTouchEnd={() => setTimeout(onHoverEnd, 150)}
     >
       {/* Letter image */}
-      <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-5">
+      <div className="absolute inset-0 flex items-center justify-center p-0.5 sm:p-1">
         <div className="relative w-full h-full flex items-center justify-center">
           {/* Label: centered inside the letter (on hover) */}
           {showLabel && (
@@ -79,37 +79,16 @@ function LetterCell({
               } as React.CSSProperties}
             />
           ) : (
-            <>
-              <Image
-                src={imgSrc}
-                alt={letter.label}
-                fill
-                sizes="(max-width: 768px) 33vw, 340px"
-                className={`object-contain transition-opacity duration-300 ${
-                  isHovered && !letter.svgHover ? "brightness-0 invert" : ""
-                } ${imageLoaded ? "opacity-100" : "opacity-0"}`}
-                onLoad={() => onImageLoad(imgSrc)}
-              />
-              {/* Hover highlight for non-C letters */}
-              {isHovered && (
-                <div
-                  className="absolute inset-0 pointer-events-none"
-                  style={
-                    {
-                      maskImage: `url(${letter.svgHover || letter.svg})`,
-                      maskSize: "contain",
-                      maskPosition: "center",
-                      maskRepeat: "no-repeat",
-                      WebkitMaskImage: `url(${letter.svgHover || letter.svg})`,
-                      WebkitMaskSize: "contain",
-                      WebkitMaskPosition: "center",
-                      WebkitMaskRepeat: "no-repeat",
-                      background: "radial-gradient(ellipse 40% 50% at 50% 45%, rgba(255,255,255,0.5) 0%, transparent 70%)",
-                    } as React.CSSProperties
-                  }
-                />
-              )}
-            </>
+            <Image
+              src={imgSrc}
+              alt={letter.label}
+              fill
+              sizes="(max-width: 768px) 33vw, 340px"
+              className={`object-contain transition-opacity duration-300 ${
+                isHovered && !letter.svgHover ? "brightness-0 invert" : ""
+              } ${imageLoaded ? "opacity-100" : "opacity-0"}`}
+              onLoad={() => onImageLoad(imgSrc)}
+            />
           )}
         </div>
       </div>
