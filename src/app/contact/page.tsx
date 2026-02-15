@@ -1,7 +1,6 @@
 import Image from "next/image";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
-import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
 import { ContactForm } from "@/components/ContactForm";
 import { AnimateIn } from "@/components/AnimateIn";
@@ -44,12 +43,6 @@ export default function Contact() {
 
       {/* Content - white text on coral areas */}
       <div className="relative z-10 flex-1 flex flex-col min-h-screen">
-        <AnimateIn delay={0.1} duration={0.5} y={16}>
-          <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
-            <Logo className="h-10" variant="white" />
-          </div>
-        </AnimateIn>
-
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-8 px-4 sm:px-8 lg:px-12 pt-8 pb-8">
           {/* Left column - contact info block */}
           <AnimateIn delay={0.2} duration={0.6} y={20} className="flex flex-col">

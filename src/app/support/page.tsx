@@ -1,6 +1,5 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
-import { Logo } from "@/components/Logo";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import Link from "next/link";
@@ -19,12 +18,6 @@ export default function Support() {
       style={{ backgroundColor: "#E88350" }}
     >
       <SlideOutMenu />
-
-      <AnimateIn delay={0.1} duration={0.5} y={16}>
-        <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
-          <Logo className="h-10" />
-        </div>
-      </AnimateIn>
 
       {/* Yellow L-shape graphic - decorative overlay behind title and content */}
       <div

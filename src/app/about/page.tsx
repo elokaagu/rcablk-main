@@ -1,6 +1,5 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
-import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
@@ -23,17 +22,7 @@ export default function About() {
     >
       <SlideOutMenu />
 
-      {/* RCA BLK logo - fixed at top, centered on white/blue boundary */}
-      <AnimateIn delay={0.1} duration={0.5} y={16}>
-        <div
-          className="fixed left-1/2 -translate-x-1/2 z-30"
-          style={{ top: "max(1.5rem, env(safe-area-inset-top))" }}
-        >
-          <Logo className="h-10 lg:h-12" />
-        </div>
-      </AnimateIn>
-
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen pt-16 sm:pt-20">
+      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen">
         {/* Left column - Text */}
         <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 bg-white">
           <AnimateIn delay={0.2} duration={0.6} y={20}>

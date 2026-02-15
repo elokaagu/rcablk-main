@@ -1,7 +1,6 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import Link from "next/link";
-import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
@@ -21,12 +20,6 @@ export default function News() {
       style={{ backgroundColor: "#FFD700" }}
     >
       <SlideOutMenu />
-
-      <AnimateIn delay={0.1} duration={0.5} y={16}>
-        <div className="px-4 sm:px-8 lg:px-12 pt-6 sm:pt-8">
-          <Logo className="h-10" />
-        </div>
-      </AnimateIn>
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>
         <div className="text-center py-8">
