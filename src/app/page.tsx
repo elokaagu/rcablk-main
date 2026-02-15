@@ -13,14 +13,8 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
-      {/* Dark top bar */}
-      <header
-        className="fixed top-0 left-0 right-0 z-40 h-12 sm:h-14 shrink-0"
-        style={{ backgroundColor: "hsl(220, 15%, 18%)" }}
-        aria-hidden
-      />
-      <SlideOutMenu iconOnDark />
-      <main className="flex-1 flex items-center justify-center pt-12 sm:pt-14 pb-0 min-h-0">
+      <SlideOutMenu />
+      <main className="flex-1 flex items-center justify-center pb-0 min-h-0">
         <RCALetterforms />
       </main>
       <Footer />

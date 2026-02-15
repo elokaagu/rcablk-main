@@ -38,7 +38,7 @@ function LetterCell({
       onTouchStart={onHover}
       onTouchEnd={() => setTimeout(onLeave, 150)}
     >
-      <div className="absolute inset-0 flex items-center justify-center p-1">
+      <div className="absolute inset-0 flex items-center justify-center p-0">
         {/* Label (on hover) - masked to letter shape */}
         {showLabel && (
           <span
@@ -58,10 +58,10 @@ function LetterCell({
             {letter.label}
           </span>
         )}
-        {/* C: solid white fill */}
+        {/* C: black by default, white on hover */}
         {isC ? (
           <div
-            className="absolute inset-0 bg-white"
+            className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-white" : "bg-black"}`}
             style={{
               maskImage: `url('${letter.svg}')`,
               maskSize: "contain",

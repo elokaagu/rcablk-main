@@ -12,9 +12,11 @@ interface AlumniNameProps {
   name: string;
   snapshot?: string;
   link?: string;
+  /** 0 = left column (image on right), 1 = right column (image on left) */
+  columnIndex?: 0 | 1;
 }
 
-export function AlumniName({ name, snapshot, link }: AlumniNameProps) {
+export function AlumniName({ name, snapshot, link, columnIndex = 0 }: AlumniNameProps) {
   const [hovered, setHovered] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -35,11 +37,21 @@ export function AlumniName({ name, snapshot, link }: AlumniNameProps) {
     const yMax = Math.max(GAP, vh * 0.45 - IMG_HEIGHT);
     const yClamped = Math.max(GAP, Math.min(yCentered, yMax, vh - IMG_HEIGHT - GAP));
 
-    // Prefer beside the name (never covers it): right first, then left
-    if (rect.right + GAP + IMG_WIDTH <= vw - GAP) {
+    // Left column (0): image on right. Right column (1): image on left.
+    const preferLeft = columnIndex === 1;
+    const fitRight = rect.right + GAP + IMG_WIDTH <= vw - GAP;
+    const fitLeft = rect.left >= GAP + IMG_WIDTH + GAP;
+
+    if (preferLeft && fitLeft) {
+      x = rect.left - GAP - IMG_WIDTH;
+      y = yClamped;
+    } else if (!preferLeft && fitRight) {
       x = rect.right + GAP;
       y = yClamped;
-    } else if (rect.left >= GAP + IMG_WIDTH + GAP) {
+    } else if (fitRight) {
+      x = rect.right + GAP;
+      y = yClamped;
+    } else if (fitLeft) {
       x = rect.left - GAP - IMG_WIDTH;
       y = yClamped;
     } else {

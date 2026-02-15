@@ -20,12 +20,12 @@ const NameList = ({ members }: { members: typeof foundingMembers }) => {
     <div className="grid grid-cols-2 gap-x-4 sm:gap-x-16 gap-y-1">
       <div className="flex flex-col gap-1">
         {col1.map((m, i) => (
-          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} />
+          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} columnIndex={0} />
         ))}
       </div>
       <div className="flex flex-col gap-1">
         {col2.map((m, i) => (
-          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} />
+          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} columnIndex={1} />
         ))}
       </div>
     </div>

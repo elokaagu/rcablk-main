@@ -42,8 +42,8 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
           height={32}
           loading="lazy"
           onLoad={() => setMenuIconLoaded(true)}
-          className={`flex-shrink-0 transition-all duration-700 ease-out ${
-            menuIconLoaded ? "opacity-100 blur-0" : "opacity-60 blur-sm"
+          className={`flex-shrink-0 transition-opacity duration-300 ${
+            menuIconLoaded ? "opacity-100" : "opacity-60"
           } ${iconOnDark ? "invert" : ""}`}
         />
       </button>
@@ -112,8 +112,8 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
               height={120}
               loading="lazy"
               onLoad={() => setLogoLoaded(true)}
-              className={`h-16 w-auto object-contain transition-all duration-700 ease-out ${
-                logoLoaded ? "opacity-90 blur-0" : "opacity-50 blur-md"
+              className={`h-16 w-auto object-contain transition-opacity duration-300 ${
+                logoLoaded ? "opacity-90" : "opacity-50"
               }`}
             />
           </div>

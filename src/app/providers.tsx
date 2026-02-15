@@ -1,11 +1,13 @@
 "use client";
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
+import dynamic from "next/dynamic";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieBanner } from "@/components/CookieBanner";
 import { useState } from "react";
+
+const Toaster = dynamic(() => import("@/components/ui/toaster").then((m) => ({ default: m.Toaster })), { ssr: false });
+const Sonner = dynamic(() => import("@/components/ui/sonner").then((m) => ({ default: m.Toaster })), { ssr: false });
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
