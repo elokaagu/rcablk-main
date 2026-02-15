@@ -43,7 +43,7 @@ export default function News() {
               href={`/news/${item.slug}`}
               className="group no-underline block focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2"
             >
-              <article className="flex flex-col h-full border border-white p-0">
+              <article className="flex flex-col h-full">
                 <div className="relative overflow-hidden">
                   <BlurImage
                     src={item.image}

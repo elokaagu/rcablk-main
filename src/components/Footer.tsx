@@ -34,7 +34,7 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-secondary text-white px-4 sm:px-8 py-8">
+    <footer className="bg-secondary text-secondary-foreground px-4 sm:px-8 py-8">
       <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-6 text-base">
         {columns.map((col, i) => (
           <div key={i} className="flex flex-col gap-2">
