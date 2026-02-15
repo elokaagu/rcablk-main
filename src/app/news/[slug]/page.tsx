@@ -4,6 +4,7 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
 import { NewsArticleGallery } from "@/components/NewsArticleGallery";
+import { BlurImage } from "@/components/BlurImage";
 import { newsArticles } from "@/data/news";
 import type { Metadata } from "next";
 
