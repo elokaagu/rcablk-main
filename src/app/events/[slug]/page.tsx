@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import { Logo } from "@/components/Logo";
 import { BlurImage } from "@/components/BlurImage";
 import { events } from "@/data/events";
 import type { Metadata } from "next";
@@ -50,6 +52,18 @@ export default async function EventDetail({ params }: PageProps) {
         }}
       />
       <SlideOutMenu />
+
+      <div className="px-4 sm:px-8 pt-6 sm:pt-8 text-left">
+        <Logo className="h-10" />
+      </div>
+      <div className="px-4 sm:px-8 pt-3">
+        <Link
+          href="/events"
+          className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/90 text-foreground hover:bg-white transition-colors rounded-lg shadow-sm border border-foreground/10 no-underline"
+        >
+          ← Back to Events
+        </Link>
+      </div>
 
       {/* Section heading: Events */}
       <div className="text-center pt-6 sm:pt-8 pb-2">

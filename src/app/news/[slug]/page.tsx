@@ -61,16 +61,18 @@ export default async function NewsArticle({ params }: PageProps) {
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_minmax(0,900px)_1fr] min-h-0">
         <div className="hidden lg:block" style={{ backgroundColor: "#FFC107" }} />
         <div className="flex flex-col min-w-0">
-          <div className="px-4 sm:px-8 pt-6 sm:pt-8">
+          <div className="px-4 sm:px-8 pt-6 sm:pt-8 text-left">
             <Logo className="h-10" />
           </div>
 
-          <Link
-            href="/news"
-            className="px-4 sm:px-8 mt-2 text-foreground underline hover:opacity-70 transition-opacity inline-flex"
-          >
-            ← Back to News
-          </Link>
+          <div className="px-4 sm:px-8 mt-3">
+            <Link
+              href="/news"
+              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/90 text-foreground hover:bg-white transition-colors rounded-lg shadow-sm border border-foreground/10 no-underline"
+            >
+              ← Back to News
+            </Link>
+          </div>
 
           <article className="flex-1 pt-6 pb-12 sm:pb-16">
             {hasGallery ? (

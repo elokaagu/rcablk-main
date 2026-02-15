@@ -38,7 +38,7 @@ function LetterCell({
       onTouchStart={onHover}
       onTouchEnd={() => setTimeout(onLeave, 150)}
     >
-      <div className="absolute inset-0 flex items-center justify-center p-0">
+      <div className="absolute inset-0 flex items-center justify-center p-0 overflow-hidden">
         {/* Label (on hover) - masked to letter shape */}
         {showLabel && (
           <span
@@ -64,11 +64,11 @@ function LetterCell({
             className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-white" : "bg-black"}`}
             style={{
               maskImage: `url('${letter.svg}')`,
-              maskSize: "contain",
+              maskSize: "cover",
               maskPosition: "center",
               maskRepeat: "no-repeat",
               WebkitMaskImage: `url('${letter.svg}')`,
-              WebkitMaskSize: "contain",
+              WebkitMaskSize: "cover",
               WebkitMaskPosition: "center",
               WebkitMaskRepeat: "no-repeat",
             } as React.CSSProperties}
@@ -79,7 +79,7 @@ function LetterCell({
             alt={letter.label}
             fill
             sizes="(max-width: 768px) 33vw, 340px"
-            className={`object-contain transition-opacity duration-300 ${
+            className={`object-cover transition-opacity duration-300 ${
               invertOnHover ? "brightness-0 invert" : ""
             }`}
           />
