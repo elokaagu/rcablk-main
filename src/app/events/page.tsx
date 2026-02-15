@@ -42,7 +42,7 @@ export default function Events() {
                   {event.name}
                 </h3>
                 {details && (
-                  <p className="mt-1 text-base text-foreground leading-relaxed">{details}</p>
+                  <p className="mt-1 text-sm text-foreground leading-relaxed">{details}</p>
                 )}
               </Link>
             );

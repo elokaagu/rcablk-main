@@ -26,8 +26,8 @@ export function Logo({ className = "", variant = "black" }: LogoProps) {
         height={60}
         loading="lazy"
         onLoad={() => setLoaded(true)}
-        className={`h-full w-auto object-contain transition-all duration-700 ease-out ${
-          loaded ? "opacity-100 blur-0" : "opacity-60 blur-md"
+        className={`h-full w-auto object-contain transition-opacity duration-300 ${
+          loaded ? "opacity-100" : "opacity-70"
         }`}
       />
     </Link>

@@ -64,11 +64,11 @@ function LetterCell({
             className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-white" : "bg-black"}`}
             style={{
               maskImage: `url('${letter.svg}')`,
-              maskSize: "cover",
+              maskSize: "contain",
               maskPosition: "center",
               maskRepeat: "no-repeat",
               WebkitMaskImage: `url('${letter.svg}')`,
-              WebkitMaskSize: "cover",
+              WebkitMaskSize: "contain",
               WebkitMaskPosition: "center",
               WebkitMaskRepeat: "no-repeat",
             } as React.CSSProperties}
@@ -79,7 +79,7 @@ function LetterCell({
             alt={letter.label}
             fill
             sizes="(max-width: 768px) 33vw, 340px"
-            className={`object-cover transition-opacity duration-300 ${
+            className={`object-contain transition-opacity duration-300 ${
               invertOnHover ? "brightness-0 invert" : ""
             }`}
           />

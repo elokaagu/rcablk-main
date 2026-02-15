@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
-import { Logo } from "@/components/Logo";
+import { ArticleHeader } from "@/components/ArticleHeader";
 import { NewsArticleGallery } from "@/components/NewsArticleGallery";
 import { BlurImage } from "@/components/BlurImage";
 import { newsArticles } from "@/data/news";
@@ -61,18 +61,7 @@ export default async function NewsArticle({ params }: PageProps) {
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-[1fr_minmax(0,900px)_1fr] min-h-0">
         <div className="hidden lg:block" style={{ backgroundColor: "#FFC107" }} />
         <div className="flex flex-col min-w-0">
-          <div className="px-4 sm:px-8 pt-6 sm:pt-8 text-left">
-            <Logo className="h-10" />
-          </div>
-
-          <div className="px-4 sm:px-8 mt-3">
-            <Link
-              href="/news"
-              className="inline-flex items-center gap-2 px-4 py-2.5 bg-white/90 text-foreground hover:bg-white transition-colors rounded-lg shadow-sm border border-foreground/10 no-underline"
-            >
-              ← Back to News
-            </Link>
-          </div>
+          <ArticleHeader backHref="/news" backLabel="Back to News" />
 
           <article className="flex-1 pt-6 pb-12 sm:pb-16">
             {hasGallery ? (
