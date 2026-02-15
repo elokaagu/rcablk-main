@@ -3,7 +3,7 @@ import Link from "next/link";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { Logo } from "@/components/Logo";
-import { BlurImage } from "@/components/BlurImage";
+import { NewsArticleGallery } from "@/components/NewsArticleGallery";
 import { newsArticles } from "@/data/news";
 import type { Metadata } from "next";
 
@@ -72,35 +72,17 @@ export default async function NewsArticle({ params }: PageProps) {
           </Link>
 
           <article className="flex-1 pt-6 pb-12 sm:pb-16">
-            {/* Featured image - large */}
-            <div className="w-full mb-4">
-              <BlurImage
-                src={article.image}
-                alt={article.title}
-                aspectRatio="3/4"
-                className="w-full max-w-2xl mx-auto"
-                sizes="(max-width: 768px) 100vw, 672px"
-              />
-            </div>
-
-            {/* Horizontal gallery - when available */}
-            {hasGallery && (
-              <div className="w-full overflow-x-auto overflow-y-hidden flex gap-2 py-4 mb-8">
-                <div className="flex gap-1 min-w-max px-4 sm:px-8">
-                  {article.gallery!.map((img, i) => (
-                    <div
-                      key={i}
-                      className="relative w-24 sm:w-32 aspect-[3/4] shrink-0 overflow-hidden"
-                    >
-                      <BlurImage
-                        src={img}
-                        alt={`${article.title} gallery ${i + 1}`}
-                        aspectRatio="3/4"
-                        sizes="128px"
-                      />
-                    </div>
-                  ))}
-                </div>
+            {hasGallery ? (
+              <NewsArticleGallery images={article.gallery!} title={article.title} />
+            ) : (
+              <div className="w-full mb-4">
+                <BlurImage
+                  src={article.image}
+                  alt={article.title}
+                  aspectRatio="3/4"
+                  className="w-full max-w-2xl mx-auto"
+                  sizes="(max-width: 768px) 100vw, 672px"
+                />
               </div>
             )}
 
