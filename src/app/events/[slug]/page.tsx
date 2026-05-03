@@ -3,8 +3,10 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { ArticleHeader } from "@/components/ArticleHeader";
 import { BlurImage } from "@/components/BlurImage";
-import { events } from "@/data/events";
+import { getEvents } from "@/lib/cms/events-repo";
 import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -12,6 +14,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const events = await getEvents();
   const event = events.find((e) => e.slug === slug);
   if (!event) return { title: "Event Not Found" };
   return {
@@ -26,6 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function EventDetail({ params }: PageProps) {
   const { slug } = await params;
+  const events = await getEvents();
   const event = events.find((e) => e.slug === slug);
 
   if (!event) {

@@ -99,6 +99,7 @@ export default function RCALetterforms() {
     if (!el) return;
 
     function measure() {
+      if (!el) return;
       const { width: cw, height: ch } = el.getBoundingClientRect();
       if (ch <= 0 || cw <= 0) return;
       const gridW = Math.min(cw, ch * 1.5);

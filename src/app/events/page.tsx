@@ -4,8 +4,10 @@ import Link from "next/link";
 import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
-import { events } from "@/data/events";
+import { getEvents } from "@/lib/cms/events-repo";
 import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Events | RCA BLK",
@@ -14,7 +16,8 @@ export const metadata: Metadata = {
 };
 
 /** Matches reference events listing: pale sage field, three-up cards, display + serif hierarchy */
-export default function Events() {
+export default async function Events() {
+  const events = await getEvents();
   return (
     <div
       className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden text-black"

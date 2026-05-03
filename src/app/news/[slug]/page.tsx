@@ -4,8 +4,10 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { NewsArticleGallery } from "@/components/NewsArticleGallery";
 import { BlurImage } from "@/components/BlurImage";
-import { newsArticles } from "@/data/news";
+import { getNewsArticles } from "@/lib/cms/news-repo";
 import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -13,6 +15,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  const newsArticles = await getNewsArticles();
   const article = newsArticles.find((a) => a.slug === slug);
   if (!article) return { title: "Article Not Found" };
   const description = article.body[0]?.slice(0, 160) || article.title;
@@ -28,6 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function NewsArticle({ params }: PageProps) {
   const { slug } = await params;
+  const newsArticles = await getNewsArticles();
   const article = newsArticles.find((a) => a.slug === slug);
 
   if (!article) {

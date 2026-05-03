@@ -6,6 +6,8 @@ export interface NewsArticle {
   image: string;
   gallery?: string[];
   body: string[];
+  /** Optional CMS ordering */
+  sort_order?: number;
 }
 
 export const newsArticles: NewsArticle[] = [

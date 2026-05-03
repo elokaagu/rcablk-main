@@ -4,8 +4,10 @@ import Link from "next/link";
 import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
-import { newsArticles } from "@/data/news";
+import { getNewsArticles } from "@/lib/cms/news-repo";
 import type { Metadata } from "next";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "News | RCA BLK",
@@ -14,7 +16,8 @@ export const metadata: Metadata = {
 };
 
 /** Listing layout aligned with editorial reference: saturated yellow field, two-up cards, portrait art, serif date + title */
-export default function News() {
+export default async function News() {
+  const newsArticles = await getNewsArticles();
   return (
     <div className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden bg-[#FFDD00] text-black">
       <SlideOutMenu />
