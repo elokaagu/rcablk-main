@@ -56,24 +56,29 @@ export default async function Support() {
         </div>
       </div>
 
-      <div className="relative z-10 flex flex-1 flex-col px-6 pb-16 pt-24 sm:px-10 sm:pb-20 sm:pt-28 lg:px-12">
-        <AnimateIn delay={0.15} duration={0.55} y={12}>
-          <header className="mb-10 text-center sm:mb-12">
-            <h1 className="font-serif text-3xl font-normal tracking-tight text-black sm:text-4xl">
-              {cms?.title?.trim() ? cms.title : "Support"}
-            </h1>
-          </header>
-        </AnimateIn>
+      {/* y-center: one column so title + copy sit mid-viewport between logo band and footer */}
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col px-6 sm:px-10 lg:px-12">
+        <div
+          className="flex flex-1 flex-col justify-center py-10 pt-[max(5.5rem,env(safe-area-inset-top,0px))] pb-12 sm:py-14 sm:pt-28 sm:pb-16"
+        >
+          <AnimateIn delay={0.15} duration={0.55} y={12}>
+            <header className="mb-8 text-center sm:mb-10">
+              <h1 className="font-serif text-3xl font-normal tracking-tight text-black sm:text-4xl">
+                {cms?.title?.trim() ? cms.title : "Support"}
+              </h1>
+            </header>
+          </AnimateIn>
 
-        <main className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center pb-8 sm:max-w-[34rem] sm:pb-12">
-          <AnimateStagger
-            delay={0.2}
-            stagger={0.08}
-            className="space-y-7 text-center font-serif text-lg leading-relaxed text-black sm:space-y-8 sm:text-xl sm:leading-relaxed"
-          >
-            <SupportBody paragraphs={paragraphs} />
-          </AnimateStagger>
-        </main>
+          <main className="mx-auto w-full max-w-xl sm:max-w-[34rem]">
+            <AnimateStagger
+              delay={0.2}
+              stagger={0.08}
+              className="space-y-7 text-center font-serif text-lg leading-relaxed text-black sm:space-y-8 sm:text-xl sm:leading-relaxed"
+            >
+              <SupportBody paragraphs={paragraphs} />
+            </AnimateStagger>
+          </main>
+        </div>
       </div>
 
       <Footer />
