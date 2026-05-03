@@ -13,13 +13,16 @@
 
 @layer base {
   :root {
-    --background: 40 100% 50%;
+    /* Default page chrome (most routes); homepage uses --home-hero instead */
+    --background: 0 0% 100%;
     --foreground: 0 0% 0%;
 
-    --card: 40 100% 50%;
+    --home-hero: 40 100% 50%;
+
+    --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
 
-    --popover: 40 100% 50%;
+    --popover: 0 0% 100%;
     --popover-foreground: 0 0% 0%;
 
     --primary: 0 0% 0%;
@@ -28,8 +31,8 @@
     --secondary: 24 95% 53%;
     --secondary-foreground: 0 0% 0%;
 
-    --muted: 40 80% 45%;
-    --muted-foreground: 0 0% 15%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
 
     --accent: 24 95% 53%;
     --accent-foreground: 0 0% 0%;
@@ -64,7 +67,7 @@
   html {
     font-size: 18px;
     scroll-behavior: smooth;
-    overflow-x: hidden;
+    overflow-x: clip;
     -webkit-text-size-adjust: 100%;
   }
 
@@ -73,7 +76,7 @@
     font-family: jubilat, Georgia, serif;
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
+    overflow-x: clip;
     -webkit-tap-highlight-color: transparent;
   }
 }

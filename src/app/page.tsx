@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
+    <div className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden bg-homeHero">
       <SlideOutMenu />
       <main className="flex min-h-0 w-full flex-1 flex-col pb-0">
         <RCALetterforms />

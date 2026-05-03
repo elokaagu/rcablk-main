@@ -2,17 +2,23 @@ import Link from "next/link";
 
 interface ArticleHeaderProps {
   backHref: string;
+  /** Short visible label, e.g. "Events" */
   backLabel: string;
+  /** Optional screen-reader hint */
+  ariaLabel?: string;
 }
 
-export function ArticleHeader({ backHref, backLabel }: ArticleHeaderProps) {
+export function ArticleHeader({ backHref, backLabel, ariaLabel }: ArticleHeaderProps) {
   return (
-    <header className="px-4 sm:px-8 pt-4 sm:pt-6">
+    <header className="px-4 pt-4 sm:px-8 sm:pt-6">
       <Link
         href={backHref}
-        className="inline-flex items-center gap-2 px-5 py-2.5 bg-secondary text-secondary-foreground font-display font-medium uppercase tracking-wide hover:opacity-90 transition-opacity no-underline"
+        aria-label={ariaLabel ?? `${backLabel} — go back to listing`}
+        className="inline-flex items-center gap-1.5 font-serif text-sm text-black/75 underline decoration-black/25 underline-offset-[0.25em] transition-colors hover:text-black hover:decoration-black/50"
       >
-        <span aria-hidden>←</span>
+        <span aria-hidden className="translate-y-px select-none text-black/60">
+          ←
+        </span>
         {backLabel}
       </Link>
     </header>

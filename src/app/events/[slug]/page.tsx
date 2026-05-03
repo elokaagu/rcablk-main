@@ -56,7 +56,7 @@ export default async function EventDetail({ params }: PageProps) {
       />
       <SlideOutMenu />
 
-      <ArticleHeader backHref="/events" backLabel="Back to Events" />
+      <ArticleHeader backHref="/events" backLabel="Events" ariaLabel="Back to all events" />
 
       {/* Section heading: Events */}
       <div className="text-center pt-6 sm:pt-8 pb-2">

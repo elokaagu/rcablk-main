@@ -5,7 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 
 const LETTERS = [
-  { id: "r", label: "RESOURCES", href: "/resources", svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg", whiteHover: "/SVG Letterforms/RCA BLK–Letterforms-R-White.svg" },
+  /** R: white Γ + yellow notch (mask); tiny serif “R” in crook — see brand mock. */
+  { id: "r", label: "RESOURCES", href: "/resources", svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg", whiteHover: null },
   { id: "c", label: "EVENTS", href: "/events", svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg", whiteHover: null },
   { id: "a", label: "ABOUT", href: "/about", svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg", whiteHover: null },
   { id: "b", label: "CONTACT", href: "/contact", svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg", whiteHover: null },
@@ -28,11 +29,24 @@ function LetterCell({
   const imgSrc = isHovered && letter.whiteHover ? letter.whiteHover : letter.svg;
   const invertOnHover = isHovered && !letter.whiteHover;
   const isC = letter.id === "c";
+  const isR = letter.id === "r";
+
+  const maskStyle = {
+    maskImage: `url('${letter.svg}')`,
+    maskSize: "contain",
+    maskPosition: "center",
+    maskRepeat: "no-repeat",
+    WebkitMaskImage: `url('${letter.svg}')`,
+    WebkitMaskSize: "contain",
+    WebkitMaskPosition: "center",
+    WebkitMaskRepeat: "no-repeat",
+  } as React.CSSProperties;
 
   return (
     <Link
       href={letter.href}
-      className="relative block w-full aspect-square bg-background overflow-hidden touch-manipulation"
+      aria-label={letter.label}
+      className="relative block aspect-square w-full overflow-hidden bg-homeHero touch-manipulation"
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       onTouchStart={onHover}
@@ -42,41 +56,42 @@ function LetterCell({
         {/* Label (on hover) - masked to letter shape */}
         {showLabel && (
           <span
-            className="absolute inset-0 flex items-center justify-center z-10 font-serif font-bold text-black text-sm sm:text-base text-center whitespace-nowrap"
+            className={`absolute inset-0 z-10 flex items-center justify-center font-serif text-sm font-bold text-center whitespace-nowrap sm:text-base ${
+              isR && isHovered ? "text-white" : "text-black"
+            }`}
             style={{
-              maskImage: `url('${letter.svg}')`,
-              maskSize: "contain",
-              maskPosition: "center",
-              maskRepeat: "no-repeat",
-              WebkitMaskImage: `url('${letter.svg}')`,
-              WebkitMaskSize: "contain",
-              WebkitMaskPosition: "center",
-              WebkitMaskRepeat: "no-repeat",
+              ...maskStyle,
               transform: "scale(0.5)",
-            } as React.CSSProperties}
+            }}
           >
             {letter.label}
           </span>
         )}
-        {/* C: black by default, white on hover */}
-        {isC ? (
+        {/* R: white Γ + notch (yellow = cell bg); tiny serif R in crook; hover → black fill + white label */}
+        {isR ? (
+          <>
+            <div
+              className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-black" : "bg-white"}`}
+              style={maskStyle}
+            />
+            {!isHovered && (
+              <span
+                className="pointer-events-none absolute left-[13%] top-[11%] z-[5] font-serif text-[0.58rem] font-normal leading-none tracking-tight text-black sm:left-[14%] sm:top-[12%] sm:text-[0.68rem]"
+                aria-hidden
+              >
+                R
+              </span>
+            )}
+          </>
+        ) : isC ? (
           <div
             className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-white" : "bg-black"}`}
-            style={{
-              maskImage: `url('${letter.svg}')`,
-              maskSize: "contain",
-              maskPosition: "center",
-              maskRepeat: "no-repeat",
-              WebkitMaskImage: `url('${letter.svg}')`,
-              WebkitMaskSize: "contain",
-              WebkitMaskPosition: "center",
-              WebkitMaskRepeat: "no-repeat",
-            } as React.CSSProperties}
+            style={maskStyle}
           />
         ) : (
           <Image
             src={imgSrc}
-            alt={letter.label}
+            alt=""
             fill
             sizes="(max-width: 768px) 33vw, 340px"
             className={`object-contain transition-opacity duration-300 ${

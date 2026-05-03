@@ -18,31 +18,35 @@ export const metadata: Metadata = {
 export default function About() {
   return (
     <div
-      className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0"
+      className="flex min-h-dvh min-h-screen min-w-0 w-full flex-col overflow-x-clip bg-white"
       style={{
-        background: "linear-gradient(to right, white 0%, white 50%, hsl(207, 70%, 88%) 50%, hsl(207, 70%, 88%) 100%)",
+        backgroundImage:
+          "linear-gradient(to right, #ffffff 0%, #ffffff 50%, hsl(207, 70%, 88%) 50%, hsl(207, 70%, 88%) 100%)",
       }}
     >
       <SlideOutMenu />
 
-      <main className="relative flex-1 grid min-h-screen grid-cols-1 gap-0 lg:grid-cols-2">
-        {/* RCA BLK logotype centered on the white / blue column seam (50% width) */}
+      <main className="relative flex-1 lg:min-h-screen">
+        {/* Sticky seam logo: zero layout height, centers on 50% seam while scrolling */}
         <div
-          className="pointer-events-none absolute left-1/2 z-20 -translate-x-1/2"
+          className="pointer-events-none sticky z-30 h-0 w-full"
           style={{
             top: "max(5.25rem, calc(env(safe-area-inset-top) + 3.25rem))",
           }}
         >
-          <Image
-            src={ABOUT_SEAM_LOGO}
-            alt="RCA BLK"
-            width={220}
-            height={88}
-            className="h-14 w-auto select-none sm:h-16 lg:h-[4.5rem]"
-            priority
-          />
+          <div className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2">
+            <Image
+              src={ABOUT_SEAM_LOGO}
+              alt="RCA BLK"
+              width={220}
+              height={88}
+              className="pointer-events-none h-14 w-auto select-none sm:h-16 lg:h-[4.5rem]"
+              priority
+            />
+          </div>
         </div>
 
+        <div className="grid min-h-screen grid-cols-1 gap-0 lg:grid-cols-2">
         {/* Left column - Text */}
         <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 bg-white">
           <AnimateIn delay={0.2} duration={0.6} y={20}>
@@ -91,6 +95,7 @@ export default function About() {
             </p>
           </div>
           </AnimateStagger>
+        </div>
         </div>
       </main>
 

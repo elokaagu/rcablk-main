@@ -1,6 +1,7 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { AlumniName } from "@/components/AlumniName";
+import { AlumniPreviewAside, AlumniPreviewProvider } from "@/components/alumni/AlumniPreviewContext";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import { foundingMembers, alumni } from "@/data/alumni";
@@ -19,12 +20,12 @@ const NameList = ({ members }: { members: typeof foundingMembers }) => {
     <div className="grid grid-cols-2 gap-x-4 sm:gap-x-16 gap-y-1">
       <div className="flex flex-col gap-1">
         {col1.map((m, i) => (
-          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} columnIndex={0} />
+          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} />
         ))}
       </div>
       <div className="flex flex-col gap-1">
         {col2.map((m, i) => (
-          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} columnIndex={1} />
+          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} />
         ))}
       </div>
     </div>
@@ -42,21 +43,31 @@ export default function Alumni() {
         </div>
       </AnimateIn>
 
-      <main className="flex-1 px-6 sm:px-10 lg:px-16 max-w-4xl mx-auto w-full pb-12 sm:pb-16">
-        <AnimateStagger delay={0.3} stagger={0.08} className="space-y-12 sm:space-y-16">
-        {/* Founding Members */}
-        <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-8">
-          <h3 className="text-xl italic text-foreground font-medium">Founding Members</h3>
-          <NameList members={foundingMembers} />
-        </div>
+      <AlumniPreviewProvider>
+        <main className="mx-auto w-full max-w-6xl flex-1 px-6 pb-12 sm:px-10 sm:pb-16 lg:px-12">
+          {/*
+            Mobile: founding → preview strip → alumni (nothing overlays the lists).
+            lg+: names in column 1; sticky preview in the right margin (column 2, spans both rows).
+          */}
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-x-14 lg:items-start">
+            <AnimateStagger delay={0.3} stagger={0.08} className="min-w-0 space-y-6 lg:col-start-1 lg:row-start-1">
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
+                <h3 className="text-xl font-medium italic text-foreground">Founding Members</h3>
+                <NameList members={foundingMembers} />
+              </div>
+            </AnimateStagger>
 
-        {/* Alumni */}
-        <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-8">
-          <h3 className="text-xl italic text-foreground font-medium">Alumni</h3>
-          <NameList members={alumni} />
-        </div>
-        </AnimateStagger>
-      </main>
+            <AlumniPreviewAside />
+
+            <AnimateStagger delay={0.38} stagger={0.08} className="min-w-0 space-y-6 lg:col-start-1 lg:row-start-2">
+              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
+                <h3 className="text-xl font-medium italic text-foreground">Alumni</h3>
+                <NameList members={alumni} />
+              </div>
+            </AnimateStagger>
+          </div>
+        </main>
+      </AlumniPreviewProvider>
 
       <Footer />
     </div>
