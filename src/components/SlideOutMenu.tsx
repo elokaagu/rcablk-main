@@ -56,15 +56,15 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
         />
       )}
 
-      {/* Slide-out panel */}
+      {/* Slide-out panel — width capped so more of the page stays visible (reference layout) */}
       <div
-        className={`fixed inset-y-0 right-0 h-screen z-40 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-y-0 right-0 z-40 flex h-screen w-max max-w-full justify-end transform transition-transform duration-300 ease-in-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div
-          className="relative w-[33vw] min-w-[260px] max-w-[400px] h-full flex flex-col bg-secondary"
+          className="relative box-border h-full w-[min(17rem,58vw)] min-w-[11.25rem] max-w-[17rem] flex flex-col bg-secondary sm:w-[min(18rem,52vw)] sm:max-w-[18rem]"
           style={{ paddingRight: "env(safe-area-inset-right)" }}
         >
           {/* Close button - top right */}

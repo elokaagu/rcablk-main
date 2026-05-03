@@ -13,43 +13,50 @@ export const metadata: Metadata = {
   openGraph: { title: "News | RCA BLK" },
 };
 
+/** Listing layout aligned with editorial reference: saturated yellow field, two-up cards, portrait art, serif date + title */
 export default function News() {
   return (
-    <div
-      className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0"
-      style={{ backgroundColor: "#FFD700" }}
-    >
+    <div className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden bg-[#FFDD00] text-black">
       <SlideOutMenu />
 
-      <AnimateIn delay={0.2} duration={0.6} y={20}>
-        <div className="text-center py-8">
-          <h2 className="text-2xl sm:text-3xl font-serif font-normal text-foreground tracking-wide">News</h2>
-        </div>
+      <AnimateIn delay={0.2} duration={0.6} y={16}>
+        <header className="px-6 pt-10 pb-8 sm:px-10 sm:pt-12 sm:pb-10 lg:px-14">
+          <h1 className="text-center font-serif text-3xl font-normal tracking-tight text-black sm:text-4xl">
+            News
+          </h1>
+        </header>
       </AnimateIn>
 
-      {/* News Grid - 2-column with white borders */}
-      <main className="flex-1 px-6 sm:px-10 lg:px-16 max-w-7xl mx-auto w-full pb-12 sm:pb-16 pt-4" aria-label="News articles">
-        <AnimateStagger delay={0.3} stagger={0.08} className="grid grid-cols-1 md:grid-cols-2 gap-x-8 md:gap-x-12 gap-y-10 sm:gap-y-16">
+      <main
+        className="mx-auto w-full max-w-[1500px] flex-1 px-6 pb-16 sm:px-10 sm:pb-20 lg:px-16 lg:pb-24"
+        aria-label="News articles"
+      >
+        <AnimateStagger
+          delay={0.25}
+          stagger={0.06}
+          className="grid grid-cols-1 gap-x-10 gap-y-14 sm:gap-x-12 sm:gap-y-20 md:grid-cols-2 lg:gap-x-16"
+        >
           {newsArticles.map((item) => (
             <Link
               key={item.slug}
               href={`/news/${item.slug}`}
-              className="group no-underline block focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground focus-visible:ring-offset-2"
+              className="group block min-w-0 no-underline outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 focus-visible:ring-offset-[#FFDD00]"
             >
-              <article className="flex flex-col h-full">
-                <div className="relative overflow-hidden">
-                  <BlurImage
-                    src={item.image}
-                    alt={item.title}
-                    aspectRatio="4/5"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    hoverOpacity
-                  />
-                </div>
-                <p className="mt-3 text-sm text-foreground">{item.date}</p>
-                <h3 className="mt-1 text-xl font-serif font-bold text-foreground">
+              <article className="flex h-full flex-col text-left">
+                <BlurImage
+                  src={item.image}
+                  alt={item.title}
+                  aspectRatio="3/4"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  hoverOpacity
+                  className="w-full"
+                />
+                <p className="mt-5 font-serif text-sm font-normal leading-normal text-black sm:text-base">
+                  {item.date}
+                </p>
+                <h2 className="mt-2 font-serif text-xl font-bold leading-snug text-black sm:text-2xl">
                   {item.title}
-                </h3>
+                </h2>
               </article>
             </Link>
           ))}

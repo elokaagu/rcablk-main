@@ -3,7 +3,10 @@ import Footer from "@/components/Footer";
 import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
+import Image from "next/image";
 import type { Metadata } from "next";
+
+const ABOUT_SEAM_LOGO = "/1_RGB Logotype/Stepped Logotype/RCA BLK–Logotype-Black.png";
 
 export const metadata: Metadata = {
   title: "About Us | RCA BLK",
@@ -22,7 +25,24 @@ export default function About() {
     >
       <SlideOutMenu />
 
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-screen">
+      <main className="relative flex-1 grid min-h-screen grid-cols-1 gap-0 lg:grid-cols-2">
+        {/* RCA BLK logotype centered on the white / blue column seam (50% width) */}
+        <div
+          className="pointer-events-none absolute left-1/2 z-20 -translate-x-1/2"
+          style={{
+            top: "max(5.25rem, calc(env(safe-area-inset-top) + 3.25rem))",
+          }}
+        >
+          <Image
+            src={ABOUT_SEAM_LOGO}
+            alt="RCA BLK"
+            width={220}
+            height={88}
+            className="h-14 w-auto select-none sm:h-16 lg:h-[4.5rem]"
+            priority
+          />
+        </div>
+
         {/* Left column - Text */}
         <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 bg-white">
           <AnimateIn delay={0.2} duration={0.6} y={20}>

@@ -71,16 +71,36 @@ export function AlumniName({ name, snapshot, link, columnIndex = 0 }: AlumniName
     setHovered(true);
   };
 
-  const handleLeave = () => {
-    timeoutRef.current = setTimeout(() => setHovered(false), 80);
+  /** Long enough to move across empty space from the name to the fixed card */
+  const LEAVE_FROM_NAME_MS = 450;
+  const LEAVE_FROM_CARD_MS = 160;
+
+  const scheduleHide = (ms: number) => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setHovered(false), ms);
   };
+
+  const handleLeaveName = () => scheduleHide(LEAVE_FROM_NAME_MS);
+
+  const handleCardEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    setHovered(true);
+  };
+
+  const handleLeaveCard = () => scheduleHide(LEAVE_FROM_CARD_MS);
 
   const sharedProps = {
     className: "inline-block cursor-default",
     onMouseEnter: handleEnter,
-    onMouseLeave: handleLeave,
+    onMouseLeave: handleLeaveName,
     onTouchStart: handleEnter,
-    onTouchEnd: () => { if (timeoutRef.current) clearTimeout(timeoutRef.current); timeoutRef.current = setTimeout(() => setHovered(false), 400); },
+    onTouchEnd: () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => setHovered(false), 400);
+    },
   };
 
   const content = (
@@ -92,8 +112,10 @@ export function AlumniName({ name, snapshot, link, columnIndex = 0 }: AlumniName
       </span>
       {snapshot && hovered && (
         <span
-          className="fixed z-50 pointer-events-none animate-in fade-in-0 zoom-in-95 duration-200"
+          className="fixed z-50 cursor-default animate-in fade-in-0 zoom-in-95 duration-200"
           style={{ left: position.x, top: position.y }}
+          onMouseEnter={handleCardEnter}
+          onMouseLeave={handleLeaveCard}
         >
           <span className="block w-[280px] aspect-[3/4] overflow-hidden bg-white shadow-lg border border-foreground/10 rounded-xl">
             <BlurImage
@@ -105,7 +127,7 @@ export function AlumniName({ name, snapshot, link, columnIndex = 0 }: AlumniName
             />
           </span>
           {link && (
-            <span className="block mt-1.5 text-sm text-foreground/80 truncate max-w-[280px]">
+            <span className="mt-1.5 block max-w-[280px] truncate text-sm text-foreground/80">
               View work →
             </span>
           )}

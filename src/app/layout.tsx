@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
-import { FixedLogoHeader } from "@/components/FixedLogoHeader";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -51,8 +50,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <Providers>
-          <FixedLogoHeader />
-          <div id="main-content" tabIndex={-1} className="pt-14 sm:pt-16 min-h-screen">
+          <div id="main-content" tabIndex={-1} className="min-h-screen">
             {children}
           </div>
         </Providers>

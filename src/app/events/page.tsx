@@ -13,33 +13,60 @@ export const metadata: Metadata = {
   openGraph: { title: "Events | RCA BLK" },
 };
 
+/** Matches reference events listing: pale sage field, three-up cards, display + serif hierarchy */
 export default function Events() {
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(140, 30%, 70%)" }}>
+    <div
+      className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden text-black"
+      style={{ backgroundColor: "#A8C9A7" }}
+    >
       <SlideOutMenu />
 
-      <AnimateIn delay={0.2} duration={0.6} y={20}>
-        <div className="text-center py-8">
-          <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground">Events</h2>
-        </div>
+      <AnimateIn delay={0.2} duration={0.6} y={16}>
+        <header className="px-6 pt-10 pb-6 sm:px-10 sm:pt-12 sm:pb-8">
+          <h1 className="text-center font-serif text-3xl font-normal capitalize tracking-tight text-black sm:text-4xl">
+            events
+          </h1>
+        </header>
       </AnimateIn>
 
-      <main className="flex-1 px-6 sm:px-10 lg:px-12 max-w-7xl mx-auto w-full pb-12 sm:pb-16">
-        <AnimateStagger delay={0.3} stagger={0.06} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {events.map((event) => {
-            const details = [event.description, event.venue, event.date].filter(Boolean).join(" ");
-            return (
-              <Link key={event.slug} href={`/events/${event.slug}`} className="flex flex-col group">
-                <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" hoverOpacity sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" />
-                <h3 className="mt-4 text-lg font-display font-black text-foreground tracking-wide uppercase">
+      <main className="mx-auto w-full max-w-[1600px] flex-1 px-5 pb-14 sm:px-8 sm:pb-20 lg:px-12">
+        <AnimateStagger delay={0.25} stagger={0.05} className="grid grid-cols-1 gap-10 sm:gap-12 md:grid-cols-2 md:gap-x-8 md:gap-y-14 lg:grid-cols-3 lg:gap-x-10">
+          {events.map((event) => (
+            <Link
+              key={event.slug}
+              href={`/events/${event.slug}`}
+              className="group flex min-w-0 flex-col no-underline outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-[#A8C9A7]"
+            >
+              <BlurImage
+                src={event.image}
+                alt={event.name}
+                aspectRatio="3/2"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="w-full"
+              />
+              <div className="mt-5 flex flex-col gap-0 text-left sm:mt-6">
+                <h2 className="font-display text-lg font-black uppercase leading-tight tracking-wide text-black sm:text-xl">
                   {event.name}
-                </h3>
-                {details && (
-                  <p className="mt-1 text-sm text-foreground leading-relaxed">{details}</p>
-                )}
-              </Link>
-            );
-          })}
+                </h2>
+                {event.description ? (
+                  <p className="mt-3 font-serif text-base font-normal italic leading-snug text-black sm:text-[1.05rem]">
+                    {event.description}
+                  </p>
+                ) : null}
+                {event.venue ? (
+                  <p className="mt-2 font-serif text-base font-normal not-italic leading-snug text-black sm:text-[1.05rem]">
+                    {event.venue}
+                  </p>
+                ) : null}
+                {event.date ? (
+                  <p className="mt-2 font-serif text-base font-normal not-italic leading-snug text-black sm:text-[1.05rem]">
+                    {event.date}
+                  </p>
+                ) : null}
+              </div>
+            </Link>
+          ))}
         </AnimateStagger>
       </main>
 

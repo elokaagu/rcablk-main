@@ -2,6 +2,7 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
+import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 
@@ -11,84 +12,83 @@ export const metadata: Metadata = {
   openGraph: { title: "Support | RCA BLK" },
 };
 
+const LOGOTYPE = "/1_RGB Logotype/Stepped Logotype/RCA BLK–Logotype-Black.png";
+
 export default function Support() {
   return (
     <div
-      className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0 relative"
-      style={{ backgroundColor: "#E88350" }}
+      className="relative flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden text-black"
+      style={{ backgroundColor: "#F3916B" }}
     >
       <SlideOutMenu />
 
-      {/* Yellow L-shape graphic - decorative overlay behind title and content */}
+      <Link
+        href="/"
+        className="absolute left-4 top-4 z-40 sm:left-6 sm:top-6"
+        style={{ paddingTop: "max(0px, env(safe-area-inset-top))" }}
+        aria-label="RCA BLK home"
+      >
+        <Image src={LOGOTYPE} alt="RCA BLK" width={200} height={60} className="h-7 w-auto sm:h-9" priority />
+      </Link>
+
+      {/* Large vertical yellow BLK — behind copy, in front of peach */}
       <div
-        className="absolute top-24 sm:top-28 left-0 right-0 h-[45vh] min-h-[350px] max-h-[550px] pointer-events-none flex justify-center"
+        className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden"
         aria-hidden
       >
-        <svg
-          viewBox="0 0 350 500"
-          className="h-full w-auto max-w-[75%] ml-[5%] sm:ml-[15%]"
-          preserveAspectRatio="xMinYMin meet"
+        <div
+          className="flex select-none flex-col items-center justify-center font-display font-black leading-[0.82] text-[#FFDD00] opacity-[0.92]"
+          style={{
+            fontSize: "min(28vw, 14rem)",
+            textShadow: "0 0.02em 0 rgba(0,0,0,0.06)",
+          }}
         >
-          <path
-            d="M 0 0 L 100 0 L 100 420 L 350 420 L 350 500 L 0 500 Z"
-            fill="#FFD700"
-          />
-        </svg>
+          <span className="block">B</span>
+          <span className="block">L</span>
+          <span className="block">K</span>
+        </div>
       </div>
 
-      <AnimateIn delay={0.2} duration={0.6} y={20}>
-        <div className="text-center py-8 relative z-10">
-          <h2 className="text-2xl sm:text-3xl font-display font-bold text-foreground">Support</h2>
-        </div>
-      </AnimateIn>
+      <div className="relative z-10 flex flex-1 flex-col px-6 pb-16 pt-24 sm:px-10 sm:pb-20 sm:pt-28 lg:px-12">
+        <AnimateIn delay={0.15} duration={0.55} y={12}>
+          <header className="mb-10 text-center sm:mb-12">
+            <h1 className="font-serif text-3xl font-normal tracking-tight text-black sm:text-4xl">Support</h1>
+          </header>
+        </AnimateIn>
 
-      <main className="flex-1 max-w-2xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 w-full relative z-10">
-        <AnimateStagger delay={0.3} stagger={0.1} className="space-y-6 text-foreground text-lg sm:text-xl leading-relaxed font-serif text-left">
-          <p>
-            RCA BLK&apos;s supporters play a vital role in sustaining our key activities, from the
-            commissioning of major new exhibitions and events, and the development of our pioneering
-            participatory, learning and offsite programmes, to the provision of much-needed
-            residencies and affordable onsite studios for artists.
-          </p>
-          <p>
-            By supporting RCA BLK you will directly contribute to the sustainability, ambition and
-            future development of one of London&apos;s leading independent arts organisations.
-          </p>
-          <p>
-            We develop a close and reciprocal relationship with all of our Supporters, giving you the
-            opportunity to enjoy a tailored package of benefits whilst enabling RCA BLK to flourish
-            and increase the amount of support and opportunities we offer to artists, audiences and
-            our community.
-          </p>
-          <p>
-            To learn more about joining RCA BLK&apos;s Supporters&apos; Scheme or to discuss a
-            particular project, please contact us.
-          </p>
-          <Link
-            href="/contact"
-            className="inline-block mt-6 px-6 py-3 font-display font-medium text-background bg-secondary hover:opacity-90 transition-opacity uppercase tracking-wide"
+        <main className="mx-auto flex w-full max-w-xl flex-1 flex-col justify-center pb-8 sm:max-w-[34rem] sm:pb-12">
+          <AnimateStagger
+            delay={0.2}
+            stagger={0.08}
+            className="space-y-7 text-center font-serif text-lg leading-relaxed text-black sm:space-y-8 sm:text-xl sm:leading-relaxed"
           >
-            Contact us
-          </Link>
-          <ul className="space-y-2 list-none p-0 mt-8">
-            <li>
-              <Link href="/contact" className="underline underline-offset-2 text-foreground hover:opacity-70 transition-opacity decoration-2">
-                Contact RCA BLK
+            <p>
+              RCA BLK&apos;s supporters play a vital role in sustaining our key activities, from the
+              commissioning of major new exhibitions and events, and the development of our pioneering
+              participatory, learning and offsite programmes, to the provision of much-needed
+              residencies and affordable onsite studios for artists.
+            </p>
+            <p>
+              By supporting RCA BLK you will directly contribute to the sustainability, ambition and
+              future development of one of London&apos;s leading independent arts organisations.
+            </p>
+            <p>
+              We develop a close and reciprocal relationship with all of our Supporters, giving you the
+              opportunity to enjoy a tailored package of benefits whilst enabling RCA BLK to flourish
+              and increase the amount of support and opportunities we offer to artists, audiences and
+              our community.
+            </p>
+            <p>
+              To learn more about joining RCA BLK&apos;s Supporters&apos; Scheme or to discuss a
+              particular project, please{" "}
+              <Link href="/contact" className="underline decoration-black/50 underline-offset-[0.15em] hover:opacity-80">
+                contact us
               </Link>
-            </li>
-            <li>
-              <a href="mailto:rcablk@rca.ac.uk" className="underline underline-offset-2 text-foreground hover:opacity-70 transition-opacity decoration-2">
-                rcablk@rca.ac.uk
-              </a>
-            </li>
-            <li>
-              <a href="https://www.rca.ac.uk/generationrca/" target="_blank" rel="noopener noreferrer" className="underline underline-offset-2 text-foreground hover:opacity-70 transition-opacity decoration-2">
-                GenerationRCA (Support the RCA)
-              </a>
-            </li>
-          </ul>
-        </AnimateStagger>
-      </main>
+              .
+            </p>
+          </AnimateStagger>
+        </main>
+      </div>
 
       <Footer />
     </div>

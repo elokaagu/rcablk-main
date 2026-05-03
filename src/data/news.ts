@@ -10,6 +10,26 @@ export interface NewsArticle {
 
 export const newsArticles: NewsArticle[] = [
   {
+    slug: "rca-blk-research-fellowship",
+    title: "RCA BLK Research Fellowship",
+    category: "Announcement",
+    date: "March 26, 2025",
+    image: "/assets/news-research-fellowship.jpg",
+    body: [
+      "RCA BLK is proud to announce the launch of the RCA BLK Research Fellowship programme.",
+    ],
+  },
+  {
+    slug: "the-nu-black-archive",
+    title: "The Nu Black Archive",
+    category: "Announcement",
+    date: "March 26, 2025",
+    image: "/assets/news-nu-black-archive.jpg",
+    body: [
+      "The Nu Black Archive is a new initiative by RCA BLK.",
+    ],
+  },
+  {
     slug: "the-tintype-archive",
     title: "The Tintype Archive",
     category: "Announcement",
@@ -31,26 +51,6 @@ export const newsArticles: NewsArticle[] = [
       "Tintype, also known as wet plate collodion, is one of the earliest image capture techniques. Developed in the 19th century, this method of photographing onto tin was initially accessible only to the affluent. For black individuals, having their portraits taken was uncommon; the earliest records depict images of slaves as an extension of their owners' wealth. Later, there were the rare images of wealthy black individuals; however, even then, these images depicted them as assimilated into white colonialism rather than in their true cultural identities.",
       "This project will aim to capture 30 artists from RCA BLK's extended network.",
       "Creating a contemporary archival legacy project of images that reclaims historical photo taking, bridging a new dimension to the existing cannon of Photography.",
-    ],
-  },
-  {
-    slug: "rca-blk-research-fellowship",
-    title: "RCA BLK Research Fellowship",
-    category: "Announcement",
-    date: "March 26, 2025",
-    image: "/assets/news-research-fellowship.jpg",
-    body: [
-      "RCA BLK is proud to announce the launch of the RCA BLK Research Fellowship programme.",
-    ],
-  },
-  {
-    slug: "the-nu-black-archive",
-    title: "The Nu Black Archive",
-    category: "Announcement",
-    date: "March 26, 2025",
-    image: "/assets/news-nu-black-archive.jpg",
-    body: [
-      "The Nu Black Archive is a new initiative by RCA BLK.",
     ],
   },
   {

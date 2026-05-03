@@ -1,54 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import { BlurImage } from "@/components/BlurImage";
+import Image from "next/image";
 
 interface NewsArticleGalleryProps {
   images: string[];
   title: string;
 }
 
+/** Narrow vertical frames in one row — reference layout above body copy */
 export function NewsArticleGallery({ images, title }: NewsArticleGalleryProps) {
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const selectedSrc = images[selectedIndex];
-
   return (
-    <>
-      {/* Main image */}
-      <div className="w-full mb-4">
-        <BlurImage
-          src={selectedSrc}
-          alt={title}
-          aspectRatio="3/4"
-          className="w-full max-w-2xl mx-auto"
-          sizes="(max-width: 768px) 100vw, 672px"
-        />
-      </div>
-
-      {/* Thumbnail row */}
-      <div className="w-full overflow-x-auto overflow-y-hidden flex gap-2 py-4 mb-8">
-        <div className="flex gap-1 min-w-max px-4 sm:px-8">
-          {images.map((img, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => setSelectedIndex(i)}
-              className={`relative w-24 sm:w-32 aspect-[3/4] shrink-0 overflow-hidden rounded-sm transition-opacity hover:opacity-90 ${
-                selectedIndex === i ? "ring-2 ring-foreground ring-offset-2 ring-offset-[#FFC107]" : "opacity-70 hover:opacity-90"
-              }`}
-              aria-label={`View image ${i + 1}`}
-              aria-pressed={selectedIndex === i}
-            >
-              <BlurImage
-                src={img}
-                alt={`${title} gallery ${i + 1}`}
-                aspectRatio="3/4"
-                sizes="128px"
-              />
-            </button>
-          ))}
+    <div
+      className="mb-10 flex w-full justify-center gap-2 overflow-x-auto pb-1 sm:mb-12 sm:gap-2.5 md:gap-3"
+      role="list"
+      aria-label={`${title} image gallery`}
+    >
+      {images.map((src, i) => (
+        <div
+          key={`${src}-${i}`}
+          role="listitem"
+          className="relative h-48 w-[4.25rem] shrink-0 overflow-hidden sm:h-56 sm:w-24 md:h-64 md:w-[6.5rem]"
+        >
+          <Image
+            src={src}
+            alt={`${title} — gallery image ${i + 1} of ${images.length}`}
+            fill
+            className="object-cover object-center"
+            sizes="(max-width: 640px) 68px, (max-width: 768px) 96px, 104px"
+          />
         </div>
-      </div>
-    </>
+      ))}
+    </div>
   );
 }

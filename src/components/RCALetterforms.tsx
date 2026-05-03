@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -91,33 +91,63 @@ function LetterCell({
 
 export default function RCALetterforms() {
   const [hovered, setHovered] = useState<string | null>(null);
+  const measureRef = useRef<HTMLDivElement>(null);
+  const [gridSize, setGridSize] = useState<{ w: number; h: number } | null>(null);
+
+  useLayoutEffect(() => {
+    const el = measureRef.current;
+    if (!el) return;
+
+    function measure() {
+      const { width: cw, height: ch } = el.getBoundingClientRect();
+      if (ch <= 0 || cw <= 0) return;
+      const gridW = Math.min(cw, ch * 1.5);
+      const gridH = (gridW * 2) / 3;
+      setGridSize({ w: gridW, h: gridH });
+    }
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener("resize", measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, []);
 
   return (
     <div
-      className="w-full flex items-center justify-center p-4 sm:p-6"
+      className="flex min-h-0 w-full flex-1 flex-col"
       style={{
         paddingTop: "max(1rem, env(safe-area-inset-top))",
         paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
       }}
     >
       <div
-        className="grid gap-0"
-        style={{
-          width: "min(150vh, 100vw - 2rem)",
-          aspectRatio: "3 / 2",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gridTemplateRows: "repeat(2, 1fr)",
-        }}
+        ref={measureRef}
+        className="flex min-h-0 flex-1 w-full items-center justify-center px-4 sm:px-6"
       >
-        {LETTERS.map((letter) => (
-          <LetterCell
-            key={letter.id}
-            letter={letter}
-            isHovered={hovered === letter.id}
-            onHover={() => setHovered(letter.id)}
-            onLeave={() => setHovered(null)}
-          />
-        ))}
+        <div
+          className="grid shrink-0 gap-0"
+          style={{
+            width: gridSize ? `${gridSize.w}px` : "min(calc(100vw - 2rem), 85vw)",
+            height: gridSize ? `${gridSize.h}px` : undefined,
+            aspectRatio: gridSize ? undefined : "3 / 2",
+            gridTemplateColumns: "repeat(3, 1fr)",
+            gridTemplateRows: "repeat(2, 1fr)",
+          }}
+        >
+          {LETTERS.map((letter) => (
+            <LetterCell
+              key={letter.id}
+              letter={letter}
+              isHovered={hovered === letter.id}
+              onHover={() => setHovered(letter.id)}
+              onLeave={() => setHovered(null)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
