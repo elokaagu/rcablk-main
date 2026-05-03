@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function StudioLoginPage() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -17,7 +18,7 @@ export default function StudioLoginPage() {
       const res = await fetch("/api/studio/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ email, password }),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) {
@@ -38,7 +39,22 @@ export default function StudioLoginPage() {
         <p className="mt-2 text-center text-sm text-neutral-400">Admin sign-in</p>
         <form onSubmit={onSubmit} className="mt-8 space-y-4">
           <div>
-            <label htmlFor="pw" className="sr-only">
+            <label htmlFor="email" className="mb-1 block text-xs font-medium text-neutral-400">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              autoComplete="username"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full rounded border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-white outline-none ring-offset-neutral-950 focus:ring-2 focus:ring-amber-500"
+              placeholder="you@example.com"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="pw" className="mb-1 block text-xs font-medium text-neutral-400">
               Password
             </label>
             <input
@@ -62,9 +78,11 @@ export default function StudioLoginPage() {
           </button>
         </form>
         <p className="mt-6 text-xs leading-relaxed text-neutral-500">
-          Set <code className="text-neutral-400">STUDIO_PASSWORD</code> and{" "}
-          <code className="text-neutral-400">STUDIO_JWT_SECRET</code> in the environment. Connect Supabase
-          for live content editing.
+          Set <code className="text-neutral-400">STUDIO_EMAIL</code> (optional) and{" "}
+          <code className="text-neutral-400">STUDIO_PASSWORD</code>, plus{" "}
+          <code className="text-neutral-400">STUDIO_JWT_SECRET</code> in the environment. If{" "}
+          <code className="text-neutral-400">STUDIO_EMAIL</code> is omitted, only the password is checked. Connect
+          Supabase for live content editing.
         </p>
       </div>
     </div>
