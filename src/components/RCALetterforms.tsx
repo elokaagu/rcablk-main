@@ -111,20 +111,29 @@ function letterMaskStyle(svgPath: string): import("react").CSSProperties {
 }
 
 /**
- * Per-column nudge applied to each cell's inner content so the six glyphs
- * read as one tight RCA BLK block instead of six widely-spaced tiles. The
- * SVG glyph is 79.37 × 124.72 (≈63.6% wide when fit-to-cell), so each
- * square cell carries ~18% of empty padding on either side of the glyph.
- * Pushing left-column glyphs right and right-column glyphs left removes
- * roughly half of the visual gap between adjacent letters while keeping
- * cell hit-areas the same. Both the glyph mask and the label mask sit
- * inside this wrapper, so they translate together and labels stay
- * registered to the visible glyph.
+ * Per-cell nudge applied to each cell's inner content so the six glyphs
+ * read as one tight RCA BLK block instead of six widely-spaced tiles.
+ *
+ * The glyph SVG is 79.37 × 124.72 with internal padding around the paint
+ * (≈5.71 units on every side). Once `mask-size: contain` fits it into a
+ * square cell, the actual painted shape occupies roughly:
+ *   – x: 22.78% → 77.22%  (≈22.78% of empty space on each horizontal side)
+ *   – y:  4.58% → 95.42%  (≈4.58% of empty space on each vertical side)
+ *
+ * Pushing each cell's content toward the centre of the grid by those exact
+ * amounts collapses the empty padding between adjacent letters without
+ * clipping any paint or distorting the glyph. Both the glyph mask and the
+ * label mask live inside the translated wrapper, so labels stay registered
+ * to the visible glyph on hover.
  */
 function colTranslateClass(col: 0 | 1 | 2): string {
-  if (col === 0) return "translate-x-[18%]";
-  if (col === 2) return "-translate-x-[18%]";
+  if (col === 0) return "translate-x-[22%]";
+  if (col === 2) return "-translate-x-[22%]";
   return "";
+}
+
+function rowTranslateClass(row: 0 | 1): string {
+  return row === 0 ? "translate-y-[4%]" : "-translate-y-[4%]";
 }
 
 function LetterCell({
@@ -147,7 +156,8 @@ function LetterCell({
   const glyphFill = isHovered ? "bg-white" : "bg-black";
   const labelColor = isHovered ? "text-black" : "text-white";
   const col = (index % 3) as 0 | 1 | 2;
-  const translate = colTranslateClass(col);
+  const row = (Math.floor(index / 3) % 2) as 0 | 1;
+  const translate = `${colTranslateClass(col)} ${rowTranslateClass(row)}`.trim();
 
   return (
     <Link
