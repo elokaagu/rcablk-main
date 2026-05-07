@@ -1,4 +1,4 @@
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 
 /**
  * Shared helpers for safely rendering HTML produced by the studio rich text
@@ -9,9 +9,10 @@ import DOMPurify from "isomorphic-dompurify";
  *   text or a legacy paragraph array);
  * - which tags / attributes / URI schemes are allowed through sanitization.
  *
- * The sanitization config mirrors the formatting actually exposed in the
- * editor toolbar (headings, lists, links, blockquote, inline marks). It
- * deliberately drops scripts, inline event handlers, and styling attributes.
+ * Uses `sanitize-html` (pure-JS, no jsdom) so server-side rendering on
+ * Vercel's CJS runtime never trips on transitive ESM-only deps that the
+ * isomorphic-dompurify → jsdom chain exposes (`html-encoding-sniffer`,
+ * `@exodus/bytes`).
  */
 
 export function isHtmlBody(input: string | null | undefined): boolean {
@@ -19,31 +20,43 @@ export function isHtmlBody(input: string | null | undefined): boolean {
   return /<[a-z][\s\S]*>/i.test(input);
 }
 
+const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
+  allowedTags: [
+    "p",
+    "br",
+    "strong",
+    "em",
+    "u",
+    "s",
+    "a",
+    "h2",
+    "h3",
+    "h4",
+    "ul",
+    "ol",
+    "li",
+    "blockquote",
+    "code",
+    "hr",
+  ],
+  allowedAttributes: {
+    a: ["href", "target", "rel", "class"],
+    "*": ["class"],
+  },
+  allowedSchemes: ["http", "https", "mailto", "tel"],
+  allowedSchemesByTag: {
+    a: ["http", "https", "mailto", "tel"],
+  },
+  // sanitize-html allows protocol-relative URLs by default; same-origin
+  // links (relative paths and #anchors) are allowed because they have no
+  // scheme to validate against.
+  allowProtocolRelative: false,
+};
+
 export function sanitizeBodyHtml(html: string): string {
   if (typeof html !== "string") return "";
   try {
-    return DOMPurify.sanitize(html, {
-      ALLOWED_TAGS: [
-        "p",
-        "br",
-        "strong",
-        "em",
-        "u",
-        "s",
-        "a",
-        "h2",
-        "h3",
-        "h4",
-        "ul",
-        "ol",
-        "li",
-        "blockquote",
-        "code",
-        "hr",
-      ],
-      ALLOWED_ATTR: ["href", "target", "rel", "class"],
-      ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|tel:|\/|#)/i,
-    });
+    return sanitizeHtml(html, SANITIZE_OPTIONS);
   } catch {
     return "";
   }
