@@ -3,6 +3,13 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { NewsArticle } from "@/data/news";
+import {
+  StudioButton,
+  StudioCard,
+  StudioField,
+  StudioInput,
+  StudioTextarea,
+} from "../_brand/StudioBrand";
 
 function galleryToText(g?: string[]) {
   return g?.length ? g.join("\n") : "";
@@ -104,110 +111,94 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <label className="block text-sm">
-          <span className="text-neutral-400">Slug</span>
-          <input
-            value={article.slug}
-            onChange={(e) => set("slug", e.target.value.toLowerCase().replace(/\s+/g, "-"))}
-            disabled={mode === "edit"}
-            className="mt-1 w-full rounded border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white disabled:opacity-60"
-          />
-        </label>
-        <label className="block text-sm">
-          <span className="text-neutral-400">Sort order</span>
-          <input
-            type="number"
-            value={sortOrder}
-            onChange={(e) => setSortOrder(parseInt(e.target.value, 10) || 0)}
-            className="mt-1 w-full rounded border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white"
-          />
-        </label>
-      </div>
-      <label className="block text-sm">
-        <span className="text-neutral-400">Title</span>
-        <input
-          value={article.title}
-          onChange={(e) => set("title", e.target.value)}
-          className="mt-1 w-full rounded border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white"
-        />
-      </label>
-      <label className="block text-sm">
-        <span className="text-neutral-400">Category</span>
-        <input
-          value={article.category}
-          onChange={(e) => set("category", e.target.value)}
-          className="mt-1 w-full rounded border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white"
-        />
-      </label>
-      <label className="block text-sm">
-        <span className="text-neutral-400">Date (display)</span>
-        <input
-          value={article.date}
-          onChange={(e) => set("date", e.target.value)}
-          className="mt-1 w-full rounded border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white"
-        />
-      </label>
-      <label className="block text-sm">
-        <span className="text-neutral-400">Hero image URL</span>
-        <input
-          value={article.image}
-          onChange={(e) => set("image", e.target.value)}
-          className="mt-1 w-full rounded border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white"
-        />
-        <input
-          type="file"
-          accept="image/*"
-          className="mt-2 block text-xs text-neutral-500 file:mr-3 file:rounded file:border-0 file:bg-neutral-700 file:px-3 file:py-1.5 file:text-sm file:text-white"
-          disabled={uploading}
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) void uploadImage(f);
-          }}
-        />
-      </label>
-      <label className="block text-sm">
-        <span className="text-neutral-400">Gallery image URLs (one per line, optional)</span>
-        <textarea
-          value={galleryText}
-          onChange={(e) => setGalleryText(e.target.value)}
-          rows={4}
-          className="mt-1 w-full rounded border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white"
-        />
-      </label>
-      <label className="block text-sm">
-        <span className="text-neutral-400">Body paragraphs (blank line between paragraphs)</span>
-        <textarea
-          value={bodyText}
-          onChange={(e) => setBodyText(e.target.value)}
-          rows={10}
-          className="mt-1 w-full rounded border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white"
-        />
-      </label>
-
-      {error && <p className="text-sm text-red-400">{error}</p>}
-
-      <div className="flex flex-wrap gap-3">
-        <button
-          type="button"
-          onClick={() => void save()}
-          disabled={saving || !article.slug.trim() || !article.title.trim()}
-          className="rounded bg-amber-500 px-4 py-2 text-sm font-medium text-black hover:bg-amber-400 disabled:opacity-50"
-        >
-          {saving ? "Saving…" : "Save"}
-        </button>
-        {mode === "edit" && (
-          <button
-            type="button"
-            onClick={() => void remove()}
-            disabled={saving}
-            className="rounded border border-red-800 px-4 py-2 text-sm text-red-300 hover:bg-red-950/50 disabled:opacity-50"
+    <StudioCard className="mx-auto max-w-3xl !p-7 sm:!p-10">
+      <div className="space-y-6">
+        <div className="grid gap-6 sm:grid-cols-2">
+          <StudioField
+            label="Slug · URL"
+            hint={mode === "edit" ? "Locked once an article is created" : "Lower-case, dashes for spaces"}
           >
-            Delete
-          </button>
+            <StudioInput
+              value={article.slug}
+              onChange={(e) => set("slug", e.target.value.toLowerCase().replace(/\s+/g, "-"))}
+              disabled={mode === "edit"}
+            />
+          </StudioField>
+
+          <StudioField label="Sort order" hint="Lower numbers appear first">
+            <StudioInput
+              type="number"
+              value={sortOrder}
+              onChange={(e) => setSortOrder(parseInt(e.target.value, 10) || 0)}
+            />
+          </StudioField>
+        </div>
+
+        <StudioField label="Title">
+          <StudioInput value={article.title} onChange={(e) => set("title", e.target.value)} />
+        </StudioField>
+
+        <div className="grid gap-6 sm:grid-cols-2">
+          <StudioField label="Category">
+            <StudioInput value={article.category} onChange={(e) => set("category", e.target.value)} />
+          </StudioField>
+
+          <StudioField label="Date" hint="Display string, e.g. 12 June 2026">
+            <StudioInput value={article.date} onChange={(e) => set("date", e.target.value)} />
+          </StudioField>
+        </div>
+
+        <StudioField label="Hero image" hint="Paste a URL or upload directly to Supabase Storage">
+          <StudioInput value={article.image} onChange={(e) => set("image", e.target.value)} />
+          <input
+            type="file"
+            accept="image/*"
+            disabled={uploading}
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) void uploadImage(f);
+            }}
+            className="mt-3 block font-serif text-[0.85rem] text-black/55 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-2 file:font-display file:text-[0.65rem] file:font-black file:uppercase file:tracking-[0.22em] file:text-white hover:file:bg-homeHero hover:file:text-black"
+          />
+        </StudioField>
+
+        <StudioField label="Gallery" hint="One image URL per line — optional">
+          <StudioTextarea value={galleryText} onChange={(e) => setGalleryText(e.target.value)} rows={4} />
+        </StudioField>
+
+        <StudioField label="Body" hint="Use a blank line to separate paragraphs">
+          <StudioTextarea value={bodyText} onChange={(e) => setBodyText(e.target.value)} rows={12} />
+        </StudioField>
+
+        {error && (
+          <p
+            role="alert"
+            className="rounded-md border border-red-500/30 bg-red-50/70 px-4 py-3 font-serif text-[0.9rem] text-red-700"
+          >
+            {error}
+          </p>
         )}
+
+        <div className="flex flex-wrap items-center gap-3 border-t border-black/10 pt-6">
+          <StudioButton
+            type="button"
+            onClick={() => void save()}
+            disabled={saving || !article.slug.trim() || !article.title.trim()}
+          >
+            {saving ? "Saving…" : "Save"}
+          </StudioButton>
+          {mode === "edit" && (
+            <StudioButton
+              type="button"
+              variant="destructive"
+              onClick={() => void remove()}
+              disabled={saving}
+            >
+              Delete article
+            </StudioButton>
+          )}
+        </div>
       </div>
-    </div>
+    </StudioCard>
   );
 }

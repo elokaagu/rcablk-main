@@ -1,69 +1,183 @@
 import Link from "next/link";
 import { isCmsConfigured } from "@/lib/cms/supabase-admin";
+import { listEventsAdmin } from "@/lib/cms/events-repo";
+import { listNewsAdmin } from "@/lib/cms/news-repo";
+import { listPagesAdmin } from "@/lib/cms/pages-repo";
 import { SeedButton } from "./SeedButton";
+import {
+  StudioButton,
+  StudioEyebrow,
+  StudioInlineCode,
+  StudioNotice,
+  StudioPageHeader,
+} from "./_brand/StudioBrand";
+import { StudioSchemaSetup } from "./_brand/StudioSchemaSetup";
+import { extractErrorMessage, isSchemaMissingError } from "./_brand/studio-errors";
 
-export default function StudioHomePage() {
+type CountState =
+  | { ok: true; value: number }
+  | { ok: false; error: unknown };
+
+type Counts = {
+  events: CountState;
+  news: CountState;
+  pages: CountState;
+};
+
+async function loadCounts(): Promise<Counts> {
+  const [events, news, pages] = await Promise.allSettled([
+    listEventsAdmin(),
+    listNewsAdmin(),
+    listPagesAdmin(),
+  ]);
+  return {
+    events:
+      events.status === "fulfilled"
+        ? { ok: true, value: events.value.length }
+        : { ok: false, error: events.reason },
+    news:
+      news.status === "fulfilled"
+        ? { ok: true, value: news.value.length }
+        : { ok: false, error: news.reason },
+    pages:
+      pages.status === "fulfilled"
+        ? { ok: true, value: pages.value.length }
+        : { ok: false, error: pages.reason },
+  };
+}
+
+function CountTile({
+  marker,
+  state,
+  label,
+  href,
+}: {
+  marker: string;
+  state: CountState | null;
+  label: string;
+  href: string;
+}) {
+  const display = state?.ok ? state.value : "—";
+  return (
+    <Link
+      href={href}
+      className="group relative flex flex-col gap-3 bg-white p-7 transition-colors hover:bg-homeHero/[0.06] focus-visible:bg-homeHero/[0.06]"
+    >
+      <span className="font-display text-[0.65rem] font-black uppercase tracking-[0.22em] text-black/45">
+        {marker}
+      </span>
+      <span className="font-display text-[3rem] font-black leading-none tracking-[-0.02em] text-black sm:text-[3.75rem]">
+        {display}
+      </span>
+      <span className="font-serif text-[1rem] leading-tight text-black/70">{label}</span>
+      <span
+        aria-hidden
+        className="mt-2 inline-flex items-center gap-2 font-display text-[0.7rem] font-black uppercase tracking-[0.22em] text-black/55 transition-colors group-hover:text-black"
+      >
+        <span>Open</span>
+        <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+      </span>
+    </Link>
+  );
+}
+
+export default async function StudioHomePage() {
   const cms = isCmsConfigured();
+  const counts = cms ? await loadCounts() : null;
+
+  // If any of the queries failed because the schema isn't applied yet, route
+  // the user to the setup card up front. We only need one example error to
+  // describe the situation clearly.
+  const schemaErrors: unknown[] = counts
+    ? [counts.events, counts.news, counts.pages]
+        .filter((c): c is { ok: false; error: unknown } => !c.ok)
+        .map((c) => c.error)
+    : [];
+  const schemaMissing = schemaErrors.some((e) => isSchemaMissingError(e));
+  const otherError = schemaErrors.find((e) => !isSchemaMissingError(e));
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="font-serif text-3xl text-white">Dashboard</h1>
-        <p className="mt-2 max-w-2xl text-sm text-neutral-400">
-          Manage events, news, and site pages (for example Support copy). Changes appear on the public site after you
-          save when Supabase is connected and tables are populated.
-        </p>
-      </div>
+    <div className="space-y-12">
+      <StudioPageHeader
+        eyebrow="Studio · Overview"
+        title="Dashboard"
+        description="Editorial control for the public RCA BLK site. Use the sidebar to navigate; this overview shows the current state of your content."
+      />
 
       {!cms && (
-        <div className="rounded-md border border-amber-900/60 bg-amber-950/40 px-4 py-3 text-sm text-amber-100">
-          <p className="font-medium text-amber-200">Supabase is not configured</p>
-          <p className="mt-1 text-amber-100/90">
-            Add <code className="rounded bg-black/30 px-1">NEXT_PUBLIC_SUPABASE_URL</code>,{" "}
-            <code className="rounded bg-black/30 px-1">NEXT_PUBLIC_SUPABASE_ANON_KEY</code>, and{" "}
-            <code className="rounded bg-black/30 px-1">SUPABASE_SERVICE_ROLE_KEY</code> to your environment. Run
-            the SQL in <code className="rounded bg-black/30 px-1">supabase/schema.sql</code> and create a public
-            Storage bucket named <code className="rounded bg-black/30 px-1">media</code>.
-          </p>
-        </div>
+        <StudioNotice tone="warn" title="Supabase is not configured">
+          Add <StudioInlineCode>NEXT_PUBLIC_SUPABASE_URL</StudioInlineCode>,{" "}
+          <StudioInlineCode>NEXT_PUBLIC_SUPABASE_ANON_KEY</StudioInlineCode> and{" "}
+          <StudioInlineCode>SUPABASE_SERVICE_ROLE_KEY</StudioInlineCode> to your environment. Run the SQL in{" "}
+          <StudioInlineCode>supabase/schema.sql</StudioInlineCode> and create a public Storage bucket named{" "}
+          <StudioInlineCode>media</StudioInlineCode>.
+        </StudioNotice>
       )}
 
-      {cms && (
-        <div className="rounded-md border border-neutral-800 bg-neutral-900/60 px-4 py-3 text-sm text-neutral-300">
-          <p className="font-medium text-white">First-time setup</p>
-          <p className="mt-1 text-neutral-400">
-            If tables are empty, copy the bundled events, news, and default Support page into Supabase (safe to run
-            more than once — upserts by slug).
-          </p>
-          <div className="mt-3">
-            <SeedButton />
-          </div>
-        </div>
+      {cms && schemaMissing && (
+        <StudioSchemaSetup
+          reason={schemaErrors.map(extractErrorMessage).find(Boolean)}
+        />
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <Link
-          href="/studio/events"
-          className="rounded-lg border border-neutral-800 bg-neutral-900 p-6 transition-colors hover:border-neutral-600"
-        >
-          <h2 className="text-lg font-medium text-white">Events</h2>
-          <p className="mt-2 text-sm text-neutral-400">Create, edit, and remove exhibition and programme entries.</p>
-        </Link>
-        <Link
-          href="/studio/news"
-          className="rounded-lg border border-neutral-800 bg-neutral-900 p-6 transition-colors hover:border-neutral-600"
-        >
-          <h2 className="text-lg font-medium text-white">News</h2>
-          <p className="mt-2 text-sm text-neutral-400">Publish and update announcements and articles.</p>
-        </Link>
-        <Link
-          href="/studio/pages"
-          className="rounded-lg border border-neutral-800 bg-neutral-900 p-6 transition-colors hover:border-neutral-600 sm:col-span-2 lg:col-span-1"
-        >
-          <h2 className="text-lg font-medium text-white">Site pages</h2>
-          <p className="mt-2 text-sm text-neutral-400">Edit Support and other on-site copy stored in Supabase.</p>
-        </Link>
-      </div>
+      {cms && !schemaMissing && Boolean(otherError) && (
+        <StudioNotice tone="error" title="Could not reach Supabase">
+          {extractErrorMessage(otherError)}
+        </StudioNotice>
+      )}
+
+      {cms && !schemaMissing && (
+        <StudioNotice tone="info" title="First-time setup" actions={<SeedButton />}>
+          If tables are empty, copy the bundled events, news and default Support page into Supabase. Safe to
+          run more than once — entries upsert by slug.
+        </StudioNotice>
+      )}
+
+      {/* At a glance — always visible so the layout stays anchored even mid-setup */}
+      <section aria-labelledby="at-a-glance" className="space-y-6">
+        <div className="flex items-center justify-between">
+          <StudioEyebrow>At a glance</StudioEyebrow>
+          <span id="at-a-glance" className="sr-only">
+            At a glance
+          </span>
+        </div>
+
+        <div className="grid gap-px overflow-hidden rounded-md border border-black/10 bg-black/10 sm:grid-cols-3">
+          <CountTile marker="01" state={counts?.events ?? null} label="Events on file" href="/studio/events" />
+          <CountTile marker="02" state={counts?.news ?? null} label="News articles" href="/studio/news" />
+          <CountTile
+            marker="03"
+            state={counts?.pages ?? null}
+            label="Site pages overridden"
+            href="/studio/pages"
+          />
+        </div>
+      </section>
+
+      {/* Quick actions */}
+      <section aria-labelledby="quick-actions" className="space-y-6">
+        <div className="flex items-center justify-between">
+          <StudioEyebrow>Quick actions</StudioEyebrow>
+          <span id="quick-actions" className="sr-only">
+            Quick actions
+          </span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <StudioButton as="a" href="/studio/events/new" variant="primary">
+            New event
+          </StudioButton>
+          <StudioButton as="a" href="/studio/news/new" variant="primary">
+            New article
+          </StudioButton>
+          <StudioButton as="a" href="/studio/pages/support/edit" variant="ghost">
+            Edit Support page
+          </StudioButton>
+          <StudioButton as="a" href="/" variant="ghost">
+            View public site
+          </StudioButton>
+        </div>
+      </section>
     </div>
   );
 }

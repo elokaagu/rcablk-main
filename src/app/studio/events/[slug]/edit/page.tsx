@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EventEditorForm } from "../../EventEditorForm";
 import { isCmsConfigured } from "@/lib/cms/supabase-admin";
 import { getEventBySlugAdmin } from "@/lib/cms/events-repo";
+import { StudioNotice, StudioPageHeader } from "../../../_brand/StudioBrand";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -12,8 +12,15 @@ export default async function EditEventPage({ params }: Props) {
   const { slug } = await params;
   if (!isCmsConfigured()) {
     return (
-      <div className="rounded-md border border-neutral-800 bg-neutral-900 p-6 text-sm text-neutral-400">
-        Configure Supabase first.
+      <div className="space-y-10">
+        <StudioPageHeader
+          eyebrow="Programme"
+          title="Edit event"
+          back={{ href: "/studio/events", label: "Events" }}
+        />
+        <StudioNotice tone="warn" title="Supabase not configured">
+          Configure Supabase first.
+        </StudioNotice>
       </div>
     );
   }
@@ -21,13 +28,13 @@ export default async function EditEventPage({ params }: Props) {
   if (!event) notFound();
 
   return (
-    <div className="space-y-8">
-      <div>
-        <Link href="/studio/events" className="text-sm text-amber-400 hover:underline">
-          ← Events
-        </Link>
-        <h1 className="mt-4 font-serif text-3xl text-white">Edit event</h1>
-      </div>
+    <div className="space-y-10">
+      <StudioPageHeader
+        eyebrow="Programme"
+        title={event.name || "Edit event"}
+        description="Edit the public-facing programme entry. Changes take effect on save."
+        back={{ href: "/studio/events", label: "Events" }}
+      />
       <EventEditorForm initial={event} mode="edit" />
     </div>
   );

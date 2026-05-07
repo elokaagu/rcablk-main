@@ -1,7 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  StudioButton,
+  StudioEyebrow,
+  StudioField,
+  StudioInput,
+} from "../_brand/StudioBrand";
 
 export default function StudioLoginPage() {
   const [email, setEmail] = useState("");
@@ -33,57 +40,74 @@ export default function StudioLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center px-4 py-16">
-      <div className="w-full max-w-sm rounded-lg border border-neutral-800 bg-neutral-900 p-8 shadow-xl">
-        <h1 className="text-center font-serif text-2xl text-white">RCA BLK Studio</h1>
-        <p className="mt-2 text-center text-sm text-neutral-400">Admin sign-in</p>
-        <form onSubmit={onSubmit} className="mt-8 space-y-4">
-          <div>
-            <label htmlFor="email" className="mb-1 block text-xs font-medium text-neutral-400">
-              Email
-            </label>
-            <input
+    <div className="relative flex min-h-[calc(100vh-3px)] w-full items-center justify-center overflow-hidden bg-white px-5 py-16">
+      {/* Brand watermark — a faint BLK lockup that mirrors the homepage marque
+          without dominating the form. Hidden on small screens for clarity. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 hidden items-center justify-center sm:flex"
+      >
+        <div className="relative h-[80vmin] w-[80vmin] opacity-[0.05]">
+          <Image
+            src="/SVG Letterforms/RCA BLK–Letterforms-BLK.svg"
+            alt=""
+            fill
+            sizes="80vmin"
+            className="object-contain"
+            priority
+          />
+        </div>
+      </div>
+
+      <div className="relative z-10 w-full max-w-md">
+        <div className="flex flex-col items-start gap-4">
+          <StudioEyebrow>RCA BLK · Studio</StudioEyebrow>
+          <h1 className="font-serif text-[2.5rem] font-normal leading-[1.05] tracking-[-0.015em] sm:text-[3rem]">
+            Sign in to the studio
+          </h1>
+          <p className="font-serif text-[1rem] leading-relaxed text-black/65">
+            Editorial control for events, news and on-site copy. Authorised members only.
+          </p>
+        </div>
+
+        <form onSubmit={onSubmit} className="mt-10 space-y-5">
+          <StudioField label="Email" htmlFor="email">
+            <StudioInput
               id="email"
               type="email"
               autoComplete="username"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-white outline-none ring-offset-neutral-950 focus:ring-2 focus:ring-amber-500"
               placeholder="you@example.com"
               required
             />
-          </div>
-          <div>
-            <label htmlFor="pw" className="mb-1 block text-xs font-medium text-neutral-400">
-              Password
-            </label>
-            <input
+          </StudioField>
+
+          <StudioField label="Password" htmlFor="pw">
+            <StudioInput
               id="pw"
               type="password"
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded border border-neutral-700 bg-neutral-950 px-3 py-2 text-sm text-white outline-none ring-offset-neutral-950 focus:ring-2 focus:ring-amber-500"
               placeholder="Studio password"
               required
             />
-          </div>
-          {error && <p className="text-sm text-red-400">{error}</p>}
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded bg-amber-500 py-2 text-sm font-medium text-black hover:bg-amber-400 disabled:opacity-50"
-          >
+          </StudioField>
+
+          {error && (
+            <p
+              role="alert"
+              className="rounded-md border border-red-500/30 bg-red-50/70 px-4 py-3 font-serif text-[0.9rem] text-red-700"
+            >
+              {error}
+            </p>
+          )}
+
+          <StudioButton type="submit" disabled={loading} className="w-full">
             {loading ? "Signing in…" : "Sign in"}
-          </button>
+          </StudioButton>
         </form>
-        <p className="mt-6 text-xs leading-relaxed text-neutral-500">
-          Set <code className="text-neutral-400">STUDIO_EMAIL</code> (optional) and{" "}
-          <code className="text-neutral-400">STUDIO_PASSWORD</code>, plus{" "}
-          <code className="text-neutral-400">STUDIO_JWT_SECRET</code> in the environment. If{" "}
-          <code className="text-neutral-400">STUDIO_EMAIL</code> is omitted, only the password is checked. Connect
-          Supabase for live content editing.
-        </p>
       </div>
     </div>
   );

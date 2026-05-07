@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { EventEditorForm } from "../EventEditorForm";
 import type { EventData } from "@/data/events";
+import { StudioPageHeader } from "../../_brand/StudioBrand";
 
 const empty: EventData = {
   slug: "",
@@ -14,13 +14,13 @@ const empty: EventData = {
 
 export default function NewEventPage() {
   return (
-    <div className="space-y-8">
-      <div>
-        <Link href="/studio/events" className="text-sm text-amber-400 hover:underline">
-          ← Events
-        </Link>
-        <h1 className="mt-4 font-serif text-3xl text-white">New event</h1>
-      </div>
+    <div className="space-y-10">
+      <StudioPageHeader
+        eyebrow="Programme"
+        title="New event"
+        description="Add a new entry to the public events programme."
+        back={{ href: "/studio/events", label: "Events" }}
+      />
       <EventEditorForm initial={empty} mode="new" />
     </div>
   );

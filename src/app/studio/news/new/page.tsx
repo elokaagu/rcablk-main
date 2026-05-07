@@ -1,6 +1,6 @@
-import Link from "next/link";
 import type { NewsArticle } from "@/data/news";
 import { NewsEditorForm } from "../NewsEditorForm";
+import { StudioPageHeader } from "../../_brand/StudioBrand";
 
 const empty: NewsArticle = {
   slug: "",
@@ -13,13 +13,13 @@ const empty: NewsArticle = {
 
 export default function NewNewsPage() {
   return (
-    <div className="space-y-8">
-      <div>
-        <Link href="/studio/news" className="text-sm text-amber-400 hover:underline">
-          ← News
-        </Link>
-        <h1 className="mt-4 font-serif text-3xl text-white">New article</h1>
-      </div>
+    <div className="space-y-10">
+      <StudioPageHeader
+        eyebrow="Editorial"
+        title="New article"
+        description="Add a new announcement or article to the public news index."
+        back={{ href: "/studio/news", label: "News" }}
+      />
       <NewsEditorForm initial={empty} mode="new" />
     </div>
   );

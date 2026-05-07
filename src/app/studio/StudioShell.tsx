@@ -1,52 +1,29 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { StudioSidebar } from "./_brand/StudioSidebar";
 
 export function StudioShell({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = usePathname() ?? "";
   const isLogin = pathname === "/studio/login";
 
-  async function logout() {
-    await fetch("/api/studio/logout", { method: "POST" });
-    router.push("/studio/login");
-    router.refresh();
+  if (isLogin) {
+    return (
+      <div className="min-h-screen bg-white text-black">
+        {/* Brand stripe even on login for visual continuity */}
+        <div aria-hidden className="h-[3px] w-full bg-homeHero" />
+        <main>{children}</main>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-neutral-100">
-      {!isLogin && (
-        <header className="border-b border-neutral-800 bg-neutral-950/95 px-4 py-3 sm:px-6">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
-            <nav className="flex flex-wrap items-center gap-4 text-sm font-medium text-neutral-300">
-              <Link href="/studio" className="text-white hover:underline">
-                Dashboard
-              </Link>
-              <Link href="/studio/events" className="hover:underline">
-                Events
-              </Link>
-              <Link href="/studio/news" className="hover:underline">
-                News
-              </Link>
-              <Link href="/studio/pages" className="hover:underline">
-                Pages
-              </Link>
-              <Link href="/" className="text-neutral-500 hover:text-neutral-300">
-                View site
-              </Link>
-            </nav>
-            <button
-              type="button"
-              onClick={() => void logout()}
-              className="text-sm text-neutral-400 underline-offset-2 hover:text-white hover:underline"
-            >
-              Sign out
-            </button>
-          </div>
-        </header>
-      )}
-      <div className={isLogin ? "" : "mx-auto max-w-6xl px-4 py-8 sm:px-6"}>{children}</div>
+    <div className="min-h-screen bg-white text-black">
+      <StudioSidebar pathname={pathname} />
+      {/* Main content — offset on lg+ to clear the fixed sidebar rail */}
+      <main className="lg:pl-72">
+        <div className="mx-auto max-w-5xl px-5 py-12 sm:px-10 sm:py-16">{children}</div>
+      </main>
     </div>
   );
 }

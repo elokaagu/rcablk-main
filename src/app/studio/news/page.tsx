@@ -2,68 +2,103 @@ import Link from "next/link";
 import type { NewsArticle } from "@/data/news";
 import { isCmsConfigured } from "@/lib/cms/supabase-admin";
 import { listNewsAdmin } from "@/lib/cms/news-repo";
+import { StudioButton, StudioNotice, StudioPageHeader } from "../_brand/StudioBrand";
+import { StudioSchemaSetup } from "../_brand/StudioSchemaSetup";
+import { extractErrorMessage, isSchemaMissingError } from "../_brand/studio-errors";
 
 export default async function StudioNewsPage() {
   if (!isCmsConfigured()) {
     return (
-      <div className="rounded-md border border-neutral-800 bg-neutral-900 p-6 text-sm text-neutral-400">
-        Configure Supabase to manage news here. See the dashboard for environment variables.
+      <div className="space-y-10">
+        <StudioPageHeader eyebrow="Editorial" title="News" />
+        <StudioNotice tone="warn" title="Supabase not configured">
+          Configure Supabase to manage news here. See the dashboard for environment variables.
+        </StudioNotice>
       </div>
     );
   }
 
   let articles: NewsArticle[] = [];
+  let loadError: unknown = null;
   try {
     articles = await listNewsAdmin();
-  } catch {
+  } catch (e) {
+    loadError = e;
+  }
+
+  if (loadError) {
     return (
-      <div className="rounded-md border border-red-900/50 bg-red-950/30 p-6 text-sm text-red-200">
-        Could not load news. Confirm the SQL in <code className="text-red-100">supabase/schema.sql</code> has been applied.
+      <div className="space-y-10">
+        <StudioPageHeader eyebrow="Editorial" title="News" />
+        {isSchemaMissingError(loadError) ? (
+          <StudioSchemaSetup reason={extractErrorMessage(loadError)} />
+        ) : (
+          <StudioNotice tone="error" title="Could not load news">
+            {extractErrorMessage(loadError)}
+          </StudioNotice>
+        )}
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="font-serif text-3xl text-white">News</h1>
-          <p className="mt-1 text-sm text-neutral-400">{articles.length} articles</p>
-        </div>
-        <Link
-          href="/studio/news/new"
-          className="rounded bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200"
-        >
-          New article
-        </Link>
-      </div>
+    <div className="space-y-10">
+      <StudioPageHeader
+        eyebrow="Editorial"
+        title="News"
+        description={`${articles.length} ${articles.length === 1 ? "article" : "articles"} on file.`}
+        actions={
+          <StudioButton as="a" href="/studio/news/new" variant="primary">
+            New article
+          </StudioButton>
+        }
+      />
 
-      <div className="overflow-hidden rounded-lg border border-neutral-800">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-neutral-800 bg-neutral-900/80 text-neutral-400">
-            <tr>
-              <th className="px-4 py-3 font-medium">Title</th>
-              <th className="px-4 py-3 font-medium">Slug</th>
-              <th className="px-4 py-3 font-medium">Date</th>
-              <th className="px-4 py-3 font-medium" />
-            </tr>
-          </thead>
-          <tbody>
-            {articles.map((a) => (
-              <tr key={a.slug} className="border-b border-neutral-800/80 last:border-0 hover:bg-neutral-900/50">
-                <td className="px-4 py-3 text-neutral-200">{a.title}</td>
-                <td className="px-4 py-3 text-neutral-500">{a.slug}</td>
-                <td className="px-4 py-3 text-neutral-400">{a.date}</td>
-                <td className="px-4 py-3 text-right">
-                  <Link href={`/studio/news/${encodeURIComponent(a.slug)}/edit`} className="text-amber-400 hover:underline">
-                    Edit
-                  </Link>
-                </td>
+      {articles.length === 0 ? (
+        <StudioNotice tone="info" title="No articles yet">
+          Publish the first announcement to populate the public news index.
+        </StudioNotice>
+      ) : (
+        <div className="overflow-hidden rounded-md border border-black/10 bg-white">
+          <table className="w-full text-left">
+            <thead className="border-b border-black/10 bg-black/[0.02]">
+              <tr className="font-display text-[0.65rem] font-black uppercase tracking-[0.22em] text-black/55">
+                <th className="px-5 py-4">Title</th>
+                <th className="hidden px-5 py-4 sm:table-cell">Slug</th>
+                <th className="hidden px-5 py-4 lg:table-cell">Date</th>
+                <th className="px-5 py-4 text-right">Action</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {articles.map((a) => (
+                <tr
+                  key={a.slug}
+                  className="border-b border-black/5 transition-colors last:border-0 hover:bg-homeHero/[0.06]"
+                >
+                  <td className="px-5 py-4 font-serif text-[0.98rem] text-black">{a.title}</td>
+                  <td className="hidden px-5 py-4 font-mono text-[0.85rem] text-black/55 sm:table-cell">
+                    {a.slug}
+                  </td>
+                  <td className="hidden px-5 py-4 font-serif text-[0.95rem] text-black/65 lg:table-cell">
+                    {a.date}
+                  </td>
+                  <td className="px-5 py-4 text-right">
+                    <Link
+                      href={`/studio/news/${encodeURIComponent(a.slug)}/edit`}
+                      className="group inline-flex items-center gap-2 font-display text-[0.7rem] font-black uppercase tracking-[0.22em] text-black transition-colors hover:text-black/60"
+                    >
+                      <span>Edit</span>
+                      <span aria-hidden className="inline-block transition-transform group-hover:translate-x-0.5">
+                        →
+                      </span>
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }

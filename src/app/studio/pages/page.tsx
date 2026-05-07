@@ -1,27 +1,44 @@
 import Link from "next/link";
 import { isCmsConfigured } from "@/lib/cms/supabase-admin";
 import { listPagesAdmin } from "@/lib/cms/pages-repo";
+import { StudioNotice, StudioPageHeader } from "../_brand/StudioBrand";
+import { StudioSchemaSetup } from "../_brand/StudioSchemaSetup";
+import { extractErrorMessage, isSchemaMissingError } from "../_brand/studio-errors";
 
 const PRESET_SLUGS = [{ slug: "support", label: "Support page" }];
 
 export default async function StudioPagesIndex() {
   if (!isCmsConfigured()) {
     return (
-      <div className="rounded-md border border-neutral-800 bg-neutral-900 p-6 text-sm text-neutral-400">
-        Configure Supabase to edit site pages here.
+      <div className="space-y-10">
+        <StudioPageHeader eyebrow="On-site copy" title="Site pages" />
+        <StudioNotice tone="warn" title="Supabase not configured">
+          Configure Supabase to edit site pages here.
+        </StudioNotice>
       </div>
     );
   }
 
   let existing: { slug: string; title: string }[] = [];
+  let loadError: unknown = null;
   try {
     const rows = await listPagesAdmin();
     existing = rows.map((r) => ({ slug: r.slug, title: r.title }));
-  } catch {
+  } catch (e) {
+    loadError = e;
+  }
+
+  if (loadError) {
     return (
-      <div className="rounded-md border border-red-900/50 bg-red-950/30 p-6 text-sm text-red-200">
-        Could not load pages. Apply the latest <code className="text-red-100">supabase/schema.sql</code> (includes{" "}
-        <code className="text-red-100">site_pages</code>).
+      <div className="space-y-10">
+        <StudioPageHeader eyebrow="On-site copy" title="Site pages" />
+        {isSchemaMissingError(loadError) ? (
+          <StudioSchemaSetup reason={extractErrorMessage(loadError)} />
+        ) : (
+          <StudioNotice tone="error" title="Could not load pages">
+            {extractErrorMessage(loadError)}
+          </StudioNotice>
+        )}
       </div>
     );
   }
@@ -29,38 +46,57 @@ export default async function StudioPagesIndex() {
   const existingSlugs = new Set(existing.map((e) => e.slug));
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="font-serif text-3xl text-white">Site pages</h1>
-        <p className="mt-2 max-w-2xl text-sm text-neutral-400">
-          Edit on-site copy. The Support page reads from the <code className="text-neutral-300">support</code> entry
-          when present; otherwise it uses the built-in default text.
-        </p>
-      </div>
+    <div className="space-y-10">
+      <StudioPageHeader
+        eyebrow="On-site copy"
+        title="Site pages"
+        description="Edit on-site copy. The Support page reads from the support entry when present; otherwise it uses the built-in default text."
+      />
 
-      <div className="overflow-hidden rounded-lg border border-neutral-800">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-neutral-800 bg-neutral-900/80 text-neutral-400">
-            <tr>
-              <th className="px-4 py-3 font-medium">Page</th>
-              <th className="px-4 py-3 font-medium">Slug</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium" />
+      <div className="overflow-hidden rounded-md border border-black/10 bg-white">
+        <table className="w-full text-left">
+          <thead className="border-b border-black/10 bg-black/[0.02]">
+            <tr className="font-display text-[0.65rem] font-black uppercase tracking-[0.22em] text-black/55">
+              <th className="px-5 py-4">Page</th>
+              <th className="hidden px-5 py-4 sm:table-cell">Slug</th>
+              <th className="px-5 py-4">Status</th>
+              <th className="px-5 py-4 text-right">Action</th>
             </tr>
           </thead>
           <tbody>
             {PRESET_SLUGS.map((p) => {
-              const row = existing.find((e) => e.slug === p.slug);
+              const live = existingSlugs.has(p.slug);
               return (
-                <tr key={p.slug} className="border-b border-neutral-800/80 last:border-0 hover:bg-neutral-900/50">
-                  <td className="px-4 py-3 text-neutral-200">{p.label}</td>
-                  <td className="px-4 py-3 text-neutral-500">{p.slug}</td>
-                  <td className="px-4 py-3 text-neutral-400">
-                    {existingSlugs.has(p.slug) ? "In database" : "Using defaults"}
+                <tr
+                  key={p.slug}
+                  className="border-b border-black/5 transition-colors last:border-0 hover:bg-homeHero/[0.06]"
+                >
+                  <td className="px-5 py-4 font-serif text-[0.98rem] text-black">{p.label}</td>
+                  <td className="hidden px-5 py-4 font-mono text-[0.85rem] text-black/55 sm:table-cell">
+                    {p.slug}
                   </td>
-                  <td className="px-4 py-3 text-right">
-                    <Link href={`/studio/pages/${encodeURIComponent(p.slug)}/edit`} className="text-amber-400 hover:underline">
-                      Edit
+                  <td className="px-5 py-4">
+                    <span
+                      className={`inline-flex items-center gap-2 font-display text-[0.65rem] font-black uppercase tracking-[0.22em] ${
+                        live ? "text-black" : "text-black/55"
+                      }`}
+                    >
+                      <span
+                        aria-hidden
+                        className={`size-1.5 rounded-full ${live ? "bg-homeHero" : "bg-black/30"}`}
+                      />
+                      {live ? "In database" : "Using defaults"}
+                    </span>
+                  </td>
+                  <td className="px-5 py-4 text-right">
+                    <Link
+                      href={`/studio/pages/${encodeURIComponent(p.slug)}/edit`}
+                      className="group inline-flex items-center gap-2 font-display text-[0.7rem] font-black uppercase tracking-[0.22em] text-black transition-colors hover:text-black/60"
+                    >
+                      <span>Edit</span>
+                      <span aria-hidden className="inline-block transition-transform group-hover:translate-x-0.5">
+                        →
+                      </span>
                     </Link>
                   </td>
                 </tr>

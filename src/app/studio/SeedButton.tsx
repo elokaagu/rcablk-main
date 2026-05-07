@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { StudioButton } from "./_brand/StudioBrand";
 
 export function SeedButton() {
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
@@ -32,16 +33,24 @@ export function SeedButton() {
   }
 
   return (
-    <div className="space-y-2">
-      <button
+    <div className="flex flex-col gap-3">
+      <StudioButton
         type="button"
         onClick={() => void seed()}
         disabled={status === "loading"}
-        className="rounded bg-white px-4 py-2 text-sm font-medium text-neutral-950 hover:bg-neutral-200 disabled:opacity-50"
+        variant="secondary"
       >
         {status === "loading" ? "Seeding…" : "Seed from bundled site data"}
-      </button>
-      {msg && <p className={status === "error" ? "text-sm text-red-400" : "text-sm text-emerald-400"}>{msg}</p>}
+      </StudioButton>
+      {msg && (
+        <p
+          className={`font-serif text-[0.9rem] ${
+            status === "error" ? "text-red-700" : "text-emerald-700"
+          }`}
+        >
+          {msg}
+        </p>
+      )}
     </div>
   );
 }

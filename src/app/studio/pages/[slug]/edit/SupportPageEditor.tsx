@@ -5,6 +5,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { SitePageRecord } from "@/lib/cms/pages-repo";
 import { DEFAULT_SUPPORT_PARAGRAPHS, SUPPORT_PAGE_SLUG } from "@/data/support-static";
+import {
+  StudioButton,
+  StudioCard,
+  StudioField,
+  StudioInlineCode,
+  StudioInput,
+  StudioTextarea,
+} from "../../../_brand/StudioBrand";
 
 function joinParas(p: string[]) {
   return p.join("\n\n---\n\n");
@@ -83,59 +91,72 @@ export function SupportPageEditor({ slug }: { slug: string }) {
   }
 
   if (loading) {
-    return <p className="text-sm text-neutral-400">Loading…</p>;
+    return (
+      <StudioCard className="mx-auto max-w-3xl">
+        <p className="font-serif text-[0.95rem] text-black/55">Loading…</p>
+      </StudioCard>
+    );
   }
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <p className="text-sm text-neutral-400">
-        Use a line containing only <code className="text-neutral-300">---</code> between paragraphs. Include the
-        phrase <code className="text-neutral-300">contact us</code> in the last paragraph to keep the contact link.
-      </p>
-      <label className="block text-sm">
-        <span className="text-neutral-400">Heading (optional override)</span>
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="mt-1 w-full rounded border border-neutral-700 bg-neutral-900 px-3 py-2 text-sm text-white"
-        />
-      </label>
-      <label className="block text-sm">
-        <span className="text-neutral-400">Body</span>
-        <textarea
-          value={bodyText}
-          onChange={(e) => setBodyText(e.target.value)}
-          rows={18}
-          className="mt-1 w-full rounded border border-neutral-700 bg-neutral-900 px-3 py-2 font-mono text-sm text-white"
-        />
-      </label>
-      {error && <p className="text-sm text-red-400">{error}</p>}
-      <div className="flex gap-3">
-        <button
-          type="button"
-          onClick={() => void save()}
-          disabled={saving}
-          className="rounded bg-amber-500 px-4 py-2 text-sm font-medium text-black hover:bg-amber-400 disabled:opacity-50"
-        >
-          {saving ? "Saving…" : "Save"}
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            setTitle("Support");
-            setBodyText(joinParas(DEFAULT_SUPPORT_PARAGRAPHS));
-          }}
-          className="rounded border border-neutral-600 px-4 py-2 text-sm text-neutral-300 hover:bg-neutral-900"
-        >
-          Reset to defaults (preview only)
-        </button>
+    <StudioCard className="mx-auto max-w-3xl !p-7 sm:!p-10">
+      <div className="space-y-6">
+        <div className="rounded-md border border-black/10 bg-black/[0.02] px-4 py-3 font-serif text-[0.9rem] leading-relaxed text-black/65">
+          Use a line containing only <StudioInlineCode>---</StudioInlineCode> between paragraphs. Include the
+          phrase <StudioInlineCode>contact us</StudioInlineCode> in the last paragraph to keep the contact link.
+        </div>
+
+        <StudioField label="Heading" hint="Optional override — defaults to 'Support'">
+          <StudioInput value={title} onChange={(e) => setTitle(e.target.value)} />
+        </StudioField>
+
+        <StudioField label="Body">
+          <StudioTextarea
+            value={bodyText}
+            onChange={(e) => setBodyText(e.target.value)}
+            rows={18}
+            className="font-mono"
+          />
+        </StudioField>
+
+        {error && (
+          <p
+            role="alert"
+            className="rounded-md border border-red-500/30 bg-red-50/70 px-4 py-3 font-serif text-[0.9rem] text-red-700"
+          >
+            {error}
+          </p>
+        )}
+
+        <div className="flex flex-wrap items-center gap-3 border-t border-black/10 pt-6">
+          <StudioButton type="button" onClick={() => void save()} disabled={saving}>
+            {saving ? "Saving…" : "Save"}
+          </StudioButton>
+          <StudioButton
+            type="button"
+            variant="ghost"
+            onClick={() => {
+              setTitle("Support");
+              setBodyText(joinParas(DEFAULT_SUPPORT_PARAGRAPHS));
+            }}
+          >
+            Reset to defaults
+          </StudioButton>
+        </div>
+
+        {slug === SUPPORT_PAGE_SLUG && (
+          <p className="font-serif text-[0.85rem] text-black/55">
+            After saving, open{" "}
+            <Link
+              href="/support"
+              className="border-b border-black/30 text-black transition-colors hover:border-black"
+            >
+              /support
+            </Link>{" "}
+            to verify.
+          </p>
+        )}
       </div>
-      {slug === SUPPORT_PAGE_SLUG && (
-        <p className="text-xs text-neutral-500">
-          After saving, open <Link href="/support" className="text-amber-400 hover:underline">/support</Link> to
-          verify.
-        </p>
-      )}
-    </div>
+    </StudioCard>
   );
 }
