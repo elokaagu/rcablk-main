@@ -1,3 +1,5 @@
+import { GATES_ADINKRAS_EVENT_BODY } from "@/data/event-body-gates-adinkras";
+
 export interface EventData {
   slug: string;
   name: string;
@@ -13,12 +15,13 @@ export interface EventData {
 export const events: EventData[] = [
   {
     slug: "sylvester-james-gates-jr",
-    name: "Sylvester James Gates Jr",
-    description: "RCA BLK are pleased to announce Adinkras-2-Adynkras an in person conversation with World renowned Physicist Sylvester James Gates Jr",
-    venue: "RCA Rausing Research & Innovation Building",
-    date: "February 7, 2025 - February 7, 2025",
-    image: "/assets/event-gates.jpg",
-    body: "RCA BLK are pleased to announce Adinkras-2-Adynkras, an in person conversation with World renowned Physicist Sylvester James Gates Jr at the RCA Rausing Research & Innovation Building.",
+    name: "Adinkras-2-Adynkras",
+    description:
+      "RCA BLK are pleased to announce Adinkras-2-Adynkras — an in person conversation with world renowned physicist Sylvester James Gates Jr.",
+    venue: "RCA Rausing Research & Innovation Building, 15 Parkgate Road, London SW11 4NL",
+    date: "February 7, 2025",
+    image: "/assets/event-gates-adinkras.png",
+    body: GATES_ADINKRAS_EVENT_BODY,
   },
   {
     slug: "aisha-seriki",
