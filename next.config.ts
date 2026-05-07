@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
       ? [{ protocol: "https", hostname: host, pathname: "/storage/v1/object/public/**" }]
       : [],
   },
+  // Keep server-side HTML processing libs out of the Webpack/Turbopack bundle
+  // and let Node resolve them at runtime. This avoids accidental ESM/CJS
+  // interop breakage like the html-encoding-sniffer + @exodus/bytes regression
+  // that took down /about, /resources, /privacy-policy etc. when sanitization
+  // was running through isomorphic-dompurify → jsdom on the server.
+  serverExternalPackages: ["sanitize-html"],
 };
 
 export default nextConfig;
