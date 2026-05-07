@@ -63,9 +63,12 @@ const LETTERS: ReadonlyArray<{
     label: "ALUMNI",
     href: "/alumni",
     svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg",
-    // Top horizontal above the bowl (cell y~8%-33%, x=22.7%-72%)
+    // The B is shaped like a lowercase b: only the stem is filled above
+    // y=40.9%, then a wide body x=22.7%-77% from y=40.9% down (with the
+    // bowl cut-out at x=39%-65%, y=55%-81%). Sit ALUMNI in the clean band
+    // immediately above the bowl so the mask doesn't slice the word.
     labelInLetter: {
-      className: "items-start justify-center pt-[12%] px-[10%]",
+      className: "items-start justify-center pt-[44%] px-[10%]",
       textClass: "text-center",
     },
   },
@@ -141,12 +144,18 @@ function LetterCell({
           style={maskStyle}
         />
 
-        {/* Always visible: clipped to the glyph so nav only reads inside the letter */}
+        {/*
+          Hover-only label, clipped to the glyph by the same mask. Idle
+          state shows the bare letterforms; the nav label fades in on
+          hover/focus and reads in black against the inverted (white)
+          glyph so type stays legible without a separate background.
+        */}
         <div
           className={`pointer-events-none absolute inset-0 z-20 box-border flex font-serif font-normal leading-tight tracking-tight transition-opacity duration-300 text-[clamp(0.45rem,4.6cqi,0.7rem)] sm:text-[clamp(0.5rem,4.4cqi,0.78rem)] md:text-[clamp(0.55rem,3.6cqi,0.85rem)] ${letter.labelInLetter.className} ${
-            isHovered ? "opacity-100" : "opacity-[0.92]"
+            isHovered ? "opacity-100" : "opacity-0"
           }`}
           style={maskStyle}
+          aria-hidden={!isHovered}
         >
           <span
             className={`inline-block max-w-full min-w-0 uppercase ${letter.labelInLetter.textClass} ${labelColor}`}
