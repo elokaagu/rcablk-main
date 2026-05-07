@@ -23,7 +23,10 @@ export function NewsBody({
 }) {
   if (!body || body.length === 0) return null;
 
-  const single = bodyArrayToString(body);
+  const safeBody = body.filter((p): p is string => typeof p === "string");
+  if (safeBody.length === 0) return null;
+
+  const single = bodyArrayToString(safeBody);
 
   if (isHtmlBody(single)) {
     return (
@@ -42,7 +45,7 @@ export function NewsBody({
         align === "center-mobile" ? "text-center sm:text-left" : "text-left"
       }`}
     >
-      {body.map((paragraph, i) => (
+      {safeBody.map((paragraph, i) => (
         <p key={i}>{paragraph}</p>
       ))}
     </div>

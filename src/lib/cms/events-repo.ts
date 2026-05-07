@@ -2,6 +2,7 @@ import type { EventData } from "@/data/events";
 import { events as staticEvents } from "@/data/events";
 import { createSupabaseAdmin } from "@/lib/cms/supabase-admin";
 import { createSupabaseAnon } from "@/lib/cms/supabase-anon";
+import { asString, asTrimmedString, normalizeEventBodyField } from "@/lib/cms/coerce";
 
 type EventRow = {
   slug: string;
@@ -14,31 +15,48 @@ type EventRow = {
   sort_order: number;
 };
 
-function rowToEvent(row: EventRow): EventData {
+const FALLBACK_EVENT_IMAGE = "/rca_logo.png";
+
+function rowToEvent(row: unknown): EventData | null {
+  const r = row as Record<string, unknown>;
+  const slug = asTrimmedString(r.slug);
+  if (!slug) return null;
+
+  const body = normalizeEventBodyField(r.body);
+
   return {
-    slug: row.slug,
-    name: row.name,
-    description: row.description ?? "",
-    venue: row.venue ?? "",
-    date: row.date ?? "",
-    image: row.image ?? "",
-    body: row.body ?? undefined,
-    sort_order: row.sort_order,
+    slug,
+    name: asTrimmedString(r.name) || "Untitled",
+    description: asString(r.description),
+    venue: asString(r.venue),
+    date: asString(r.date),
+    image: asTrimmedString(r.image) || FALLBACK_EVENT_IMAGE,
+    body,
+    sort_order: typeof r.sort_order === "number" && Number.isFinite(r.sort_order) ? r.sort_order : undefined,
   };
 }
 
 /** Public site: Supabase rows if configured and non-empty, else bundled static data. */
 export async function getEvents(): Promise<EventData[]> {
-  const anon = createSupabaseAnon();
-  if (!anon) return staticEvents;
+  try {
+    const anon = createSupabaseAnon();
+    if (!anon) return staticEvents;
 
-  const { data, error } = await anon
-    .from("events")
-    .select("slug,name,description,venue,date,image,body,sort_order")
-    .order("sort_order", { ascending: true });
+    const { data, error } = await anon
+      .from("events")
+      .select("slug,name,description,venue,date,image,body,sort_order")
+      .order("sort_order", { ascending: true });
 
-  if (error || !data?.length) return staticEvents;
-  return (data as EventRow[]).map(rowToEvent);
+    if (error || !data?.length) return staticEvents;
+
+    const events = (data as EventRow[])
+      .map((row) => rowToEvent(row))
+      .filter((e): e is EventData => e != null);
+
+    return events.length ? events : staticEvents;
+  } catch {
+    return staticEvents;
+  }
 }
 
 /** Studio: always hits Supabase with service role. */
@@ -49,7 +67,9 @@ export async function listEventsAdmin(): Promise<EventData[]> {
     .select("slug,name,description,venue,date,image,body,sort_order")
     .order("sort_order", { ascending: true });
   if (error) throw error;
-  return ((data ?? []) as EventRow[]).map(rowToEvent);
+  return ((data ?? []) as EventRow[])
+    .map((row) => rowToEvent(row))
+    .filter((e): e is EventData => e != null);
 }
 
 export async function getEventBySlugAdmin(slug: string): Promise<EventData | null> {
@@ -61,7 +81,7 @@ export async function getEventBySlugAdmin(slug: string): Promise<EventData | nul
     .maybeSingle();
   if (error) throw error;
   if (!data) return null;
-  return rowToEvent(data as EventRow);
+  return rowToEvent(data);
 }
 
 export async function upsertEventAdmin(event: EventData, sortOrder: number): Promise<void> {

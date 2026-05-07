@@ -55,6 +55,7 @@ export function sanitizeBodyHtml(html: string): string {
  * HTML parser — just the surface needed for editor output.
  */
 export function htmlToPlainText(html: string): string {
+  if (typeof html !== "string") return "";
   return html
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")

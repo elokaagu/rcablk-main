@@ -14,7 +14,7 @@ import { isHtmlBody, sanitizeBodyHtml } from "@/lib/rich-body";
  *   render correctly without a migration.
  */
 export function EventBody({ body }: { body: string }) {
-  if (!body) return null;
+  if (typeof body !== "string" || !body) return null;
 
   if (isHtmlBody(body)) {
     return (

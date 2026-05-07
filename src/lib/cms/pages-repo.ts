@@ -1,5 +1,6 @@
 import { createSupabaseAdmin } from "@/lib/cms/supabase-admin";
 import { createSupabaseAnon } from "@/lib/cms/supabase-anon";
+import { normalizeStringArrayField } from "@/lib/cms/coerce";
 
 type PageRow = {
   slug: string;
@@ -13,20 +14,19 @@ export type SitePageRecord = {
   paragraphs: string[];
 };
 
+/** Public routes: safe heading from CMS vs bundled default (never calls `.trim()` on non-strings). */
+export function pickLiveSiteTitle(cms: SitePageRecord | null | undefined, fallbackTitle: string): string {
+  if (!cms) return fallbackTitle;
+  const t = typeof cms.title === "string" ? cms.title.trim() : "";
+  return t || fallbackTitle;
+}
+
 function asTextField(raw: unknown): string {
   return typeof raw === "string" ? raw : "";
 }
 
 function normalizeParagraphs(raw: unknown): string[] {
-  if (raw == null) return [];
-  // Some databases store a single HTML blob as a JSON string instead of a
-  // string array — treat that as one paragraph so public pages don't fall over.
-  if (typeof raw === "string") {
-    const t = raw.trim();
-    return t ? [raw] : [];
-  }
-  if (!Array.isArray(raw)) return [];
-  return raw.filter((p): p is string => typeof p === "string");
+  return normalizeStringArrayField(raw);
 }
 
 /** Public read: returns null if missing or Supabase off (caller uses static fallback). */

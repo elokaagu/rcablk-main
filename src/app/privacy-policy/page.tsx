@@ -5,7 +5,7 @@ import { SitePageBody } from "@/components/SitePageBody";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import { getSitePageDefaults } from "@/data/site-pages-static";
-import { getSitePage } from "@/lib/cms/pages-repo";
+import { getSitePage, pickLiveSiteTitle } from "@/lib/cms/pages-repo";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default async function PrivacyPolicy() {
   const defaults = getSitePageDefaults("privacy-policy")!;
   const cms = await getSitePage("privacy-policy");
   const paragraphs = cms?.paragraphs?.length ? cms.paragraphs : defaults.defaultParagraphs;
-  const heading = cms?.title?.trim() ? cms.title : defaults.title;
+  const heading = pickLiveSiteTitle(cms, defaults.title);
 
   return (
     <div

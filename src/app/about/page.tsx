@@ -6,7 +6,7 @@ import { BlurImage } from "@/components/BlurImage";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import { RevealText } from "@/components/RevealText";
 import { getSitePageDefaults } from "@/data/site-pages-static";
-import { getSitePage } from "@/lib/cms/pages-repo";
+import { getSitePage, pickLiveSiteTitle } from "@/lib/cms/pages-repo";
 import Image from "next/image";
 import type { Metadata } from "next";
 
@@ -25,7 +25,7 @@ export default async function About() {
   const defaults = getSitePageDefaults("about")!;
   const cms = await getSitePage("about");
   const paragraphs = cms?.paragraphs?.length ? cms.paragraphs : defaults.defaultParagraphs;
-  const heading = cms?.title?.trim() ? cms.title : defaults.title;
+  const heading = pickLiveSiteTitle(cms, defaults.title);
 
   return (
     <div

@@ -5,7 +5,7 @@ import { SitePageBody } from "@/components/SitePageBody";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import { getSitePageDefaults } from "@/data/site-pages-static";
-import { getSitePage } from "@/lib/cms/pages-repo";
+import { getSitePage, pickLiveSiteTitle } from "@/lib/cms/pages-repo";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -20,7 +20,7 @@ export default async function Resources() {
   const defaults = getSitePageDefaults("resources")!;
   const cms = await getSitePage("resources");
   const paragraphs = cms?.paragraphs?.length ? cms.paragraphs : defaults.defaultParagraphs;
-  const heading = cms?.title?.trim() ? cms.title : defaults.title;
+  const heading = pickLiveSiteTitle(cms, defaults.title);
 
   return (
     <div

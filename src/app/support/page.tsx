@@ -5,7 +5,7 @@ import { SitePageBody } from "@/components/SitePageBody";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import { getSitePageDefaults, SUPPORT_PAGE_SLUG } from "@/data/site-pages-static";
-import { getSitePage } from "@/lib/cms/pages-repo";
+import { getSitePage, pickLiveSiteTitle } from "@/lib/cms/pages-repo";
 import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -67,7 +67,7 @@ export default async function Support() {
           <AnimateIn delay={0.15} duration={0.55} y={12}>
             <header className="mb-8 text-center sm:mb-10">
               <h1 className="font-serif text-3xl font-normal tracking-tight text-black sm:text-4xl">
-                {cms?.title?.trim() ? cms.title : defaults.title}
+                {pickLiveSiteTitle(cms, defaults.title)}
               </h1>
             </header>
           </AnimateIn>

@@ -2,6 +2,12 @@ import type { NewsArticle } from "@/data/news";
 import { newsArticles as staticNews } from "@/data/news";
 import { createSupabaseAdmin } from "@/lib/cms/supabase-admin";
 import { createSupabaseAnon } from "@/lib/cms/supabase-anon";
+import {
+  asString,
+  asTrimmedString,
+  normalizeGalleryField,
+  normalizeStringArrayField,
+} from "@/lib/cms/coerce";
 
 type NewsRow = {
   slug: string;
@@ -14,30 +20,48 @@ type NewsRow = {
   sort_order: number;
 };
 
-function rowToArticle(row: NewsRow): NewsArticle {
+const FALLBACK_NEWS_IMAGE = "/rca_logo.png";
+
+function rowToArticle(row: unknown): NewsArticle | null {
+  const r = row as Record<string, unknown>;
+  const slug = asTrimmedString(r.slug);
+  if (!slug) return null;
+
+  const body = normalizeStringArrayField(r.body);
+  const gallery = normalizeGalleryField(r.gallery);
+
   return {
-    slug: row.slug,
-    title: row.title,
-    category: row.category ?? "Announcement",
-    date: row.date ?? "",
-    image: row.image ?? "",
-    gallery: row.gallery ?? undefined,
-    body: Array.isArray(row.body) ? (row.body as string[]) : [],
-    sort_order: row.sort_order,
+    slug,
+    title: asTrimmedString(r.title) || "Untitled",
+    category: asTrimmedString(r.category) || "Announcement",
+    date: asString(r.date),
+    image: asTrimmedString(r.image) || FALLBACK_NEWS_IMAGE,
+    gallery,
+    body: body.length ? body : [],
+    sort_order: typeof r.sort_order === "number" && Number.isFinite(r.sort_order) ? r.sort_order : undefined,
   };
 }
 
 export async function getNewsArticles(): Promise<NewsArticle[]> {
-  const anon = createSupabaseAnon();
-  if (!anon) return staticNews;
+  try {
+    const anon = createSupabaseAnon();
+    if (!anon) return staticNews;
 
-  const { data, error } = await anon
-    .from("news_articles")
-    .select("slug,title,category,date,image,gallery,body,sort_order")
-    .order("sort_order", { ascending: true });
+    const { data, error } = await anon
+      .from("news_articles")
+      .select("slug,title,category,date,image,gallery,body,sort_order")
+      .order("sort_order", { ascending: true });
 
-  if (error || !data?.length) return staticNews;
-  return (data as NewsRow[]).map(rowToArticle);
+    if (error || !data?.length) return staticNews;
+
+    const articles = (data as NewsRow[])
+      .map((row) => rowToArticle(row))
+      .filter((a): a is NewsArticle => a != null);
+
+    return articles.length ? articles : staticNews;
+  } catch {
+    return staticNews;
+  }
 }
 
 export async function listNewsAdmin(): Promise<NewsArticle[]> {
@@ -47,7 +71,9 @@ export async function listNewsAdmin(): Promise<NewsArticle[]> {
     .select("slug,title,category,date,image,gallery,body,sort_order")
     .order("sort_order", { ascending: true });
   if (error) throw error;
-  return ((data ?? []) as NewsRow[]).map(rowToArticle);
+  return ((data ?? []) as NewsRow[])
+    .map((row) => rowToArticle(row))
+    .filter((a): a is NewsArticle => a != null);
 }
 
 export async function getNewsBySlugAdmin(slug: string): Promise<NewsArticle | null> {
@@ -59,7 +85,7 @@ export async function getNewsBySlugAdmin(slug: string): Promise<NewsArticle | nu
     .maybeSingle();
   if (error) throw error;
   if (!data) return null;
-  return rowToArticle(data as NewsRow);
+  return rowToArticle(data);
 }
 
 export async function upsertNewsAdmin(article: NewsArticle, sortOrder: number): Promise<void> {
