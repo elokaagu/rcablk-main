@@ -110,13 +110,32 @@ function letterMaskStyle(svgPath: string): import("react").CSSProperties {
   };
 }
 
+/**
+ * Per-column nudge applied to each cell's inner content so the six glyphs
+ * read as one tight RCA BLK block instead of six widely-spaced tiles. The
+ * SVG glyph is 79.37 × 124.72 (≈63.6% wide when fit-to-cell), so each
+ * square cell carries ~18% of empty padding on either side of the glyph.
+ * Pushing left-column glyphs right and right-column glyphs left removes
+ * roughly half of the visual gap between adjacent letters while keeping
+ * cell hit-areas the same. Both the glyph mask and the label mask sit
+ * inside this wrapper, so they translate together and labels stay
+ * registered to the visible glyph.
+ */
+function colTranslateClass(col: 0 | 1 | 2): string {
+  if (col === 0) return "translate-x-[18%]";
+  if (col === 2) return "-translate-x-[18%]";
+  return "";
+}
+
 function LetterCell({
   letter,
+  index,
   isHovered,
   onHover,
   onLeave,
 }: {
   letter: (typeof LETTERS)[number];
+  index: number;
   isHovered: boolean;
   onHover: () => void;
   onLeave: () => void;
@@ -127,6 +146,8 @@ function LetterCell({
   // white on hover. Labels flip with it so type stays legible on either fill.
   const glyphFill = isHovered ? "bg-white" : "bg-black";
   const labelColor = isHovered ? "text-black" : "text-white";
+  const col = (index % 3) as 0 | 1 | 2;
+  const translate = colTranslateClass(col);
 
   return (
     <Link
@@ -139,29 +160,31 @@ function LetterCell({
       onBlur={onLeave}
     >
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden p-0">
-        <div
-          className={`absolute inset-0 transition-colors duration-300 ${glyphFill}`}
-          style={maskStyle}
-        />
+        <div className={`absolute inset-0 ${translate}`}>
+          <div
+            className={`absolute inset-0 transition-colors duration-300 ${glyphFill}`}
+            style={maskStyle}
+          />
 
-        {/*
-          Hover-only label, clipped to the glyph by the same mask. Idle
-          state shows the bare letterforms; the nav label fades in on
-          hover/focus and reads in black against the inverted (white)
-          glyph so type stays legible without a separate background.
-        */}
-        <div
-          className={`pointer-events-none absolute inset-0 z-20 box-border flex font-serif font-normal leading-tight tracking-tight transition-opacity duration-300 text-[clamp(0.45rem,4.6cqi,0.7rem)] sm:text-[clamp(0.5rem,4.4cqi,0.78rem)] md:text-[clamp(0.55rem,3.6cqi,0.85rem)] ${letter.labelInLetter.className} ${
-            isHovered ? "opacity-100" : "opacity-0"
-          }`}
-          style={maskStyle}
-          aria-hidden={!isHovered}
-        >
-          <span
-            className={`inline-block max-w-full min-w-0 uppercase ${letter.labelInLetter.textClass} ${labelColor}`}
+          {/*
+            Hover-only label, clipped to the glyph by the same mask. Idle
+            state shows the bare letterforms; the nav label fades in on
+            hover/focus and reads in black against the inverted (white)
+            glyph so type stays legible without a separate background.
+          */}
+          <div
+            className={`pointer-events-none absolute inset-0 z-20 box-border flex font-serif font-normal leading-tight tracking-tight transition-opacity duration-300 text-[clamp(0.45rem,4.6cqi,0.7rem)] sm:text-[clamp(0.5rem,4.4cqi,0.78rem)] md:text-[clamp(0.55rem,3.6cqi,0.85rem)] ${letter.labelInLetter.className} ${
+              isHovered ? "opacity-100" : "opacity-0"
+            }`}
+            style={maskStyle}
+            aria-hidden={!isHovered}
           >
-            {letter.label}
-          </span>
+            <span
+              className={`inline-block max-w-full min-w-0 uppercase ${letter.labelInLetter.textClass} ${labelColor}`}
+            >
+              {letter.label}
+            </span>
+          </div>
         </div>
       </div>
     </Link>
@@ -218,10 +241,11 @@ export default function RCALetterforms() {
             gridTemplateRows: "repeat(2, 1fr)",
           }}
         >
-          {LETTERS.map((letter) => (
+          {LETTERS.map((letter, i) => (
             <LetterCell
               key={letter.id}
               letter={letter}
+              index={i}
               isHovered={hovered === letter.id}
               onHover={() => setHovered(letter.id)}
               onLeave={() => setHovered(null)}
