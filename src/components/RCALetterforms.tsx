@@ -1,18 +1,16 @@
 "use client";
 
-import { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useLayoutEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 /**
- * Flex alignment for the hover label inside a full-cell wrapper that shares
- * the letter SVG as a CSS mask. Text only appears inside the letter shape,
- * matching the EVENTS / RESOURCES reference treatment.
+ * Flex alignment for labels clipped to each letter SVG (same mask as the
+ * glyph). Labels are always visible on the homepage to match brand references;
+ * hover only changes fill / inversion.
  */
 type LabelInLetterAlign = {
-  /** Tailwind flex alignment classes for the masked label wrapper */
   className: string;
-  /** Text alignment inside the masked label */
   textClass: string;
 };
 
@@ -24,7 +22,6 @@ const LETTERS: ReadonlyArray<{
   whiteHover: string | null;
   labelInLetter: LabelInLetterAlign;
 }> = [
-  /** R: white Γ + yellow notch (mask); tiny serif "R" in crook */
   {
     id: "r",
     label: "ABOUT",
@@ -93,6 +90,20 @@ const LETTERS: ReadonlyArray<{
   },
 ];
 
+function letterMaskStyle(svgPath: string): import("react").CSSProperties {
+  const url = `url("${encodeURI(svgPath)}")`;
+  return {
+    maskImage: url,
+    WebkitMaskImage: url,
+    maskSize: "contain",
+    maskPosition: "center",
+    maskRepeat: "no-repeat",
+    WebkitMaskSize: "contain",
+    WebkitMaskPosition: "center",
+    WebkitMaskRepeat: "no-repeat",
+  };
+}
+
 function LetterCell({
   letter,
   isHovered,
@@ -104,22 +115,26 @@ function LetterCell({
   onHover: () => void;
   onLeave: () => void;
 }) {
-  const showLabel = isHovered;
   const imgSrc = isHovered && letter.whiteHover ? letter.whiteHover : letter.svg;
   const invertOnHover = isHovered && !letter.whiteHover;
   const isC = letter.id === "c";
   const isR = letter.id === "r";
 
-  const maskStyle = {
-    maskImage: `url('${letter.svg}')`,
-    maskSize: "contain",
-    maskPosition: "center",
-    maskRepeat: "no-repeat",
-    WebkitMaskImage: `url('${letter.svg}')`,
-    WebkitMaskSize: "contain",
-    WebkitMaskPosition: "center",
-    WebkitMaskRepeat: "no-repeat",
-  } as React.CSSProperties;
+  const maskStyle = useMemo(() => letterMaskStyle(letter.svg), [letter.svg]);
+
+  /** Idle vs hover label colour so type stays legible on both fills. */
+  const labelColor =
+    isR && isHovered
+      ? "text-white"
+      : isR && !isHovered
+        ? "text-black"
+        : isC && !isHovered
+          ? "text-white"
+          : isC && isHovered
+            ? "text-black"
+            : !isHovered
+              ? "text-white"
+              : "text-black";
 
   return (
     <Link
@@ -128,26 +143,15 @@ function LetterCell({
       className="relative block aspect-square w-full overflow-hidden bg-homeHero touch-manipulation"
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
-      onTouchStart={onHover}
-      onTouchEnd={() => setTimeout(onLeave, 150)}
+      onFocus={onHover}
+      onBlur={onLeave}
     >
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden p-0">
-        {/* R: white Γ + notch (yellow = cell bg); tiny serif R in crook; hover → black fill + white label */}
         {isR ? (
-          <>
-            <div
-              className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-black" : "bg-white"}`}
-              style={maskStyle}
-            />
-            {!isHovered && (
-              <span
-                className="pointer-events-none absolute left-[13%] top-[11%] z-[5] font-serif text-[0.58rem] font-normal leading-none tracking-tight text-black sm:left-[14%] sm:top-[12%] sm:text-[0.68rem]"
-                aria-hidden
-              >
-                R
-              </span>
-            )}
-          </>
+          <div
+            className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-black" : "bg-white"}`}
+            style={maskStyle}
+          />
         ) : isC ? (
           <div
             className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-white" : "bg-black"}`}
@@ -159,27 +163,25 @@ function LetterCell({
             alt=""
             fill
             sizes="(max-width: 768px) 33vw, 340px"
-            className={`object-contain transition-opacity duration-300 ${
+            className={`object-contain transition-all duration-300 ${
               invertOnHover ? "brightness-0 invert" : ""
             }`}
           />
         )}
-        {/* Hover label on top: same mask as the letter so type only appears inside
-            the glyph (matches EVENTS / RESOURCES). Per-letter flex alignment. */}
-        {showLabel && (
-          <div
-            className={`pointer-events-none absolute inset-0 z-20 flex font-serif text-[0.62rem] font-normal leading-none tracking-tight sm:text-sm ${letter.labelInLetter.className}`}
-            style={maskStyle}
+
+        {/* Always visible: clipped to letter so nav only reads inside the glyph */}
+        <div
+          className={`pointer-events-none absolute inset-0 z-20 flex font-serif text-[0.58rem] font-normal leading-tight tracking-tight transition-opacity duration-300 sm:text-[0.72rem] ${letter.labelInLetter.className} ${
+            isHovered ? "opacity-100" : "opacity-[0.92]"
+          }`}
+          style={maskStyle}
+        >
+          <span
+            className={`inline-block max-w-[94%] uppercase ${letter.labelInLetter.textClass} ${labelColor}`}
           >
-            <span
-              className={`inline-block max-w-[92%] uppercase ${letter.labelInLetter.textClass} ${
-                isR && isHovered ? "text-white" : "text-black"
-              }`}
-            >
-              {letter.label}
-            </span>
-          </div>
-        )}
+            {letter.label}
+          </span>
+        </div>
       </div>
     </Link>
   );
