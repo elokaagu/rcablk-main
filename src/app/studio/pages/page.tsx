@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { isCmsConfigured } from "@/lib/cms/supabase-admin";
 import { listPagesAdmin } from "@/lib/cms/pages-repo";
+import { SITE_PAGES } from "@/data/site-pages-static";
 import { StudioNotice, StudioPageHeader } from "../_brand/StudioBrand";
 import { StudioSchemaSetup } from "../_brand/StudioSchemaSetup";
 import { extractErrorMessage, isSchemaMissingError } from "../_brand/studio-errors";
-
-const PRESET_SLUGS = [{ slug: "support", label: "Support page" }];
 
 export default async function StudioPagesIndex() {
   if (!isCmsConfigured()) {
@@ -50,13 +49,13 @@ export default async function StudioPagesIndex() {
       <StudioPageHeader
         eyebrow="On-site copy"
         title="Site pages"
-        description="Edit on-site copy. The Support page reads from the support entry when present; otherwise it uses the built-in default text."
+        description="Edit on-site copy. Each page reads from its database entry when present; otherwise it falls back to the built-in default text."
       />
 
       <div className="overflow-hidden rounded-md border border-black/10 bg-white">
         <table className="w-full text-left">
           <thead className="border-b border-black/10 bg-black/[0.02]">
-            <tr className="font-display text-[0.65rem] font-black uppercase tracking-[0.22em] text-black/55">
+            <tr className="font-serif text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-black/55">
               <th className="px-5 py-4">Page</th>
               <th className="hidden px-5 py-4 sm:table-cell">Slug</th>
               <th className="px-5 py-4">Status</th>
@@ -64,7 +63,7 @@ export default async function StudioPagesIndex() {
             </tr>
           </thead>
           <tbody>
-            {PRESET_SLUGS.map((p) => {
+            {SITE_PAGES.map((p) => {
               const live = existingSlugs.has(p.slug);
               return (
                 <tr
@@ -77,7 +76,7 @@ export default async function StudioPagesIndex() {
                   </td>
                   <td className="px-5 py-4">
                     <span
-                      className={`inline-flex items-center gap-2 font-display text-[0.65rem] font-black uppercase tracking-[0.22em] ${
+                      className={`inline-flex items-center gap-2 font-serif text-[0.72rem] font-semibold uppercase tracking-[0.18em] ${
                         live ? "text-black" : "text-black/55"
                       }`}
                     >
@@ -91,7 +90,7 @@ export default async function StudioPagesIndex() {
                   <td className="px-5 py-4 text-right">
                     <Link
                       href={`/studio/pages/${encodeURIComponent(p.slug)}/edit`}
-                      className="group inline-flex items-center gap-2 font-display text-[0.7rem] font-black uppercase tracking-[0.22em] text-black transition-colors hover:text-black/60"
+                      className="group inline-flex items-center gap-2 font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black transition-colors hover:text-black/60"
                     >
                       <span>Edit</span>
                       <span aria-hidden className="inline-block transition-transform group-hover:translate-x-0.5">

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { events } from "@/data/events";
 import { newsArticles } from "@/data/news";
-import { DEFAULT_SUPPORT_PARAGRAPHS, SUPPORT_PAGE_SLUG } from "@/data/support-static";
+import { SITE_PAGES } from "@/data/site-pages-static";
 import { upsertEventAdmin } from "@/lib/cms/events-repo";
 import { upsertNewsAdmin } from "@/lib/cms/news-repo";
 import { upsertSitePageAdmin } from "@/lib/cms/pages-repo";
@@ -22,16 +22,18 @@ export async function POST() {
     for (let i = 0; i < newsArticles.length; i++) {
       await upsertNewsAdmin(newsArticles[i], i);
     }
-    await upsertSitePageAdmin({
-      slug: SUPPORT_PAGE_SLUG,
-      title: "Support",
-      paragraphs: DEFAULT_SUPPORT_PARAGRAPHS,
-    });
+    for (const page of SITE_PAGES) {
+      await upsertSitePageAdmin({
+        slug: page.slug,
+        title: page.title,
+        paragraphs: page.defaultParagraphs,
+      });
+    }
     return NextResponse.json({
       ok: true,
       events: events.length,
       news: newsArticles.length,
-      pages: 1,
+      pages: SITE_PAGES.length,
     });
   } catch (e) {
     console.error(e);

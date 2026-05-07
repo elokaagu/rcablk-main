@@ -10,6 +10,10 @@ import {
   StudioInput,
   StudioTextarea,
 } from "../_brand/StudioBrand";
+import { StudioDatePicker } from "../_brand/StudioDatePicker";
+import { StudioRichTextEditor } from "../_brand/StudioRichTextEditor";
+import { slugify } from "../_brand/slugify";
+import { bodyArrayToString } from "@/lib/rich-body";
 
 function galleryToText(g?: string[]) {
   return g?.length ? g.join("\n") : "";
@@ -23,29 +27,40 @@ function textToGallery(text: string): string[] | undefined {
   return lines.length ? lines : undefined;
 }
 
-function bodyToText(body: string[]) {
-  return body.join("\n\n");
-}
-
-function textToBody(text: string): string[] {
-  return text
-    .split(/\n\n+/)
-    .map((p) => p.trim())
-    .filter(Boolean);
-}
-
 export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: "new" | "edit" }) {
   const router = useRouter();
   const [article, setArticle] = useState<NewsArticle>(initial);
   const [galleryText, setGalleryText] = useState(galleryToText(initial.gallery));
-  const [bodyText, setBodyText] = useState(bodyToText(initial.body));
+  // The body is stored on disk as `string[]` for legacy compatibility. When
+  // edited through the rich text editor we save the entire HTML payload as a
+  // single-element array. Normalising on load means the editor always
+  // receives one string (legacy multi-paragraph entries get joined into a
+  // single block of text that `legacyBodyToHtml` then converts to <p> tags).
+  const [bodyHtml, setBodyHtml] = useState(bodyArrayToString(initial.body));
   const [sortOrder, setSortOrder] = useState(initial.sort_order ?? 0);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Auto-fill the slug from `title` while the user hasn't customised it. Once
+  // they type into the slug field directly, we stop syncing. In edit mode
+  // the slug field is disabled anyway.
+  const [slugTouched, setSlugTouched] = useState(mode === "edit" || Boolean(initial.slug));
 
   function set<K extends keyof NewsArticle>(key: K, value: NewsArticle[K]) {
     setArticle((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function onTitleChange(value: string) {
+    setArticle((prev) => ({
+      ...prev,
+      title: value,
+      slug: slugTouched ? prev.slug : slugify(value),
+    }));
+  }
+
+  function onSlugChange(value: string) {
+    setSlugTouched(true);
+    set("slug", slugify(value));
   }
 
   async function uploadImage(file: File) {
@@ -69,10 +84,13 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
   async function save() {
     setSaving(true);
     setError(null);
+    // Wrap the HTML in a single-element array so the existing schema is
+    // happy; the public renderer detects HTML vs legacy paragraphs.
+    const body = bodyHtml.trim() ? [bodyHtml] : [];
     const payload: NewsArticle = {
       ...article,
       gallery: textToGallery(galleryText),
-      body: textToBody(bodyText),
+      body,
     };
     try {
       const method = mode === "new" ? "POST" : "PUT";
@@ -116,11 +134,17 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
         <div className="grid gap-6 sm:grid-cols-2">
           <StudioField
             label="Slug · URL"
-            hint={mode === "edit" ? "Locked once an article is created" : "Lower-case, dashes for spaces"}
+            hint={
+              mode === "edit"
+                ? "Locked once an article is created"
+                : slugTouched
+                  ? "Custom — won't auto-update from Title"
+                  : "Auto-filled from Title; type to customise"
+            }
           >
             <StudioInput
               value={article.slug}
-              onChange={(e) => set("slug", e.target.value.toLowerCase().replace(/\s+/g, "-"))}
+              onChange={(e) => onSlugChange(e.target.value)}
               disabled={mode === "edit"}
             />
           </StudioField>
@@ -135,7 +159,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
         </div>
 
         <StudioField label="Title">
-          <StudioInput value={article.title} onChange={(e) => set("title", e.target.value)} />
+          <StudioInput value={article.title} onChange={(e) => onTitleChange(e.target.value)} />
         </StudioField>
 
         <div className="grid gap-6 sm:grid-cols-2">
@@ -143,12 +167,16 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
             <StudioInput value={article.category} onChange={(e) => set("category", e.target.value)} />
           </StudioField>
 
-          <StudioField label="Date" hint="Display string, e.g. 12 June 2026">
-            <StudioInput value={article.date} onChange={(e) => set("date", e.target.value)} />
-          </StudioField>
+          <StudioDatePicker
+            label="Date"
+            hint="Pick from the calendar or type freely (e.g. Spring 2026, TBC)"
+            value={article.date}
+            onChange={(v) => set("date", v)}
+            mode="single"
+          />
         </div>
 
-        <StudioField label="Hero image" hint="Paste a URL or upload directly to Supabase Storage">
+        <StudioField label="Hero image" hint="Paste an image URL or upload one from your computer">
           <StudioInput value={article.image} onChange={(e) => set("image", e.target.value)} />
           <input
             type="file"
@@ -158,7 +186,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
               const f = e.target.files?.[0];
               if (f) void uploadImage(f);
             }}
-            className="mt-3 block font-serif text-[0.85rem] text-black/55 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-2 file:font-display file:text-[0.65rem] file:font-black file:uppercase file:tracking-[0.22em] file:text-white hover:file:bg-homeHero hover:file:text-black"
+            className="mt-3 block font-serif text-[0.85rem] text-black/55 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-2 file:font-serif file:text-[0.78rem] file:font-semibold file:uppercase file:tracking-[0.18em] file:text-white hover:file:bg-homeHero hover:file:text-black"
           />
         </StudioField>
 
@@ -166,9 +194,13 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
           <StudioTextarea value={galleryText} onChange={(e) => setGalleryText(e.target.value)} rows={4} />
         </StudioField>
 
-        <StudioField label="Body" hint="Use a blank line to separate paragraphs">
-          <StudioTextarea value={bodyText} onChange={(e) => setBodyText(e.target.value)} rows={12} />
-        </StudioField>
+        <StudioRichTextEditor
+          label="Body"
+          hint="Long-form copy for the article. Formatting (headings, lists, links, emphasis) renders identically on the public site."
+          value={bodyHtml}
+          onChange={setBodyHtml}
+          minRows={10}
+        />
 
         {error && (
           <p

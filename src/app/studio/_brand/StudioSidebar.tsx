@@ -69,7 +69,7 @@ function SidebarBody({
         <ul className="flex flex-col gap-7">
           {SECTIONS.map((section) => (
             <li key={section.title}>
-              <h2 className="px-3 font-display text-[0.65rem] font-black uppercase tracking-[0.22em] text-black/45">
+              <h2 className="px-3 font-serif text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-black/45">
                 {section.title}
               </h2>
               <ul className="mt-2 flex flex-col gap-px">
@@ -118,7 +118,7 @@ function SidebarBody({
           <Link
             href="/"
             onClick={onNavigate}
-            className="group inline-flex items-center justify-between gap-3 font-display text-[0.7rem] font-black uppercase tracking-[0.22em] text-black/60 transition-colors hover:text-black"
+            className="group inline-flex items-center justify-between gap-3 font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black/60 transition-colors hover:text-black"
           >
             <span>View site</span>
             <span aria-hidden className="inline-block transition-transform group-hover:translate-x-0.5">
@@ -131,7 +131,7 @@ function SidebarBody({
               onNavigate?.();
               onLogout();
             }}
-            className="group inline-flex items-center justify-between gap-3 font-display text-[0.7rem] font-black uppercase tracking-[0.22em] text-black/60 transition-colors hover:text-black"
+            className="group inline-flex items-center justify-between gap-3 font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black/60 transition-colors hover:text-black"
           >
             <span>Sign out</span>
             <span aria-hidden className="inline-block transition-transform group-hover:translate-x-0.5">
@@ -199,7 +199,7 @@ export function StudioSidebar({ pathname }: { pathname: string }) {
           aria-label="Open navigation"
           aria-expanded={open}
           aria-controls="studio-sidebar-drawer"
-          className="inline-flex items-center gap-2 font-display text-[0.7rem] font-black uppercase tracking-[0.22em] text-black/70 transition-colors hover:text-black"
+          className="inline-flex items-center gap-2 font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black/70 transition-colors hover:text-black"
         >
           <span aria-hidden className="flex flex-col gap-1">
             <span className="block h-px w-5 bg-current" />

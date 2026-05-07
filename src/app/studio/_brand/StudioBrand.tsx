@@ -2,8 +2,10 @@ import * as React from "react";
 
 /**
  * Studio brand primitives, modelled on the public site's editorial language:
- * - Jubilat serif for body / labels / table cells
- * - RCABLK display for eyebrows and section markers (set via `font-display`)
+ * - Jubilat serif for body, form labels, table cells, buttons and nav
+ * - RCABLK display reserved for the wordmark, eyebrow accents, and the few
+ *   genuine display moments (e.g. the big dashboard count). Used sparingly
+ *   so it reads as a brand voice, not a UI font.
  * - Hairline borders (`border-black/10`) and tracked-out uppercase eyebrows
  * - `homeHero` orange used sparingly as a brand accent
  *
@@ -56,7 +58,7 @@ export function StudioPageHeader({
         {back && (
           <a
             href={back.href}
-            className="font-display text-[0.7rem] font-black uppercase tracking-[0.22em] text-black/55 transition-colors hover:text-black"
+            className="font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black/55 transition-colors hover:text-black"
           >
             ← {back.label}
           </a>
@@ -128,7 +130,7 @@ type StudioButtonProps =
 export function StudioButton(props: StudioButtonProps) {
   const { variant = "primary", className = "" } = props as { variant?: ButtonVariant; className?: string };
   const base =
-    "inline-flex items-center justify-center gap-2 rounded-md px-5 py-2.5 font-display text-[0.7rem] font-black uppercase tracking-[0.22em] transition-colors disabled:opacity-50 disabled:cursor-not-allowed";
+    "inline-flex items-center justify-center gap-2 rounded-md px-5 py-2.5 font-serif text-[0.82rem] font-semibold uppercase tracking-[0.18em] transition-colors disabled:opacity-50 disabled:cursor-not-allowed";
 
   if ((props as { as?: string }).as === "a") {
     const { as: _as, variant: _v, className: _c, ...rest } = props as React.AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -164,7 +166,7 @@ export function StudioFieldLabel({
 }) {
   return (
     <label htmlFor={htmlFor} className={`block ${className}`}>
-      <span className="font-display text-[0.65rem] font-black uppercase tracking-[0.22em] text-black/60">
+      <span className="font-serif text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-black/60">
         {children}
       </span>
       {hint && (
@@ -238,7 +240,7 @@ export function StudioNotice({
     <div className={`rounded-md border ${t.wrap} px-5 py-4 sm:px-6 sm:py-5`}>
       {title && (
         <p
-          className={`font-display text-[0.7rem] font-black uppercase tracking-[0.22em] ${t.eyebrow}`}
+          className={`font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] ${t.eyebrow}`}
         >
           {title}
         </p>

@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
 import { ArticleHeader } from "@/components/ArticleHeader";
 import { BlurImage } from "@/components/BlurImage";
+import { EventBody } from "@/components/EventBody";
 import { getEvents } from "@/lib/cms/events-repo";
 import type { Metadata } from "next";
 
@@ -87,15 +88,12 @@ export default async function EventDetail({ params }: PageProps) {
         </div>
       )}
 
-      {/* Body - left-aligned */}
+      {/* Body - left-aligned. Renders rich text HTML produced by the studio
+          editor when present, with a graceful fallback to the legacy plain-
+          text/`*italic*` format so seeded entries keep their original look. */}
       {event.body && (
         <div className="max-w-2xl mx-auto px-6 sm:px-10 pb-12 sm:pb-16 text-left">
-          <div
-            className="text-xl leading-relaxed text-foreground whitespace-pre-line [&_em]:italic"
-            dangerouslySetInnerHTML={{
-              __html: event.body.replace(/\*([^*]+)\*/g, "<em>$1</em>"),
-            }}
-          />
+          <EventBody body={event.body} />
         </div>
       )}
 

@@ -62,7 +62,7 @@ export default async function StudioNewsPage() {
         <div className="overflow-hidden rounded-md border border-black/10 bg-white">
           <table className="w-full text-left">
             <thead className="border-b border-black/10 bg-black/[0.02]">
-              <tr className="font-display text-[0.65rem] font-black uppercase tracking-[0.22em] text-black/55">
+              <tr className="font-serif text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-black/55">
                 <th className="px-5 py-4">Title</th>
                 <th className="hidden px-5 py-4 sm:table-cell">Slug</th>
                 <th className="hidden px-5 py-4 lg:table-cell">Date</th>
@@ -85,7 +85,7 @@ export default async function StudioNewsPage() {
                   <td className="px-5 py-4 text-right">
                     <Link
                       href={`/studio/news/${encodeURIComponent(a.slug)}/edit`}
-                      className="group inline-flex items-center gap-2 font-display text-[0.7rem] font-black uppercase tracking-[0.22em] text-black transition-colors hover:text-black/60"
+                      className="group inline-flex items-center gap-2 font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black transition-colors hover:text-black/60"
                     >
                       <span>Edit</span>
                       <span aria-hidden className="inline-block transition-transform group-hover:translate-x-0.5">

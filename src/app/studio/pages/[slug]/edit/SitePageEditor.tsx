@@ -4,31 +4,37 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { SitePageRecord } from "@/lib/cms/pages-repo";
-import { DEFAULT_SUPPORT_PARAGRAPHS, SUPPORT_PAGE_SLUG } from "@/data/support-static";
+import { getSitePageDefaults } from "@/data/site-pages-static";
 import {
   StudioButton,
   StudioCard,
   StudioField,
-  StudioInlineCode,
   StudioInput,
-  StudioTextarea,
 } from "../../../_brand/StudioBrand";
+import { StudioRichTextEditor } from "../../../_brand/StudioRichTextEditor";
+import { bodyArrayToString } from "@/lib/rich-body";
 
-function joinParas(p: string[]) {
-  return p.join("\n\n---\n\n");
-}
-
-function splitParas(text: string): string[] {
-  return text
-    .split(/\n-{3,}\n/)
-    .map((s) => s.trim())
-    .filter(Boolean);
-}
-
-export function SupportPageEditor({ slug }: { slug: string }) {
+/**
+ * Slug-aware editor for everything under "Site pages". Uses the registry in
+ * `@/data/site-pages-static` to resolve per-slug defaults (heading + body)
+ * and the public path used for the post-save "open live" link. Saves the
+ * rich text editor's HTML output as a single-element `paragraphs` array;
+ * the public renderer (`<SitePageBody />`) detects HTML vs legacy data and
+ * picks the right rendering path.
+ */
+export function SitePageEditor({ slug }: { slug: string }) {
   const router = useRouter();
-  const [title, setTitle] = useState("Support");
-  const [bodyText, setBodyText] = useState(joinParas(DEFAULT_SUPPORT_PARAGRAPHS));
+  const defaults = getSitePageDefaults(slug);
+  const fallbackTitle = defaults?.title ?? "";
+  const fallbackBody = bodyArrayToString(defaults?.defaultParagraphs ?? []);
+  const livePath = defaults?.path;
+
+  const [title, setTitle] = useState(fallbackTitle);
+  // Body is stored as `paragraphs: string[]`. When edited through the rich
+  // text editor we save a single-element array containing HTML; legacy
+  // entries get joined into one block for the editor to render via
+  // `legacyBodyToHtml`.
+  const [bodyHtml, setBodyHtml] = useState(fallbackBody);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -40,19 +46,21 @@ export function SupportPageEditor({ slug }: { slug: string }) {
         const res = await fetch(`/api/studio/pages/${encodeURIComponent(slug)}`);
         if (res.status === 404) {
           if (!cancelled) {
-            setTitle("Support");
-            setBodyText(joinParas(DEFAULT_SUPPORT_PARAGRAPHS));
+            setTitle(fallbackTitle);
+            setBodyHtml(fallbackBody);
           }
           return;
         }
         if (!res.ok) throw new Error("Failed to load");
         const data = (await res.json()) as SitePageRecord;
         if (!cancelled) {
-          setTitle(data.title?.trim() || "Support");
-          setBodyText(joinParas(data.paragraphs?.length ? data.paragraphs : DEFAULT_SUPPORT_PARAGRAPHS));
+          setTitle(data.title?.trim() || fallbackTitle);
+          setBodyHtml(
+            data.paragraphs?.length ? bodyArrayToString(data.paragraphs) : fallbackBody,
+          );
         }
       } catch {
-        if (!cancelled) setBodyText(joinParas(DEFAULT_SUPPORT_PARAGRAPHS));
+        if (!cancelled) setBodyHtml(fallbackBody);
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -60,14 +68,16 @@ export function SupportPageEditor({ slug }: { slug: string }) {
     return () => {
       cancelled = true;
     };
+    // We deliberately re-init on slug change only; defaults derived from slug.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   async function save() {
     setSaving(true);
     setError(null);
-    const paragraphs = splitParas(bodyText);
-    if (paragraphs.length < 1) {
-      setError("Add at least one paragraph (use a line with only --- between paragraphs).");
+    const trimmed = bodyHtml.trim();
+    if (!trimmed) {
+      setError("Body cannot be empty.");
       setSaving(false);
       return;
     }
@@ -76,7 +86,11 @@ export function SupportPageEditor({ slug }: { slug: string }) {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          page: { slug, title: title.trim() || "Support", paragraphs } satisfies SitePageRecord,
+          page: {
+            slug,
+            title: title.trim() || fallbackTitle,
+            paragraphs: [trimmed],
+          } satisfies SitePageRecord,
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
@@ -101,23 +115,24 @@ export function SupportPageEditor({ slug }: { slug: string }) {
   return (
     <StudioCard className="mx-auto max-w-3xl !p-7 sm:!p-10">
       <div className="space-y-6">
-        <div className="rounded-md border border-black/10 bg-black/[0.02] px-4 py-3 font-serif text-[0.9rem] leading-relaxed text-black/65">
-          Use a line containing only <StudioInlineCode>---</StudioInlineCode> between paragraphs. Include the
-          phrase <StudioInlineCode>contact us</StudioInlineCode> in the last paragraph to keep the contact link.
-        </div>
-
-        <StudioField label="Heading" hint="Optional override — defaults to 'Support'">
+        <StudioField
+          label="Heading"
+          hint={
+            fallbackTitle
+              ? `Optional override — defaults to "${fallbackTitle}"`
+              : "Optional override"
+          }
+        >
           <StudioInput value={title} onChange={(e) => setTitle(e.target.value)} />
         </StudioField>
 
-        <StudioField label="Body">
-          <StudioTextarea
-            value={bodyText}
-            onChange={(e) => setBodyText(e.target.value)}
-            rows={18}
-            className="font-mono"
-          />
-        </StudioField>
+        <StudioRichTextEditor
+          label="Body"
+          hint="Format with headings, lists, links and emphasis. Output renders identically on the public site."
+          value={bodyHtml}
+          onChange={setBodyHtml}
+          minRows={14}
+        />
 
         {error && (
           <p
@@ -136,22 +151,22 @@ export function SupportPageEditor({ slug }: { slug: string }) {
             type="button"
             variant="ghost"
             onClick={() => {
-              setTitle("Support");
-              setBodyText(joinParas(DEFAULT_SUPPORT_PARAGRAPHS));
+              setTitle(fallbackTitle);
+              setBodyHtml(fallbackBody);
             }}
           >
             Reset to defaults
           </StudioButton>
         </div>
 
-        {slug === SUPPORT_PAGE_SLUG && (
+        {livePath && (
           <p className="font-serif text-[0.85rem] text-black/55">
             After saving, open{" "}
             <Link
-              href="/support"
+              href={livePath}
               className="border-b border-black/30 text-black transition-colors hover:border-black"
             >
-              /support
+              {livePath}
             </Link>{" "}
             to verify.
           </p>

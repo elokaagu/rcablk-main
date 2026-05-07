@@ -1,8 +1,11 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
+import { SitePageBody } from "@/components/SitePageBody";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
+import { getSitePageDefaults } from "@/data/site-pages-static";
+import { getSitePage } from "@/lib/cms/pages-repo";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -11,10 +14,17 @@ export const metadata: Metadata = {
   openGraph: { title: "Terms & Conditions | RCA BLK" },
 };
 
+export const dynamic = "force-dynamic";
+
 // See `privacy-policy/page.tsx` — shared warm-cream tone for the legal set.
 const LEGAL_PAGE_BG = "#F0E7D5";
 
-export default function Terms() {
+export default async function Terms() {
+  const defaults = getSitePageDefaults("terms")!;
+  const cms = await getSitePage("terms");
+  const paragraphs = cms?.paragraphs?.length ? cms.paragraphs : defaults.defaultParagraphs;
+  const heading = cms?.title?.trim() ? cms.title : defaults.title;
+
   return (
     <div
       className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0 text-black"
@@ -25,53 +35,13 @@ export default function Terms() {
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>
         <div className="text-center py-8">
-          <h2 className="text-xl sm:text-2xl font-display font-normal text-foreground px-4">Terms & Conditions</h2>
+          <h2 className="text-xl sm:text-2xl font-display font-normal text-foreground px-4">{heading}</h2>
         </div>
       </AnimateIn>
 
       <main className="flex-1 max-w-2xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 w-full">
         <AnimateStagger delay={0.3} stagger={0.1} className="space-y-8 text-foreground text-xl leading-relaxed">
-          <p>
-            This website is run by the Royal College of Art. By using rcablk.com, you agree to
-            these terms and conditions.
-          </p>
-
-          <div>
-            <h3 className="text-xl font-bold text-foreground mb-2">Use of this website</h3>
-            <p>
-              The content of this website is for general information only. The Royal College of
-              Art and RCA BLK endeavour to keep the information up to date and correct, but we
-              make no representations or warranties of any kind about the completeness or
-              accuracy of the material.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold text-foreground mb-2">Intellectual property</h3>
-            <p>
-              Unless otherwise stated, all content on this site is the property of the Royal
-              College of Art or its licensors. You may not reproduce, distribute, or use our
-              content without prior written permission.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold text-foreground mb-2">Links to other sites</h3>
-            <p>
-              This website may link to external sites. We are not responsible for the content
-              or privacy practices of those sites.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-bold text-foreground mb-2">Contact</h3>
-            <p>
-              For questions about these terms, please contact{" "}
-              <a href="mailto:rcablk@rca.ac.uk" className="underline hover:opacity-70 transition-opacity">rcablk@rca.ac.uk</a>{" "}
-              or{" "}
-              <a href="mailto:websupport@rca.ac.uk" className="underline hover:opacity-70 transition-opacity">websupport@rca.ac.uk</a>.
-            </p>
-          </div>
+          <SitePageBody paragraphs={paragraphs} />
         </AnimateStagger>
       </main>
 

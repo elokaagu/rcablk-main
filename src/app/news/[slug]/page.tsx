@@ -4,8 +4,10 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
 import { NewsArticleGallery } from "@/components/NewsArticleGallery";
+import { NewsBody } from "@/components/NewsBody";
 import { BlurImage } from "@/components/BlurImage";
 import { getNewsArticles } from "@/lib/cms/news-repo";
+import { bodyArrayToString, htmlToPlainText, isHtmlBody } from "@/lib/rich-body";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -19,7 +21,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const newsArticles = await getNewsArticles();
   const article = newsArticles.find((a) => a.slug === slug);
   if (!article) return { title: "Article Not Found" };
-  const description = article.body[0]?.slice(0, 160) || article.title;
+  // Build a short excerpt, stripping HTML when the body was authored with the
+  // rich text editor so meta descriptions stay clean.
+  const raw = bodyArrayToString(article.body);
+  const text = isHtmlBody(raw) ? htmlToPlainText(raw) : raw;
+  const description = (text || article.title).slice(0, 160);
   return {
     title: `${article.title} | RCA BLK News`,
     description,
@@ -78,10 +84,8 @@ export default async function NewsArticle({ params }: PageProps) {
               </h1>
               <p className="mt-3 font-serif text-base text-black sm:text-lg">{article.date}</p>
             </header>
-            <div className="mx-auto max-w-prose space-y-6 text-left font-serif text-lg leading-relaxed text-black sm:text-xl">
-              {article.body.map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
-              ))}
+            <div className="mx-auto max-w-prose">
+              <NewsBody body={article.body} align="left" />
             </div>
           </>
         ) : (
@@ -103,10 +107,8 @@ export default async function NewsArticle({ params }: PageProps) {
               />
             </div>
 
-            <div className="mx-auto max-w-prose space-y-6 text-center font-serif text-lg leading-relaxed text-black sm:text-left sm:text-xl">
-              {article.body.map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
-              ))}
+            <div className="mx-auto max-w-prose">
+              <NewsBody body={article.body} align="center-mobile" />
             </div>
           </>
         )}

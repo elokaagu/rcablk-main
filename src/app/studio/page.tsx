@@ -1,9 +1,10 @@
+import Image from "next/image";
 import Link from "next/link";
 import { isCmsConfigured } from "@/lib/cms/supabase-admin";
 import { listEventsAdmin } from "@/lib/cms/events-repo";
 import { listNewsAdmin } from "@/lib/cms/news-repo";
 import { listPagesAdmin } from "@/lib/cms/pages-repo";
-import { SeedButton } from "./SeedButton";
+import { BlurImage } from "@/components/BlurImage";
 import {
   StudioButton,
   StudioEyebrow,
@@ -15,7 +16,7 @@ import { StudioSchemaSetup } from "./_brand/StudioSchemaSetup";
 import { extractErrorMessage, isSchemaMissingError } from "./_brand/studio-errors";
 
 type CountState =
-  | { ok: true; value: number }
+  | { ok: true; value: number; preview?: { src: string; alt: string } }
   | { ok: false; error: unknown };
 
 type Counts = {
@@ -33,11 +34,23 @@ async function loadCounts(): Promise<Counts> {
   return {
     events:
       events.status === "fulfilled"
-        ? { ok: true, value: events.value.length }
+        ? {
+            ok: true,
+            value: events.value.length,
+            preview: events.value[0]?.image
+              ? { src: events.value[0].image, alt: events.value[0].name ?? "" }
+              : undefined,
+          }
         : { ok: false, error: events.reason },
     news:
       news.status === "fulfilled"
-        ? { ok: true, value: news.value.length }
+        ? {
+            ok: true,
+            value: news.value.length,
+            preview: news.value[0]?.image
+              ? { src: news.value[0].image, alt: news.value[0].title ?? "" }
+              : undefined,
+          }
         : { ok: false, error: news.reason },
     pages:
       pages.status === "fulfilled"
@@ -46,37 +59,94 @@ async function loadCounts(): Promise<Counts> {
   };
 }
 
+/**
+ * Image header for a dashboard tile. Uses a real content image when one is
+ * available (latest event / news hero) and falls back to a brand-coloured
+ * panel with one of the BLK letterforms — the same letterforms the public
+ * homepage uses, which keeps the studio visually anchored to the brand.
+ */
+function TilePreview({
+  image,
+  fallback,
+}: {
+  image?: { src: string; alt: string };
+  fallback: { letter: "B" | "L" | "K"; bg: string };
+}) {
+  if (image) {
+    return (
+      <BlurImage
+        src={image.src}
+        alt={image.alt}
+        aspectRatio="3/2"
+        sizes="(max-width: 640px) 100vw, 33vw"
+        className="w-full"
+        hoverOpacity
+      />
+    );
+  }
+  const LETTER_SVG: Record<typeof fallback.letter, string> = {
+    B: "/SVG Letterforms/RCA BLK\u2013Letterforms-B.svg",
+    L: "/SVG Letterforms/RCA BLK\u2013Letterforms-L.svg",
+    K: "/SVG Letterforms/RCA BLK\u2013Letterforms-K.svg",
+  };
+  return (
+    <div
+      className="relative aspect-[3/2] w-full overflow-hidden"
+      style={{ backgroundColor: fallback.bg }}
+      aria-hidden
+    >
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative h-[78%] w-[78%] opacity-90 transition-transform duration-700 ease-out group-hover:scale-[1.03]">
+          <Image
+            src={LETTER_SVG[fallback.letter]}
+            alt=""
+            fill
+            sizes="(max-width: 640px) 100vw, 33vw"
+            className="object-contain"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function CountTile({
   marker,
   state,
   label,
   href,
+  fallback,
 }: {
   marker: string;
   state: CountState | null;
   label: string;
   href: string;
+  fallback: { letter: "B" | "L" | "K"; bg: string };
 }) {
   const display = state?.ok ? state.value : "—";
+  const preview = state?.ok ? state.preview : undefined;
   return (
     <Link
       href={href}
-      className="group relative flex flex-col gap-3 bg-white p-7 transition-colors hover:bg-homeHero/[0.06] focus-visible:bg-homeHero/[0.06]"
+      className="group relative flex flex-col bg-white transition-colors hover:bg-homeHero/[0.06] focus-visible:bg-homeHero/[0.06]"
     >
-      <span className="font-display text-[0.65rem] font-black uppercase tracking-[0.22em] text-black/45">
-        {marker}
-      </span>
-      <span className="font-display text-[3rem] font-black leading-none tracking-[-0.02em] text-black sm:text-[3.75rem]">
-        {display}
-      </span>
-      <span className="font-serif text-[1rem] leading-tight text-black/70">{label}</span>
-      <span
-        aria-hidden
-        className="mt-2 inline-flex items-center gap-2 font-display text-[0.7rem] font-black uppercase tracking-[0.22em] text-black/55 transition-colors group-hover:text-black"
-      >
-        <span>Open</span>
-        <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
-      </span>
+      <TilePreview image={preview} fallback={fallback} />
+      <div className="flex flex-col gap-3 p-7">
+        <span className="font-serif text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-black/45">
+          {marker}
+        </span>
+        <span className="font-display text-[2.5rem] font-black leading-none tracking-[-0.02em] text-black sm:text-[3rem]">
+          {display}
+        </span>
+        <span className="font-serif text-[1rem] leading-tight text-black/70">{label}</span>
+        <span
+          aria-hidden
+          className="mt-2 inline-flex items-center gap-2 font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black/55 transition-colors group-hover:text-black"
+        >
+          <span>Open</span>
+          <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
+        </span>
+      </div>
     </Link>
   );
 }
@@ -126,13 +196,6 @@ export default async function StudioHomePage() {
         </StudioNotice>
       )}
 
-      {cms && !schemaMissing && (
-        <StudioNotice tone="info" title="First-time setup" actions={<SeedButton />}>
-          If tables are empty, copy the bundled events, news and default Support page into Supabase. Safe to
-          run more than once — entries upsert by slug.
-        </StudioNotice>
-      )}
-
       {/* At a glance — always visible so the layout stays anchored even mid-setup */}
       <section aria-labelledby="at-a-glance" className="space-y-6">
         <div className="flex items-center justify-between">
@@ -143,13 +206,26 @@ export default async function StudioHomePage() {
         </div>
 
         <div className="grid gap-px overflow-hidden rounded-md border border-black/10 bg-black/10 sm:grid-cols-3">
-          <CountTile marker="01" state={counts?.events ?? null} label="Events on file" href="/studio/events" />
-          <CountTile marker="02" state={counts?.news ?? null} label="News articles" href="/studio/news" />
+          <CountTile
+            marker="01"
+            state={counts?.events ?? null}
+            label="Events on file"
+            href="/studio/events"
+            fallback={{ letter: "B", bg: "#FFDD00" }}
+          />
+          <CountTile
+            marker="02"
+            state={counts?.news ?? null}
+            label="News articles"
+            href="/studio/news"
+            fallback={{ letter: "L", bg: "#F3916B" }}
+          />
           <CountTile
             marker="03"
             state={counts?.pages ?? null}
             label="Site pages overridden"
             href="/studio/pages"
+            fallback={{ letter: "K", bg: "#F0E7D5" }}
           />
         </div>
       </section>

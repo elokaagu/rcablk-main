@@ -1,10 +1,10 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
-import { SupportBody } from "@/components/SupportBody";
+import { SitePageBody } from "@/components/SitePageBody";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
-import { DEFAULT_SUPPORT_PARAGRAPHS, SUPPORT_PAGE_SLUG } from "@/data/support-static";
+import { getSitePageDefaults, SUPPORT_PAGE_SLUG } from "@/data/site-pages-static";
 import { getSitePage } from "@/lib/cms/pages-repo";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,8 +21,9 @@ export const dynamic = "force-dynamic";
 const LOGOTYPE = "/1_RGB Logotype/Stepped Logotype/RCA BLK–Logotype-Black.png";
 
 export default async function Support() {
+  const defaults = getSitePageDefaults(SUPPORT_PAGE_SLUG)!;
   const cms = await getSitePage(SUPPORT_PAGE_SLUG);
-  const paragraphs = cms?.paragraphs?.length ? cms.paragraphs : DEFAULT_SUPPORT_PARAGRAPHS;
+  const paragraphs = cms?.paragraphs?.length ? cms.paragraphs : defaults.defaultParagraphs;
 
   return (
     <div
@@ -66,7 +67,7 @@ export default async function Support() {
           <AnimateIn delay={0.15} duration={0.55} y={12}>
             <header className="mb-8 text-center sm:mb-10">
               <h1 className="font-serif text-3xl font-normal tracking-tight text-black sm:text-4xl">
-                {cms?.title?.trim() ? cms.title : "Support"}
+                {cms?.title?.trim() ? cms.title : defaults.title}
               </h1>
             </header>
           </AnimateIn>
@@ -77,7 +78,7 @@ export default async function Support() {
               stagger={0.08}
               className="space-y-7 text-center font-serif text-lg leading-relaxed text-black sm:space-y-8 sm:text-xl sm:leading-relaxed"
             >
-              <SupportBody paragraphs={paragraphs} />
+              <SitePageBody paragraphs={paragraphs} />
             </AnimateStagger>
           </main>
         </div>

@@ -10,6 +10,9 @@ import {
   StudioInput,
   StudioTextarea,
 } from "../_brand/StudioBrand";
+import { StudioDatePicker } from "../_brand/StudioDatePicker";
+import { StudioRichTextEditor } from "../_brand/StudioRichTextEditor";
+import { slugify } from "../_brand/slugify";
 
 export function EventEditorForm({
   initial,
@@ -24,9 +27,26 @@ export function EventEditorForm({
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Auto-fill the slug from `name` while the user hasn't customised it. Once
+  // they type into the slug field directly, we stop syncing so the manual
+  // value is preserved. In edit mode the slug field is disabled anyway.
+  const [slugTouched, setSlugTouched] = useState(mode === "edit" || Boolean(initial.slug));
 
   function set<K extends keyof EventData>(key: K, value: EventData[K]) {
     setEvent((prev) => ({ ...prev, [key]: value }));
+  }
+
+  function onNameChange(value: string) {
+    setEvent((prev) => ({
+      ...prev,
+      name: value,
+      slug: slugTouched ? prev.slug : slugify(value),
+    }));
+  }
+
+  function onSlugChange(value: string) {
+    setSlugTouched(true);
+    set("slug", slugify(value));
   }
 
   async function uploadImage(file: File) {
@@ -95,11 +115,17 @@ export function EventEditorForm({
         <div className="grid gap-6 sm:grid-cols-2">
           <StudioField
             label="Slug · URL"
-            hint={mode === "edit" ? "Locked once an entry is created" : "Lower-case, dashes for spaces"}
+            hint={
+              mode === "edit"
+                ? "Locked once an entry is created"
+                : slugTouched
+                  ? "Custom — won't auto-update from Name"
+                  : "Auto-filled from Name; type to customise"
+            }
           >
             <StudioInput
               value={event.slug}
-              onChange={(e) => set("slug", e.target.value.toLowerCase().replace(/\s+/g, "-"))}
+              onChange={(e) => onSlugChange(e.target.value)}
               disabled={mode === "edit"}
             />
           </StudioField>
@@ -114,7 +140,7 @@ export function EventEditorForm({
         </div>
 
         <StudioField label="Name">
-          <StudioInput value={event.name} onChange={(e) => set("name", e.target.value)} />
+          <StudioInput value={event.name} onChange={(e) => onNameChange(e.target.value)} />
         </StudioField>
 
         <StudioField label="Description" hint="Short summary used in the programme grid">
@@ -130,12 +156,16 @@ export function EventEditorForm({
             <StudioInput value={event.venue} onChange={(e) => set("venue", e.target.value)} />
           </StudioField>
 
-          <StudioField label="Date" hint="Display string, e.g. 12–14 June 2026">
-            <StudioInput value={event.date} onChange={(e) => set("date", e.target.value)} />
-          </StudioField>
+          <StudioDatePicker
+            label="Date"
+            hint="Pick from the calendar or type freely (e.g. Spring 2026, TBC)"
+            value={event.date}
+            onChange={(v) => set("date", v)}
+            mode="range"
+          />
         </div>
 
-        <StudioField label="Image" hint="Paste a URL or upload directly to Supabase Storage">
+        <StudioField label="Image" hint="Paste an image URL or upload one from your computer">
           <StudioInput value={event.image} onChange={(e) => set("image", e.target.value)} />
           <input
             type="file"
@@ -145,17 +175,17 @@ export function EventEditorForm({
               const f = e.target.files?.[0];
               if (f) void uploadImage(f);
             }}
-            className="mt-3 block font-serif text-[0.85rem] text-black/55 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-2 file:font-display file:text-[0.65rem] file:font-black file:uppercase file:tracking-[0.22em] file:text-white hover:file:bg-homeHero hover:file:text-black"
+            className="mt-3 block font-serif text-[0.85rem] text-black/55 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-2 file:font-serif file:text-[0.78rem] file:font-semibold file:uppercase file:tracking-[0.18em] file:text-white hover:file:bg-homeHero hover:file:text-black"
           />
         </StudioField>
 
-        <StudioField label="Body" hint="Optional long-form copy for the event detail page">
-          <StudioTextarea
-            value={event.body ?? ""}
-            onChange={(e) => set("body", e.target.value)}
-            rows={6}
-          />
-        </StudioField>
+        <StudioRichTextEditor
+          label="Body"
+          hint="Optional long-form copy for the event detail page. Formatting (headings, lists, links, emphasis) renders identically on the public site."
+          value={event.body ?? ""}
+          onChange={(html) => set("body", html)}
+          minRows={8}
+        />
 
         {error && (
           <p

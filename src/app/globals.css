@@ -59,6 +59,58 @@
   }
 }
 
+/* Brand-aligned prose styles shared by the studio rich text editor and the
+   public renderers. Keeps Jubilat serif, hairline rules, and homeHero
+   accents consistent everywhere `prose prose-rcablk` is applied. */
+@layer components {
+  .prose-rcablk {
+    --tw-prose-body: hsl(0 0% 0%);
+    --tw-prose-headings: hsl(0 0% 0%);
+    --tw-prose-lead: hsl(0 0% 0%);
+    --tw-prose-links: hsl(0 0% 0%);
+    --tw-prose-bold: hsl(0 0% 0%);
+    --tw-prose-counters: hsl(0 0% 30%);
+    --tw-prose-bullets: hsl(0 0% 0% / 0.45);
+    --tw-prose-hr: hsl(0 0% 0% / 0.12);
+    --tw-prose-quotes: hsl(0 0% 0%);
+    --tw-prose-quote-borders: hsl(40 100% 50%);
+    --tw-prose-captions: hsl(0 0% 0% / 0.55);
+    --tw-prose-code: hsl(0 0% 0%);
+    --tw-prose-pre-code: hsl(0 0% 0%);
+    --tw-prose-pre-bg: hsl(0 0% 0% / 0.04);
+    --tw-prose-th-borders: hsl(0 0% 0% / 0.15);
+    --tw-prose-td-borders: hsl(0 0% 0% / 0.08);
+    font-family: jubilat, Georgia, serif;
+  }
+  .prose-rcablk h2 {
+    font-family: jubilat, Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .prose-rcablk h3 {
+    font-family: jubilat, Georgia, serif;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+  }
+  .prose-rcablk a {
+    text-decoration-color: hsl(0 0% 0% / 0.4);
+    text-underline-offset: 0.18em;
+    transition: opacity 0.2s;
+  }
+  .prose-rcablk a:hover {
+    opacity: 0.7;
+  }
+  .prose-rcablk blockquote {
+    font-style: normal;
+    border-left-width: 2px;
+    padding-left: 1.25rem;
+  }
+  .prose-rcablk blockquote p::before,
+  .prose-rcablk blockquote p::after {
+    content: "";
+  }
+}
+
 /* Focus styles for accessibility */
 @layer base {
   *:focus-visible {

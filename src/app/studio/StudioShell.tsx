@@ -18,7 +18,12 @@ export function StudioShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-white text-black">
+    // Soft warm-cream studio canvas. The sidebar (rendered inside) keeps its
+    // own white background so it reads as the navigational rail; the main
+    // content area inherits this paper tone, which gives white surfaces
+    // (StudioCard, dashboard tiles, list tables, schema setup) a subtle
+    // "documents on a desk" lift instead of disappearing into a white void.
+    <div className="min-h-screen bg-[#F5EEDF] text-black">
       <StudioSidebar pathname={pathname} />
       {/* Main content — offset on lg+ to clear the fixed sidebar rail */}
       <main className="lg:pl-72">
