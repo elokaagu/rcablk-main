@@ -1,5 +1,6 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import Link from "next/link";
@@ -11,9 +12,19 @@ export const metadata: Metadata = {
   openGraph: { title: "Privacy Policy | RCA BLK" },
 };
 
+// Shared warm-cream paper tone for all legal / utility pages so Privacy,
+// Cookie Policy, Terms and Accessibility feel like a single coherent set
+// distinct from the bolder editorial colour blocks (Events sage, News yellow,
+// Support coral, etc).
+const LEGAL_PAGE_BG = "#F0E7D5";
+
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
+    <div
+      className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0 text-black"
+      style={{ backgroundColor: LEGAL_PAGE_BG }}
+    >
+      <PageBackground color={LEGAL_PAGE_BG} />
       <SlideOutMenu />
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>

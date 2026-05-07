@@ -1,5 +1,6 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import type { Metadata } from "next";
@@ -10,9 +11,16 @@ export const metadata: Metadata = {
   openGraph: { title: "Terms & Conditions | RCA BLK" },
 };
 
+// See `privacy-policy/page.tsx` — shared warm-cream tone for the legal set.
+const LEGAL_PAGE_BG = "#F0E7D5";
+
 export default function Terms() {
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden w-full min-w-0">
+    <div
+      className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0 text-black"
+      style={{ backgroundColor: LEGAL_PAGE_BG }}
+    >
+      <PageBackground color={LEGAL_PAGE_BG} />
       <SlideOutMenu />
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>
