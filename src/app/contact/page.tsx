@@ -97,7 +97,16 @@ function Credits({ className = "" }: { className?: string }) {
       </div>
       <div className="flex gap-2">
         <dt className="font-normal">Web Development :</dt>
-        <dd>Eloka Agu</dd>
+        <dd>
+          <a
+            href="https://www.satellitelabs.xyz"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="border-b border-black/40 transition-colors hover:border-black"
+          >
+            Satellite Labs
+          </a>
+        </dd>
       </div>
     </dl>
   );
