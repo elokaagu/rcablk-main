@@ -29,7 +29,7 @@ const LETTERS: ReadonlyArray<{
     svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg",
     whiteHover: null,
     labelInLetter: {
-      className: "items-start justify-start pt-[10%] pl-[8%] sm:pt-[11%] sm:pl-[9%]",
+      className: "items-start justify-start pt-[5%] pl-[6%] sm:pt-[6%] sm:pl-[7%]",
       textClass: "text-left",
     },
   },
@@ -40,7 +40,7 @@ const LETTERS: ReadonlyArray<{
     svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg",
     whiteHover: null,
     labelInLetter: {
-      className: "items-end justify-center pb-[10%] sm:pb-[11%]",
+      className: "items-end justify-center pb-[6%] sm:pb-[7%]",
       textClass: "text-center",
     },
   },
@@ -51,7 +51,7 @@ const LETTERS: ReadonlyArray<{
     svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg",
     whiteHover: null,
     labelInLetter: {
-      className: "items-start justify-center pt-[10%] sm:pt-[11%]",
+      className: "items-start justify-center pt-[6%] sm:pt-[7%]",
       textClass: "text-center",
     },
   },
@@ -62,7 +62,7 @@ const LETTERS: ReadonlyArray<{
     svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg",
     whiteHover: null,
     labelInLetter: {
-      className: "items-center justify-start pl-[8%] sm:pl-[10%]",
+      className: "items-center justify-start pl-[6%] sm:pl-[7%]",
       textClass: "text-left",
     },
   },
@@ -73,7 +73,7 @@ const LETTERS: ReadonlyArray<{
     svg: "/SVG Letterforms/RCA BLK–Letterforms-L.svg",
     whiteHover: null,
     labelInLetter: {
-      className: "items-start justify-end pr-[8%] pt-[10%] sm:pr-[10%] sm:pt-[11%]",
+      className: "items-start justify-end pr-[6%] pt-[5%] sm:pr-[7%] sm:pt-[6%]",
       textClass: "text-right",
     },
   },
@@ -171,7 +171,7 @@ function LetterCell({
 
         {/* Always visible: clipped to letter so nav only reads inside the glyph */}
         <div
-          className={`pointer-events-none absolute inset-0 z-20 flex font-serif text-[0.58rem] font-normal leading-tight tracking-tight transition-opacity duration-300 sm:text-[0.72rem] ${letter.labelInLetter.className} ${
+          className={`pointer-events-none absolute inset-0 z-20 flex font-serif text-[0.78rem] font-normal leading-tight tracking-tight transition-opacity duration-300 sm:text-[1.05rem] ${letter.labelInLetter.className} ${
             isHovered ? "opacity-100" : "opacity-[0.92]"
           }`}
           style={maskStyle}

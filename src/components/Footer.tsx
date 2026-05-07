@@ -33,6 +33,7 @@ const Footer = () => {
     {
       items: [
         { label: "Contact", href: "/contact" },
+        { label: "Shop", href: "https://shop.rca.ac.uk/collections/rca-blk", external: true },
         { label: "Instagram", href: "https://www.instagram.com/rcablk/", external: true },
       ],
     },
@@ -60,6 +61,14 @@ const Footer = () => {
             <Link href="/privacy-policy" className="text-white/80 underline-offset-4 hover:text-white hover:underline">
               Privacy
             </Link>
+            <a
+              href="https://shop.rca.ac.uk/collections/rca-blk"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-white/80 underline-offset-4 hover:text-white hover:underline"
+            >
+              Shop
+            </a>
             <a
               href="https://www.instagram.com/rcablk/"
               target="_blank"

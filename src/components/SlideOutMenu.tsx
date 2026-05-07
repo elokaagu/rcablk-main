@@ -19,6 +19,7 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
     { label: "Alumni", href: "/alumni" },
     { label: "Support", href: "/support" },
     { label: "Contact", href: "/contact" },
+    { label: "Shop", href: "https://shop.rca.ac.uk/collections/rca-blk", external: true },
     { label: "Instagram", href: "https://www.instagram.com/rcablk/", external: true },
   ];
 
