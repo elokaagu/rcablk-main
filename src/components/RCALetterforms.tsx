@@ -29,7 +29,8 @@ const LETTERS: ReadonlyArray<{
     svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg",
     whiteHover: null,
     labelInLetter: {
-      className: "items-start justify-start pt-[5%] pl-[6%] sm:pt-[6%] sm:pl-[7%]",
+      // Inset from the narrow stem so the full word stays inside the mask
+      className: "items-start justify-start pt-[4%] pl-[12%] sm:pt-[5%] sm:pl-[14%]",
       textClass: "text-left",
     },
   },
@@ -40,7 +41,7 @@ const LETTERS: ReadonlyArray<{
     svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg",
     whiteHover: null,
     labelInLetter: {
-      className: "items-end justify-center pb-[6%] sm:pb-[7%]",
+      className: "items-end justify-center px-[5%] pb-[7%] sm:px-[6%] sm:pb-[8%]",
       textClass: "text-center",
     },
   },
@@ -51,7 +52,7 @@ const LETTERS: ReadonlyArray<{
     svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg",
     whiteHover: null,
     labelInLetter: {
-      className: "items-start justify-center pt-[6%] sm:pt-[7%]",
+      className: "items-start justify-center px-[7%] pt-[5%] sm:px-[9%] sm:pt-[6%]",
       textClass: "text-center",
     },
   },
@@ -62,7 +63,7 @@ const LETTERS: ReadonlyArray<{
     svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg",
     whiteHover: null,
     labelInLetter: {
-      className: "items-center justify-start pl-[6%] sm:pl-[7%]",
+      className: "items-center justify-start pl-[12%] sm:pl-[15%]",
       textClass: "text-left",
     },
   },
@@ -73,8 +74,8 @@ const LETTERS: ReadonlyArray<{
     svg: "/SVG Letterforms/RCA BLK–Letterforms-L.svg",
     whiteHover: null,
     labelInLetter: {
-      className: "items-start justify-end pr-[6%] pt-[5%] sm:pr-[7%] sm:pt-[6%]",
-      textClass: "text-right",
+      className: "items-center justify-center px-[8%] sm:px-[10%]",
+      textClass: "text-center",
     },
   },
   {
@@ -83,11 +84,9 @@ const LETTERS: ReadonlyArray<{
     href: "/contact",
     svg: "/SVG Letterforms/RCA BLK–Letterforms-K.svg",
     whiteHover: null,
-    // Sit the label on the K's top horizontal arm (upper half) — centred
-    // along the bar so the SVG mask clips the type cleanly within the
-    // glyph rather than over the orange ground.
+    // Top horizontal arm of the K — horizontal inset keeps “CONTACT” inside the bar
     labelInLetter: {
-      className: "items-start justify-center pt-[11%] sm:pt-[13%]",
+      className: "items-start justify-center px-[8%] pt-[7%] sm:px-[10%] sm:pt-[9%]",
       textClass: "text-center",
     },
   },
@@ -126,24 +125,23 @@ function LetterCell({
   const maskStyle = useMemo(() => letterMaskStyle(letter.svg), [letter.svg]);
 
   /** Idle vs hover label colour so type stays legible on both fills. */
-  const labelColor =
-    isR && isHovered
-      ? "text-white"
-      : isR && !isHovered
+  const labelColor = isR
+    ? isHovered
+      ? "text-black"
+      : "text-white"
+    : isC
+      ? isHovered
         ? "text-black"
-        : isC && !isHovered
-          ? "text-white"
-          : isC && isHovered
-            ? "text-black"
-            : !isHovered
-              ? "text-white"
-              : "text-black";
+        : "text-white"
+      : isHovered
+        ? "text-black"
+        : "text-white";
 
   return (
     <Link
       href={letter.href}
       aria-label={letter.label}
-      className="relative block aspect-square w-full overflow-hidden bg-homeHero touch-manipulation"
+      className="relative block aspect-square w-full overflow-hidden bg-homeHero touch-manipulation @container"
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
       onFocus={onHover}
@@ -152,7 +150,7 @@ function LetterCell({
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden p-0">
         {isR ? (
           <div
-            className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-black" : "bg-white"}`}
+            className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-white" : "bg-black"}`}
             style={maskStyle}
           />
         ) : isC ? (
@@ -174,13 +172,13 @@ function LetterCell({
 
         {/* Always visible: clipped to letter so nav only reads inside the glyph */}
         <div
-          className={`pointer-events-none absolute inset-0 z-20 flex font-serif text-[0.78rem] font-normal leading-tight tracking-tight transition-opacity duration-300 sm:text-[1.05rem] ${letter.labelInLetter.className} ${
+          className={`pointer-events-none absolute inset-0 z-20 box-border flex font-serif font-normal leading-snug tracking-tight transition-opacity duration-300 text-[clamp(0.5rem,5.6cqi,0.78rem)] sm:text-[clamp(0.54rem,6cqi,0.88rem)] md:text-[clamp(0.58rem,5.5cqi,0.95rem)] ${letter.labelInLetter.className} ${
             isHovered ? "opacity-100" : "opacity-[0.92]"
           }`}
           style={maskStyle}
         >
           <span
-            className={`inline-block max-w-[94%] uppercase ${letter.labelInLetter.textClass} ${labelColor}`}
+            className={`inline-block max-w-full min-w-0 uppercase ${letter.labelInLetter.textClass} ${labelColor}`}
           >
             {letter.label}
           </span>
