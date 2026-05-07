@@ -13,21 +13,44 @@ export type SitePageRecord = {
   paragraphs: string[];
 };
 
+function asTextField(raw: unknown): string {
+  return typeof raw === "string" ? raw : "";
+}
+
 function normalizeParagraphs(raw: unknown): string[] {
+  if (raw == null) return [];
+  // Some databases store a single HTML blob as a JSON string instead of a
+  // string array — treat that as one paragraph so public pages don't fall over.
+  if (typeof raw === "string") {
+    const t = raw.trim();
+    return t ? [raw] : [];
+  }
   if (!Array.isArray(raw)) return [];
   return raw.filter((p): p is string => typeof p === "string");
 }
 
 /** Public read: returns null if missing or Supabase off (caller uses static fallback). */
 export async function getSitePage(slug: string): Promise<SitePageRecord | null> {
-  const anon = createSupabaseAnon();
-  if (!anon) return null;
-  const { data, error } = await anon.from("site_pages").select("slug,title,paragraphs").eq("slug", slug).maybeSingle();
-  if (error || !data) return null;
-  const row = data as PageRow;
-  const paragraphs = normalizeParagraphs(row.paragraphs);
-  if (!paragraphs.length) return null;
-  return { slug: row.slug, title: row.title || "", paragraphs };
+  try {
+    const anon = createSupabaseAnon();
+    if (!anon) return null;
+    const { data, error } = await anon
+      .from("site_pages")
+      .select("slug,title,paragraphs")
+      .eq("slug", slug)
+      .maybeSingle();
+    if (error || !data) return null;
+    const row = data as PageRow;
+    const paragraphs = normalizeParagraphs(row.paragraphs);
+    if (!paragraphs.length) return null;
+    return {
+      slug: asTextField(row.slug) || slug,
+      title: asTextField(row.title),
+      paragraphs,
+    };
+  } catch {
+    return null;
+  }
 }
 
 export async function listPagesAdmin(): Promise<SitePageRecord[]> {
@@ -36,7 +59,11 @@ export async function listPagesAdmin(): Promise<SitePageRecord[]> {
   if (error) throw error;
   return (data ?? []).map((row) => {
     const r = row as PageRow;
-    return { slug: r.slug, title: r.title || "", paragraphs: normalizeParagraphs(r.paragraphs) };
+    return {
+      slug: asTextField(r.slug),
+      title: asTextField(r.title),
+      paragraphs: normalizeParagraphs(r.paragraphs),
+    };
   });
 }
 
@@ -46,7 +73,11 @@ export async function getSitePageAdmin(slug: string): Promise<SitePageRecord | n
   if (error) throw error;
   if (!data) return null;
   const row = data as PageRow;
-  return { slug: row.slug, title: row.title || "", paragraphs: normalizeParagraphs(row.paragraphs) };
+  return {
+    slug: asTextField(row.slug),
+    title: asTextField(row.title),
+    paragraphs: normalizeParagraphs(row.paragraphs),
+  };
 }
 
 export async function upsertSitePageAdmin(record: SitePageRecord): Promise<void> {

@@ -18,7 +18,8 @@ import { bodyArrayToString, isHtmlBody, sanitizeBodyHtml } from "@/lib/rich-body
  *   the parent's stagger then treats it as one fade-in.
  */
 export function SitePageBody({ paragraphs }: { paragraphs: string[] }) {
-  const single = bodyArrayToString(paragraphs);
+  const safeParagraphs = paragraphs.filter((p): p is string => typeof p === "string");
+  const single = bodyArrayToString(safeParagraphs);
 
   if (isHtmlBody(single)) {
     return (
@@ -31,8 +32,8 @@ export function SitePageBody({ paragraphs }: { paragraphs: string[] }) {
 
   return (
     <>
-      {paragraphs.map((text, i) => {
-        const isLast = i === paragraphs.length - 1;
+      {safeParagraphs.map((text, i) => {
+        const isLast = i === safeParagraphs.length - 1;
         if (isLast && /contact us/i.test(text)) {
           const m = text.match(/contact us/i);
           if (m && m.index !== undefined && m[0]) {

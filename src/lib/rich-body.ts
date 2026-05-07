@@ -15,33 +15,38 @@ import DOMPurify from "isomorphic-dompurify";
  */
 
 export function isHtmlBody(input: string | null | undefined): boolean {
-  if (!input) return false;
+  if (typeof input !== "string" || !input) return false;
   return /<[a-z][\s\S]*>/i.test(input);
 }
 
 export function sanitizeBodyHtml(html: string): string {
-  return DOMPurify.sanitize(html, {
-    ALLOWED_TAGS: [
-      "p",
-      "br",
-      "strong",
-      "em",
-      "u",
-      "s",
-      "a",
-      "h2",
-      "h3",
-      "h4",
-      "ul",
-      "ol",
-      "li",
-      "blockquote",
-      "code",
-      "hr",
-    ],
-    ALLOWED_ATTR: ["href", "target", "rel", "class"],
-    ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|tel:|\/|#)/i,
-  });
+  if (typeof html !== "string") return "";
+  try {
+    return DOMPurify.sanitize(html, {
+      ALLOWED_TAGS: [
+        "p",
+        "br",
+        "strong",
+        "em",
+        "u",
+        "s",
+        "a",
+        "h2",
+        "h3",
+        "h4",
+        "ul",
+        "ol",
+        "li",
+        "blockquote",
+        "code",
+        "hr",
+      ],
+      ALLOWED_ATTR: ["href", "target", "rel", "class"],
+      ALLOWED_URI_REGEXP: /^(?:https?:|mailto:|tel:|\/|#)/i,
+    });
+  } catch {
+    return "";
+  }
 }
 
 /**
@@ -72,6 +77,9 @@ export function htmlToPlainText(html: string): string {
 export function bodyArrayToString(body: string[] | string | null | undefined): string {
   if (!body) return "";
   if (typeof body === "string") return body;
-  if (body.length === 1) return body[0] ?? "";
-  return body.join("\n\n");
+  if (!Array.isArray(body)) return "";
+  const parts = body.filter((p): p is string => typeof p === "string");
+  if (parts.length === 0) return "";
+  if (parts.length === 1) return parts[0] ?? "";
+  return parts.join("\n\n");
 }
