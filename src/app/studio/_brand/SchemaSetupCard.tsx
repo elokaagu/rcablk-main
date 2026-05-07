@@ -33,12 +33,12 @@ export function SchemaSetupCard({
 
   return (
     <section className="overflow-hidden rounded-md border border-amber-500/40 bg-amber-50/60">
-      <div className="flex flex-col gap-5 px-6 py-7 sm:px-8 sm:py-8">
+      <div className="flex flex-col gap-5 px-5 py-6 sm:px-8 sm:py-8">
         <StudioEyebrow>Setup required</StudioEyebrow>
-        <h2 className="font-serif text-[1.6rem] font-normal leading-[1.1] tracking-[-0.01em] sm:text-[2rem]">
+        <h2 className="font-serif text-[1.4rem] font-normal leading-[1.1] tracking-[-0.01em] [overflow-wrap:anywhere] sm:text-[1.8rem] md:text-[2rem]">
           Apply the database schema to your Supabase project
         </h2>
-        <p className="max-w-2xl font-serif text-[1rem] leading-relaxed text-black/70">
+        <p className="max-w-2xl font-serif text-[0.95rem] leading-relaxed text-black/70 sm:text-[1rem]">
           Supabase is connected, but the studio tables ({" "}
           <StudioInlineCode>events</StudioInlineCode>,{" "}
           <StudioInlineCode>news_articles</StudioInlineCode>,{" "}
@@ -98,7 +98,7 @@ export function SchemaSetupCard({
       </div>
 
       <div className="border-t border-amber-500/30 bg-white/60">
-        <pre className="max-h-[28rem] overflow-auto px-6 py-5 font-mono text-[0.78rem] leading-relaxed text-black sm:px-8">
+        <pre className="max-h-[28rem] overflow-auto px-5 py-5 font-mono text-[0.74rem] leading-relaxed text-black sm:px-8 sm:text-[0.78rem]">
           <code>{sql}</code>
         </pre>
       </div>

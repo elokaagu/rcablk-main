@@ -33,8 +33,11 @@ export default async function News() {
       <SlideOutMenu />
 
       <AnimateIn delay={0.15} duration={0.55} y={14}>
-        <header className="px-6 pt-12 pb-6 text-center sm:px-10 sm:pt-14 sm:pb-8 lg:px-14">
-          <h1 className="font-serif text-[2.25rem] font-normal leading-[1.05] tracking-tight text-black sm:text-[2.75rem]">
+        <header
+          className="px-5 pb-6 pt-12 text-center sm:px-10 sm:pt-14 sm:pb-8 lg:px-14"
+          style={{ paddingTop: "max(3.5rem, calc(env(safe-area-inset-top) + 2.5rem))" }}
+        >
+          <h1 className="font-serif text-[1.85rem] font-normal leading-[1.05] tracking-tight text-black sm:text-[2.25rem] md:text-[2.75rem]">
             News
           </h1>
           <p className="mx-auto mt-3 max-w-md font-serif text-sm leading-relaxed text-black/70 sm:text-[0.95rem]">

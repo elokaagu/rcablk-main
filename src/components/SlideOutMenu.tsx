@@ -78,8 +78,11 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
             <X size={28} strokeWidth={2.5} />
           </button>
 
-          {/* Nav links */}
-          <nav className="flex-1 pt-20 px-8 pb-8 flex flex-col gap-0.5" aria-label="Main navigation">
+          {/* Nav links — scrollable so very small viewports can still reach the bottom */}
+          <nav
+            className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-8 pb-6 pt-20 sm:pt-24"
+            aria-label="Main navigation"
+          >
             {navItems.map((item) =>
               item.external ? (
                 <a
@@ -105,7 +108,7 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
           </nav>
 
           {/* Footer: RCA logo */}
-          <div className="px-8 pb-8">
+          <div className="px-8 pb-8 pt-2">
             <Image
               src="/rca_logo.png"
               alt="Royal College of Art"

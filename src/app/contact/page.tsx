@@ -128,7 +128,13 @@ export default function Contact() {
       {/* ----------------------------------------------------------- */}
       {/* Mobile / tablet — vertical stack                            */}
       {/* ----------------------------------------------------------- */}
-      <div className="flex min-h-screen flex-col gap-12 px-6 pb-16 pt-[max(5rem,env(safe-area-inset-top))] sm:gap-14 sm:px-10 sm:pb-20 lg:hidden">
+      <div
+        className="flex min-h-screen flex-col gap-10 px-5 pb-16 sm:gap-14 sm:px-10 sm:pb-20 lg:hidden"
+        style={{
+          paddingTop: "max(5rem, calc(env(safe-area-inset-top) + 4rem))",
+          paddingBottom: "max(4rem, env(safe-area-inset-bottom))",
+        }}
+      >
         <AnimateIn delay={0.05} duration={0.7} y={10}>
           <div className="flex flex-col gap-8">
             <Wordmark />

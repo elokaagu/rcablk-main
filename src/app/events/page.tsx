@@ -28,7 +28,10 @@ export default async function Events() {
       <SlideOutMenu />
 
       <AnimateIn delay={0.2} duration={0.6} y={16}>
-        <header className="px-6 pt-10 pb-6 sm:px-10 sm:pt-12 sm:pb-8">
+        <header
+          className="px-5 pb-6 pt-12 sm:px-10 sm:pt-12 sm:pb-8"
+          style={{ paddingTop: "max(3.5rem, calc(env(safe-area-inset-top) + 2.5rem))" }}
+        >
           <h1 className="text-center font-serif text-3xl font-normal capitalize tracking-tight text-black sm:text-4xl">
             events
           </h1>

@@ -34,13 +34,20 @@ export default async function CookiePolicy() {
       <SlideOutMenu />
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>
-        <div className="text-center py-8">
-          <h2 className="text-xl sm:text-2xl font-display font-normal text-foreground px-4">{heading}</h2>
+        <div
+          className="px-5 pb-6 pt-12 text-center sm:py-10"
+          style={{ paddingTop: "max(3rem, calc(env(safe-area-inset-top) + 2rem))" }}
+        >
+          <h2 className="px-2 font-display text-xl font-normal text-foreground sm:text-2xl">{heading}</h2>
         </div>
       </AnimateIn>
 
-      <main className="flex-1 max-w-2xl mx-auto px-6 sm:px-10 lg:px-12 pb-12 sm:pb-16 w-full">
-        <AnimateStagger delay={0.3} stagger={0.1} className="space-y-8 text-foreground text-xl leading-relaxed">
+      <main className="mx-auto w-full max-w-2xl flex-1 px-5 pb-12 sm:px-10 sm:pb-16 lg:px-12">
+        <AnimateStagger
+          delay={0.3}
+          stagger={0.1}
+          className="space-y-6 text-base leading-relaxed text-foreground sm:space-y-8 sm:text-lg md:text-xl"
+        >
           <SitePageBody paragraphs={paragraphs} />
         </AnimateStagger>
       </main>

@@ -19,7 +19,7 @@ export function EventBody({ body }: { body: string }) {
   if (isHtmlBody(body)) {
     return (
       <div
-        className="prose prose-rcablk max-w-none text-xl leading-relaxed text-foreground"
+        className="prose prose-rcablk max-w-none text-base leading-relaxed text-foreground sm:text-lg md:text-xl"
         dangerouslySetInnerHTML={{ __html: sanitizeBodyHtml(body) }}
       />
     );
@@ -29,7 +29,7 @@ export function EventBody({ body }: { body: string }) {
   // newlines via `whitespace-pre-line` and convert `*text*` to <em>.
   return (
     <div
-      className="text-xl leading-relaxed text-foreground whitespace-pre-line [&_em]:italic"
+      className="whitespace-pre-line text-base leading-relaxed text-foreground sm:text-lg md:text-xl [&_em]:italic"
       dangerouslySetInnerHTML={{
         __html: body.replace(/\*([^*]+)\*/g, "<em>$1</em>"),
       }}

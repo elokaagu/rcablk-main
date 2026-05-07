@@ -129,7 +129,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
   }
 
   return (
-    <StudioCard className="mx-auto max-w-3xl !p-7 sm:!p-10">
+    <StudioCard className="mx-auto max-w-3xl !p-5 sm:!p-8 lg:!p-10">
       <div className="space-y-6">
         <div className="grid gap-6 sm:grid-cols-2">
           <StudioField
@@ -186,7 +186,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
               const f = e.target.files?.[0];
               if (f) void uploadImage(f);
             }}
-            className="mt-3 block font-serif text-[0.85rem] text-black/55 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-2 file:font-serif file:text-[0.78rem] file:font-semibold file:uppercase file:tracking-[0.18em] file:text-white hover:file:bg-homeHero hover:file:text-black"
+            className="mt-3 block w-full max-w-full font-serif text-[0.82rem] text-black/55 file:mb-2 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-3 file:font-serif file:text-[0.78rem] file:font-semibold file:uppercase file:tracking-[0.18em] file:text-white hover:file:bg-homeHero hover:file:text-black sm:file:mb-0 sm:file:py-2"
           />
         </StudioField>
 

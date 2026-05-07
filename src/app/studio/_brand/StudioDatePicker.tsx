@@ -156,7 +156,8 @@ export function StudioDatePicker({
             <Popover.Content
               align="start"
               sideOffset={8}
-              className="z-50 w-auto rounded-md border border-black/10 bg-white p-4 shadow-[0_18px_48px_-12px_rgba(0,0,0,0.22)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95"
+              collisionPadding={12}
+              className="z-50 max-h-[min(80vh,32rem)] w-[min(20rem,calc(100vw-1.5rem))] overflow-y-auto rounded-md border border-black/10 bg-white p-3 shadow-[0_18px_48px_-12px_rgba(0,0,0,0.22)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0 data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95 sm:w-auto sm:p-4"
             >
               {/* Mode toggle */}
               <div className="mb-3 flex items-center justify-between gap-2">

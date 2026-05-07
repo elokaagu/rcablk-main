@@ -27,7 +27,12 @@ export function StudioShell({ children }: { children: React.ReactNode }) {
       <StudioSidebar pathname={pathname} />
       {/* Main content — offset on lg+ to clear the fixed sidebar rail */}
       <main className="lg:pl-72">
-        <div className="mx-auto max-w-5xl px-5 py-12 sm:px-10 sm:py-16">{children}</div>
+        <div
+          className="mx-auto max-w-5xl px-4 py-6 sm:px-8 sm:py-12 lg:px-10 lg:py-16"
+          style={{ paddingBottom: "max(2rem, env(safe-area-inset-bottom))" }}
+        >
+          {children}
+        </div>
       </main>
     </div>
   );

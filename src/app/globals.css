@@ -119,7 +119,10 @@
   }
 
   html {
-    font-size: 18px;
+    /* Fluid base so phones use ~16px and large displays scale up to 18px.
+       Tailwind's `rem` utilities reflow with this, which gives the whole
+       site a more comfortable mobile read without per-component tweaks. */
+    font-size: clamp(16px, 0.92rem + 0.25vw, 18px);
     scroll-behavior: smooth;
     overflow-x: clip;
     -webkit-text-size-adjust: 100%;

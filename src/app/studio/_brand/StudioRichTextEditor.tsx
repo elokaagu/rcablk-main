@@ -151,9 +151,10 @@ export function StudioRichTextEditor({
       attributes: {
         // `prose` matches the public site's typography exactly (see globals
         // theming + tailwindcss-typography plugin), so what you see here is
-        // what readers see.
+        // what readers see. iOS Safari zooms into inputs <16px on focus so we
+        // keep the body at base text size on phones and scale up on `sm+`.
         class:
-          "prose prose-rcablk max-w-none focus:outline-none px-5 py-4 font-serif text-[1.05rem] leading-relaxed text-black",
+          "prose prose-rcablk max-w-none focus:outline-none px-4 py-3 font-serif text-base leading-relaxed text-black sm:px-5 sm:py-4 sm:text-[1.05rem]",
         style: `min-height: ${minRows * 1.6}rem`,
       },
     },
@@ -195,8 +196,8 @@ export function StudioRichTextEditor({
       <StudioFieldLabel hint={hint}>{label}</StudioFieldLabel>
 
       <div className="mt-2 overflow-hidden rounded-md border border-black/15 bg-white transition-colors focus-within:border-black">
-        {/* Toolbar */}
-        <div className="flex flex-wrap items-center gap-0.5 border-b border-black/10 bg-black/[0.02] px-2 py-1.5">
+        {/* Toolbar — wraps to multiple rows on phones */}
+        <div className="flex flex-wrap items-center gap-0.5 border-b border-black/10 bg-black/[0.02] px-1.5 py-1.5 sm:px-2">
           <ToolbarButton
             ariaLabel="Bold"
             active={editor?.isActive("bold")}

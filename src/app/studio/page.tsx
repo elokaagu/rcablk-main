@@ -131,17 +131,19 @@ function CountTile({
       className="group relative flex flex-col bg-white transition-colors hover:bg-homeHero/[0.06] focus-visible:bg-homeHero/[0.06]"
     >
       <TilePreview image={preview} fallback={fallback} />
-      <div className="flex flex-col gap-3 p-7">
-        <span className="font-serif text-[0.72rem] font-semibold uppercase tracking-[0.18em] text-black/45">
+      <div className="flex flex-col gap-2.5 p-5 sm:gap-3 sm:p-7">
+        <span className="font-serif text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-black/45 sm:text-[0.72rem]">
           {marker}
         </span>
-        <span className="font-display text-[2.5rem] font-black leading-none tracking-[-0.02em] text-black sm:text-[3rem]">
+        <span className="font-display text-[2rem] font-black leading-none tracking-[-0.02em] text-black sm:text-[2.5rem] md:text-[3rem]">
           {display}
         </span>
-        <span className="font-serif text-[1rem] leading-tight text-black/70">{label}</span>
+        <span className="font-serif text-[0.95rem] leading-tight text-black/70 sm:text-[1rem]">
+          {label}
+        </span>
         <span
           aria-hidden
-          className="mt-2 inline-flex items-center gap-2 font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black/55 transition-colors group-hover:text-black"
+          className="mt-1 inline-flex min-h-[40px] items-center gap-2 font-serif text-[0.75rem] font-semibold uppercase tracking-[0.18em] text-black/55 transition-colors group-hover:text-black sm:mt-2 sm:text-[0.78rem]"
         >
           <span>Open</span>
           <span className="inline-block transition-transform group-hover:translate-x-1">→</span>

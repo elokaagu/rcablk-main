@@ -113,7 +113,7 @@ export function SitePageEditor({ slug }: { slug: string }) {
   }
 
   return (
-    <StudioCard className="mx-auto max-w-3xl !p-7 sm:!p-10">
+    <StudioCard className="mx-auto max-w-3xl !p-5 sm:!p-8 lg:!p-10">
       <div className="space-y-6">
         <StudioField
           label="Heading"

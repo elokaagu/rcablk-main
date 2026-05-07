@@ -188,9 +188,20 @@ export function StudioSidebar({ pathname }: { pathname: string }) {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="sticky top-0 z-30 flex items-center justify-between border-b border-black/10 bg-white/95 px-5 py-4 backdrop-blur-sm lg:hidden">
+      <div
+        className="sticky top-0 z-30 flex min-h-[3.5rem] items-center justify-between border-b border-black/10 bg-white/95 px-4 py-3 backdrop-blur-sm sm:px-5 lg:hidden"
+        style={{
+          paddingTop: "max(0.75rem, env(safe-area-inset-top))",
+          paddingLeft: "max(1rem, env(safe-area-inset-left))",
+          paddingRight: "max(1rem, env(safe-area-inset-right))",
+        }}
+      >
         <div aria-hidden className="absolute inset-x-0 top-0 h-[3px] w-full bg-homeHero" />
-        <Link href="/studio" aria-label="RCA BLK Studio dashboard">
+        <Link
+          href="/studio"
+          aria-label="RCA BLK Studio dashboard"
+          className="-ml-1 inline-flex min-h-[44px] items-center px-1"
+        >
           <StudioWordmark />
         </Link>
         <button
@@ -199,7 +210,7 @@ export function StudioSidebar({ pathname }: { pathname: string }) {
           aria-label="Open navigation"
           aria-expanded={open}
           aria-controls="studio-sidebar-drawer"
-          className="inline-flex items-center gap-2 font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black/70 transition-colors hover:text-black"
+          className="-mr-1 inline-flex min-h-[44px] items-center gap-2 px-2 font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black/70 transition-colors hover:text-black"
         >
           <span aria-hidden className="flex flex-col gap-1">
             <span className="block h-px w-5 bg-current" />

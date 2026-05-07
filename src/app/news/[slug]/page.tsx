@@ -65,11 +65,14 @@ export default async function NewsArticle({ params }: PageProps) {
       />
       <SlideOutMenu />
 
-      <main className="mx-auto w-full max-w-5xl flex-1 px-6 py-8 pb-16 sm:px-10 sm:py-10 sm:pb-20 lg:max-w-[56rem] lg:px-14">
+      <main
+        className="mx-auto w-full max-w-5xl flex-1 px-5 py-8 pb-16 sm:px-10 sm:py-10 sm:pb-20 lg:max-w-[56rem] lg:px-14"
+        style={{ paddingTop: "max(2rem, calc(env(safe-area-inset-top) + 1rem))" }}
+      >
         <nav className="mb-8 sm:mb-10" aria-label="Breadcrumb">
           <Link
             href="/news"
-            className="font-serif text-sm text-black underline decoration-black/40 underline-offset-[0.2em] transition-opacity hover:opacity-70"
+            className="inline-flex min-h-[44px] items-center font-serif text-sm text-black underline decoration-black/40 underline-offset-[0.2em] transition-opacity hover:opacity-70"
           >
             Back to news
           </Link>
@@ -79,7 +82,7 @@ export default async function NewsArticle({ params }: PageProps) {
           <>
             <NewsArticleGallery images={article.gallery!} title={article.title} />
             <header className="mb-8 text-center sm:mb-10">
-              <h1 className="font-serif text-2xl font-normal leading-tight text-black sm:text-3xl md:text-[2rem]">
+              <h1 className="font-serif text-[1.5rem] font-normal leading-tight text-black [overflow-wrap:anywhere] sm:text-2xl md:text-3xl lg:text-[2rem]">
                 {article.title}
               </h1>
               <p className="mt-3 font-serif text-base text-black sm:text-lg">{article.date}</p>
@@ -91,7 +94,7 @@ export default async function NewsArticle({ params }: PageProps) {
         ) : (
           <>
             <header className="mb-8 text-center sm:mb-10">
-              <h1 className="font-serif text-2xl font-normal leading-tight text-black sm:text-3xl md:text-[2rem]">
+              <h1 className="font-serif text-[1.5rem] font-normal leading-tight text-black [overflow-wrap:anywhere] sm:text-2xl md:text-3xl lg:text-[2rem]">
                 {article.title}
               </h1>
               <p className="mt-3 font-serif text-base text-black sm:text-lg">{article.date}</p>

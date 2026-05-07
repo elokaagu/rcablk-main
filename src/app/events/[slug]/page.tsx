@@ -62,14 +62,14 @@ export default async function EventDetail({ params }: PageProps) {
       <ArticleHeader backHref="/events" backLabel="Events" ariaLabel="Back to all events" />
 
       {/* Section heading: Events */}
-      <div className="text-center pt-6 sm:pt-8 pb-2">
-        <h2 className="text-xl font-serif font-normal text-foreground">Events</h2>
+      <div className="px-5 pb-2 pt-6 text-center sm:pt-8">
+        <h2 className="font-serif text-lg font-normal text-foreground sm:text-xl">Events</h2>
       </div>
 
       {/* Event Name */}
-      <div className="text-center py-4">
+      <div className="px-5 py-4 text-center sm:px-8">
         <h1
-          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-display font-black tracking-wide uppercase px-4"
+          className="font-display text-2xl font-black uppercase tracking-[0.02em] [overflow-wrap:anywhere] sm:text-3xl sm:tracking-wide md:text-4xl lg:text-5xl"
           style={{ color: "hsl(24, 95%, 50%)" }}
         >
           {event.name}
@@ -77,14 +77,14 @@ export default async function EventDetail({ params }: PageProps) {
       </div>
 
       {/* Event Image */}
-      <div className="flex justify-center px-4 sm:px-8 pb-6">
-        <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" className="max-w-2xl mx-auto rounded-md" sizes="(max-width: 768px) 100vw, 672px" />
+      <div className="flex justify-center px-5 pb-6 sm:px-8">
+        <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" className="mx-auto w-full max-w-2xl rounded-md" sizes="(max-width: 768px) 100vw, 672px" />
       </div>
 
       {/* Date */}
       {event.date && (
-        <div className="text-center pb-6">
-          <p className="text-lg text-foreground">{event.date}</p>
+        <div className="px-5 pb-6 text-center">
+          <p className="font-serif text-base text-foreground sm:text-lg">{event.date}</p>
         </div>
       )}
 
@@ -92,7 +92,7 @@ export default async function EventDetail({ params }: PageProps) {
           editor when present, with a graceful fallback to the legacy plain-
           text/`*italic*` format so seeded entries keep their original look. */}
       {event.body && (
-        <div className="max-w-2xl mx-auto px-6 sm:px-10 pb-12 sm:pb-16 text-left">
+        <div className="mx-auto max-w-2xl px-5 pb-12 text-left sm:px-10 sm:pb-16">
           <EventBody body={event.body} />
         </div>
       )}

@@ -41,8 +41,11 @@ const Footer = () => {
 
   if (isHome) {
     return (
-      <footer className="border-t border-white/10 bg-black px-4 py-8 text-white/85 sm:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
+      <footer
+        className="border-t border-white/10 bg-black px-5 py-8 text-white/85 sm:px-8"
+        style={{ paddingBottom: "max(2rem, env(safe-area-inset-bottom))" }}
+      >
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-start md:justify-between">
           <div className="max-w-xs font-serif text-sm leading-relaxed text-white/75">
             <p>Royal College of Art</p>
             <p>Kensington Gore</p>
@@ -97,32 +100,37 @@ const Footer = () => {
   }
 
   return (
-    <footer className="bg-secondary text-secondary-foreground px-4 sm:px-8 py-8">
-      <div className="mx-auto grid max-w-7xl grid-cols-2 gap-4 text-base sm:grid-cols-3 sm:gap-6 md:grid-cols-5">
-        {columns.map((col, i) => (
-          <div key={i} className="flex flex-col gap-2">
-            {col.items.map((item, j) =>
-              typeof item === "string" ? (
-                <span key={j}>{item}</span>
-              ) : "external" in item && item.external ? (
-                <a
-                  key={j}
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cursor-pointer hover:underline"
-                >
-                  {item.label}
-                </a>
-              ) : (
-                <Link key={j} href={item.href} className="cursor-pointer no-underline hover:underline">
-                  {item.label}
-                </Link>
-              )
-            )}
-          </div>
-        ))}
-        <div className="flex flex-col items-end justify-start gap-1">
+    <footer
+      className="bg-secondary text-secondary-foreground px-5 py-8 sm:px-8 sm:py-10"
+      style={{ paddingBottom: "max(2rem, env(safe-area-inset-bottom))" }}
+    >
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-10">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-[0.95rem] leading-snug sm:grid-cols-4 sm:gap-x-8 sm:text-base md:flex-1">
+          {columns.map((col, i) => (
+            <div key={i} className="flex min-w-0 flex-col gap-2">
+              {col.items.map((item, j) =>
+                typeof item === "string" ? (
+                  <span key={j} className="break-words">{item}</span>
+                ) : "external" in item && item.external ? (
+                  <a
+                    key={j}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="cursor-pointer break-words hover:underline"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link key={j} href={item.href} className="cursor-pointer break-words no-underline hover:underline">
+                    {item.label}
+                  </Link>
+                )
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="flex shrink-0 items-start justify-start md:justify-end">
           <Image
             src="/rca_logo.png"
             alt="Royal College of Art"
@@ -130,7 +138,7 @@ const Footer = () => {
             height={60}
             loading="lazy"
             onLoad={() => setLogoLoaded(true)}
-            className={`h-12 w-auto object-contain transition-all duration-700 ease-out sm:h-14 ${
+            className={`h-10 w-auto object-contain transition-all duration-700 ease-out sm:h-12 md:h-14 ${
               logoLoaded ? "opacity-100 blur-0" : "opacity-60 blur-md"
             }`}
           />

@@ -40,7 +40,13 @@ export default function StudioLoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-[calc(100vh-3px)] w-full items-center justify-center overflow-hidden bg-white px-5 py-16">
+    <div
+      className="relative flex min-h-[calc(100vh-3px)] w-full items-center justify-center overflow-hidden bg-white px-5 py-10 sm:py-16"
+      style={{
+        paddingTop: "max(2.5rem, env(safe-area-inset-top))",
+        paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))",
+      }}
+    >
       {/* Brand watermark — a faint BLK lockup that mirrors the homepage marque
           without dominating the form. Hidden on small screens for clarity. */}
       <div
@@ -62,15 +68,15 @@ export default function StudioLoginPage() {
       <div className="relative z-10 w-full max-w-md">
         <div className="flex flex-col items-start gap-4">
           <StudioEyebrow>RCA BLK · Studio</StudioEyebrow>
-          <h1 className="font-serif text-[2.5rem] font-normal leading-[1.05] tracking-[-0.015em] sm:text-[3rem]">
+          <h1 className="font-serif text-[1.85rem] font-normal leading-[1.05] tracking-[-0.015em] sm:text-[2.5rem] md:text-[3rem]">
             Sign in to the studio
           </h1>
-          <p className="font-serif text-[1rem] leading-relaxed text-black/65">
+          <p className="font-serif text-[0.95rem] leading-relaxed text-black/65 sm:text-[1rem]">
             Editorial control for events, news and on-site copy. Authorised members only.
           </p>
         </div>
 
-        <form onSubmit={onSubmit} className="mt-10 space-y-5">
+        <form onSubmit={onSubmit} className="mt-8 space-y-5 sm:mt-10">
           <StudioField label="Email" htmlFor="email">
             <StudioInput
               id="email"

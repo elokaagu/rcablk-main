@@ -31,7 +31,7 @@ export function NewsBody({
   if (isHtmlBody(single)) {
     return (
       <div
-        className={`prose prose-rcablk max-w-none font-serif text-lg leading-relaxed text-black sm:text-xl ${
+        className={`prose prose-rcablk max-w-none font-serif text-base leading-relaxed text-black sm:text-lg md:text-xl ${
           align === "center-mobile" ? "text-center sm:text-left" : "text-left"
         }`}
         dangerouslySetInnerHTML={{ __html: sanitizeBodyHtml(single) }}
@@ -41,7 +41,7 @@ export function NewsBody({
 
   return (
     <div
-      className={`space-y-6 font-serif text-lg leading-relaxed text-black sm:text-xl ${
+      className={`space-y-5 font-serif text-base leading-relaxed text-black sm:space-y-6 sm:text-lg md:text-xl ${
         align === "center-mobile" ? "text-center sm:text-left" : "text-left"
       }`}
     >

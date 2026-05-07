@@ -33,7 +33,7 @@ export function ContactNewsletterForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email Address"
-        className="w-[18rem] max-w-full border-b border-black/40 bg-transparent pb-1 font-serif text-[1.05rem] text-black outline-none transition-colors placeholder:text-black/85 focus:border-black"
+        className="w-full max-w-full border-b border-black/40 bg-transparent pb-1 font-serif text-base text-black outline-none transition-colors placeholder:text-black/85 focus:border-black sm:w-[18rem] sm:text-[1.05rem]"
       />
       <button
         type="submit"
