@@ -83,8 +83,11 @@ const LETTERS: ReadonlyArray<{
     href: "/contact",
     svg: "/SVG Letterforms/RCA BLK–Letterforms-K.svg",
     whiteHover: null,
+    // Sit the label on the K's top horizontal arm (upper half) — centred
+    // along the bar so the SVG mask clips the type cleanly within the
+    // glyph rather than over the orange ground.
     labelInLetter: {
-      className: "items-center justify-center",
+      className: "items-start justify-center pt-[11%] sm:pt-[13%]",
       textClass: "text-center",
     },
   },
