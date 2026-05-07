@@ -2,7 +2,6 @@
 
 import { useState, useRef, useLayoutEffect, useMemo } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 /**
  * Flex alignment for labels clipped to each letter SVG (same mask as the
@@ -19,19 +18,22 @@ const LETTERS: ReadonlyArray<{
   label: string;
   href: string;
   svg: string;
-  whiteHover: string | null;
   labelInLetter: LabelInLetterAlign;
 }> = [
+  // Glyph viewBox is 79.37 × 124.72 (taller than wide), drawn with mask
+  // size: contain + center alignment. That places the glyph between cell
+  // x=22.7% and x=77.0% horizontally and 0%–100% vertically. The padding
+  // values below sit each label on the *thickest* visible stroke of its
+  // letter so the SVG mask doesn't slice the type.
   {
     id: "r",
     label: "ABOUT",
     href: "/about",
     svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg",
-    whiteHover: null,
+    // Top crossbar (cell y=4.6%-22.7%, x=22.7%-77%)
     labelInLetter: {
-      // Inset from the narrow stem so the full word stays inside the mask
-      className: "items-start justify-start pt-[4%] pl-[12%] sm:pt-[5%] sm:pl-[14%]",
-      textClass: "text-left",
+      className: "items-start justify-center pt-[7%] px-[12%]",
+      textClass: "text-center",
     },
   },
   {
@@ -39,9 +41,9 @@ const LETTERS: ReadonlyArray<{
     label: "EVENTS",
     href: "/events",
     svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg",
-    whiteHover: null,
+    // Bottom bar (cell y=77.3%-95.5%, full width x=22.7%-77%)
     labelInLetter: {
-      className: "items-end justify-center px-[5%] pb-[7%] sm:px-[6%] sm:pb-[8%]",
+      className: "items-end justify-center pb-[7%] px-[8%]",
       textClass: "text-center",
     },
   },
@@ -50,9 +52,9 @@ const LETTERS: ReadonlyArray<{
     label: "RESOURCES",
     href: "/resources",
     svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg",
-    whiteHover: null,
+    // Top crossbar above the bowl (cell y=0-19%, x=22.7%-77%)
     labelInLetter: {
-      className: "items-start justify-center px-[7%] pt-[5%] sm:px-[9%] sm:pt-[6%]",
+      className: "items-start justify-center pt-[5%] px-[6%]",
       textClass: "text-center",
     },
   },
@@ -61,10 +63,10 @@ const LETTERS: ReadonlyArray<{
     label: "ALUMNI",
     href: "/alumni",
     svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg",
-    whiteHover: null,
+    // Top horizontal above the bowl (cell y~8%-33%, x=22.7%-72%)
     labelInLetter: {
-      className: "items-center justify-start pl-[12%] sm:pl-[15%]",
-      textClass: "text-left",
+      className: "items-start justify-center pt-[12%] px-[10%]",
+      textClass: "text-center",
     },
   },
   {
@@ -72,9 +74,9 @@ const LETTERS: ReadonlyArray<{
     label: "NEWS",
     href: "/news",
     svg: "/SVG Letterforms/RCA BLK–Letterforms-L.svg",
-    whiteHover: null,
+    // Bottom foot (cell y=77.3%-95.5%, x=22.7%-77%)
     labelInLetter: {
-      className: "items-center justify-center px-[8%] sm:px-[10%]",
+      className: "items-end justify-center pb-[7%] px-[16%]",
       textClass: "text-center",
     },
   },
@@ -83,10 +85,9 @@ const LETTERS: ReadonlyArray<{
     label: "CONTACT",
     href: "/contact",
     svg: "/SVG Letterforms/RCA BLK–Letterforms-K.svg",
-    whiteHover: null,
-    // Top horizontal arm of the K — horizontal inset keeps “CONTACT” inside the bar
+    // K's wide middle joint (cell y=22.7%-40.9%, full width)
     labelInLetter: {
-      className: "items-start justify-center px-[8%] pt-[7%] sm:px-[10%] sm:pt-[9%]",
+      className: "items-start justify-center pt-[27%] px-[8%]",
       textClass: "text-center",
     },
   },
@@ -117,25 +118,12 @@ function LetterCell({
   onHover: () => void;
   onLeave: () => void;
 }) {
-  const imgSrc = isHovered && letter.whiteHover ? letter.whiteHover : letter.svg;
-  const invertOnHover = isHovered && !letter.whiteHover;
-  const isC = letter.id === "c";
-  const isR = letter.id === "r";
-
   const maskStyle = useMemo(() => letterMaskStyle(letter.svg), [letter.svg]);
 
-  /** Idle vs hover label colour so type stays legible on both fills. */
-  const labelColor = isR
-    ? isHovered
-      ? "text-black"
-      : "text-white"
-    : isC
-      ? isHovered
-        ? "text-black"
-        : "text-white"
-      : isHovered
-        ? "text-black"
-        : "text-white";
+  // Every glyph idles as solid black on the orange ground and inverts to
+  // white on hover. Labels flip with it so type stays legible on either fill.
+  const glyphFill = isHovered ? "bg-white" : "bg-black";
+  const labelColor = isHovered ? "text-black" : "text-white";
 
   return (
     <Link
@@ -148,31 +136,14 @@ function LetterCell({
       onBlur={onLeave}
     >
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden p-0">
-        {isR ? (
-          <div
-            className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-white" : "bg-black"}`}
-            style={maskStyle}
-          />
-        ) : isC ? (
-          <div
-            className={`absolute inset-0 transition-colors duration-300 ${isHovered ? "bg-white" : "bg-black"}`}
-            style={maskStyle}
-          />
-        ) : (
-          <Image
-            src={imgSrc}
-            alt=""
-            fill
-            sizes="(max-width: 768px) 33vw, 340px"
-            className={`object-contain transition-all duration-300 ${
-              invertOnHover ? "brightness-0 invert" : ""
-            }`}
-          />
-        )}
-
-        {/* Always visible: clipped to letter so nav only reads inside the glyph */}
         <div
-          className={`pointer-events-none absolute inset-0 z-20 box-border flex font-serif font-normal leading-snug tracking-tight transition-opacity duration-300 text-[clamp(0.5rem,5.6cqi,0.78rem)] sm:text-[clamp(0.54rem,6cqi,0.88rem)] md:text-[clamp(0.58rem,5.5cqi,0.95rem)] ${letter.labelInLetter.className} ${
+          className={`absolute inset-0 transition-colors duration-300 ${glyphFill}`}
+          style={maskStyle}
+        />
+
+        {/* Always visible: clipped to the glyph so nav only reads inside the letter */}
+        <div
+          className={`pointer-events-none absolute inset-0 z-20 box-border flex font-serif font-normal leading-tight tracking-tight transition-opacity duration-300 text-[clamp(0.45rem,4.6cqi,0.7rem)] sm:text-[clamp(0.5rem,4.4cqi,0.78rem)] md:text-[clamp(0.55rem,3.6cqi,0.85rem)] ${letter.labelInLetter.className} ${
             isHovered ? "opacity-100" : "opacity-[0.92]"
           }`}
           style={maskStyle}
