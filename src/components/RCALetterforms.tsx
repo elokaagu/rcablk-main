@@ -5,20 +5,16 @@ import Link from "next/link";
 import Image from "next/image";
 
 /**
- * Label is anchored to a specific corner of the tile on hover instead of being
- * masked to the letter shape, matching the brand reference set where each
- * navigation label sits in a fixed quadrant of its letterform.
+ * Flex alignment for the hover label inside a full-cell wrapper that shares
+ * the letter SVG as a CSS mask. Text only appears inside the letter shape,
+ * matching the EVENTS / RESOURCES reference treatment.
  */
-type LabelPosition =
-  | "top-left"
-  | "top-center"
-  | "top-right"
-  | "middle-left"
-  | "middle-center"
-  | "middle-right"
-  | "bottom-left"
-  | "bottom-center"
-  | "bottom-right";
+type LabelInLetterAlign = {
+  /** Tailwind flex alignment classes for the masked label wrapper */
+  className: string;
+  /** Text alignment inside the masked label */
+  textClass: string;
+};
 
 const LETTERS: ReadonlyArray<{
   id: string;
@@ -26,42 +22,76 @@ const LETTERS: ReadonlyArray<{
   href: string;
   svg: string;
   whiteHover: string | null;
-  labelPosition: LabelPosition;
+  labelInLetter: LabelInLetterAlign;
 }> = [
-  /** R: white Γ + yellow notch (mask); tiny serif "R" in crook — see brand mock. */
-  { id: "r", label: "ABOUT", href: "/about", svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg", whiteHover: null, labelPosition: "top-left" },
-  { id: "c", label: "EVENTS", href: "/events", svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg", whiteHover: null, labelPosition: "bottom-center" },
-  { id: "a", label: "RESOURCES", href: "/resources", svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg", whiteHover: null, labelPosition: "top-center" },
-  { id: "b", label: "ALUMNI", href: "/alumni", svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg", whiteHover: null, labelPosition: "middle-left" },
-  { id: "l", label: "NEWS", href: "/news", svg: "/SVG Letterforms/RCA BLK–Letterforms-L.svg", whiteHover: null, labelPosition: "top-right" },
-  { id: "k", label: "CONTACT", href: "/contact", svg: "/SVG Letterforms/RCA BLK–Letterforms-K.svg", whiteHover: null, labelPosition: "middle-center" },
+  /** R: white Γ + yellow notch (mask); tiny serif "R" in crook */
+  {
+    id: "r",
+    label: "ABOUT",
+    href: "/about",
+    svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg",
+    whiteHover: null,
+    labelInLetter: {
+      className: "items-start justify-start pt-[10%] pl-[8%] sm:pt-[11%] sm:pl-[9%]",
+      textClass: "text-left",
+    },
+  },
+  {
+    id: "c",
+    label: "EVENTS",
+    href: "/events",
+    svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg",
+    whiteHover: null,
+    labelInLetter: {
+      className: "items-end justify-center pb-[10%] sm:pb-[11%]",
+      textClass: "text-center",
+    },
+  },
+  {
+    id: "a",
+    label: "RESOURCES",
+    href: "/resources",
+    svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg",
+    whiteHover: null,
+    labelInLetter: {
+      className: "items-start justify-center pt-[10%] sm:pt-[11%]",
+      textClass: "text-center",
+    },
+  },
+  {
+    id: "b",
+    label: "ALUMNI",
+    href: "/alumni",
+    svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg",
+    whiteHover: null,
+    labelInLetter: {
+      className: "items-center justify-start pl-[8%] sm:pl-[10%]",
+      textClass: "text-left",
+    },
+  },
+  {
+    id: "l",
+    label: "NEWS",
+    href: "/news",
+    svg: "/SVG Letterforms/RCA BLK–Letterforms-L.svg",
+    whiteHover: null,
+    labelInLetter: {
+      className: "items-start justify-end pr-[8%] pt-[10%] sm:pr-[10%] sm:pt-[11%]",
+      textClass: "text-right",
+    },
+  },
+  {
+    id: "k",
+    label: "CONTACT",
+    href: "/contact",
+    svg: "/SVG Letterforms/RCA BLK–Letterforms-K.svg",
+    whiteHover: null,
+    labelInLetter: {
+      className: "items-center justify-center",
+      textClass: "text-center",
+    },
+  },
 ];
-
-function labelPositionStyle(position: LabelPosition): React.CSSProperties {
-  // 8% inset keeps the label safely off the cell edge while still landing in
-  // the corner shown in the reference tiles.
-  const INSET = "8%";
-  switch (position) {
-    case "top-left":
-      return { top: INSET, left: INSET };
-    case "top-center":
-      return { top: INSET, left: "50%", transform: "translateX(-50%)" };
-    case "top-right":
-      return { top: INSET, right: INSET };
-    case "middle-left":
-      return { top: "50%", left: INSET, transform: "translateY(-50%)" };
-    case "middle-center":
-      return { top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
-    case "middle-right":
-      return { top: "50%", right: INSET, transform: "translateY(-50%)" };
-    case "bottom-left":
-      return { bottom: INSET, left: INSET };
-    case "bottom-center":
-      return { bottom: INSET, left: "50%", transform: "translateX(-50%)" };
-    case "bottom-right":
-      return { bottom: INSET, right: INSET };
-  }
-}
 
 function LetterCell({
   letter,
@@ -101,19 +131,7 @@ function LetterCell({
       onTouchStart={onHover}
       onTouchEnd={() => setTimeout(onLeave, 150)}
     >
-      <div className="absolute inset-0 flex items-center justify-center p-0 overflow-hidden">
-        {/* Label (on hover) — anchored to the per-letter quadrant defined in
-            the brand reference set rather than masked to the letter shape. */}
-        {showLabel && (
-          <span
-            className={`pointer-events-none absolute z-20 font-serif text-sm font-normal whitespace-nowrap sm:text-base ${
-              isR && isHovered ? "text-white" : "text-black"
-            }`}
-            style={labelPositionStyle(letter.labelPosition)}
-          >
-            {letter.label}
-          </span>
-        )}
+      <div className="absolute inset-0 flex items-center justify-center overflow-hidden p-0">
         {/* R: white Γ + notch (yellow = cell bg); tiny serif R in crook; hover → black fill + white label */}
         {isR ? (
           <>
@@ -145,6 +163,22 @@ function LetterCell({
               invertOnHover ? "brightness-0 invert" : ""
             }`}
           />
+        )}
+        {/* Hover label on top: same mask as the letter so type only appears inside
+            the glyph (matches EVENTS / RESOURCES). Per-letter flex alignment. */}
+        {showLabel && (
+          <div
+            className={`pointer-events-none absolute inset-0 z-20 flex font-serif text-[0.62rem] font-normal leading-none tracking-tight sm:text-sm ${letter.labelInLetter.className}`}
+            style={maskStyle}
+          >
+            <span
+              className={`inline-block max-w-[92%] uppercase ${letter.labelInLetter.textClass} ${
+                isR && isHovered ? "text-white" : "text-black"
+              }`}
+            >
+              {letter.label}
+            </span>
+          </div>
         )}
       </div>
     </Link>
