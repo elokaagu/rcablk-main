@@ -1,5 +1,6 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
 import Link from "next/link";
 import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
@@ -23,6 +24,7 @@ export default async function Events() {
       className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden text-black"
       style={{ backgroundColor: "#A8C9A7" }}
     >
+      <PageBackground color="#A8C9A7" />
       <SlideOutMenu />
 
       <AnimateIn delay={0.2} duration={0.6} y={16}>
@@ -46,7 +48,7 @@ export default async function Events() {
                 alt={event.name}
                 aspectRatio="3/2"
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="w-full"
+                className="w-full rounded-md"
               />
               <div className="mt-5 flex flex-col gap-0 text-left sm:mt-6">
                 <h2 className="font-display text-lg font-black uppercase leading-tight tracking-wide text-black sm:text-xl">

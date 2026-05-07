@@ -44,7 +44,9 @@
     --input: 0 0% 0%;
     --ring: 0 0% 0%;
 
-    --radius: 0rem;
+    /* Slight site-wide softness — 6px feels considered without losing the
+       editorial/architectural character of the brand. */
+    --radius: 0.375rem;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;

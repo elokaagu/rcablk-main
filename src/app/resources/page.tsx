@@ -1,5 +1,6 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import type { Metadata } from "next";
@@ -16,6 +17,7 @@ export default function Resources() {
       className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0"
       style={{ backgroundColor: "#FAF05A" }}
     >
+      <PageBackground color="#FAF05A" />
       <SlideOutMenu />
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>

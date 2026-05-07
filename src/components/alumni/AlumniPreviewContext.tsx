@@ -125,8 +125,30 @@ export function AlumniPreviewAside() {
           )}
         </div>
       ) : (
-        <div className="hidden rounded-xl border border-dashed border-black/15 bg-white/40 px-4 py-8 text-center lg:block">
-          <p className="font-serif text-sm leading-relaxed text-foreground/50">Hover a name to preview work</p>
+        <div
+          aria-hidden
+          className="relative hidden aspect-[3/4] w-full overflow-hidden rounded-xl bg-gradient-to-br from-white/85 via-white/60 to-white/40 ring-1 ring-inset ring-black/[0.06] shadow-[0_1px_24px_-12px_rgba(0,0,0,0.18)] lg:block"
+        >
+          {/* Geometric echo of the BLK marque, kept very faint */}
+          <span className="pointer-events-none absolute left-1/2 top-1/2 size-[60%] -translate-x-1/2 -translate-y-[58%] rounded-full border border-foreground/[0.08]" />
+          <span className="pointer-events-none absolute left-1/2 top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-foreground/30" />
+
+          {/* Live indicator dot */}
+          <span className="absolute right-4 top-4 flex size-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-foreground/40" />
+            <span className="relative inline-flex size-2 rounded-full bg-foreground/70" />
+          </span>
+
+          {/* Caption stack pinned to the bottom-left, mirroring the layout
+              of the loaded preview where the artist name sits above the work. */}
+          <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 px-5 pb-5">
+            <p className="font-display text-[0.6rem] font-black uppercase tracking-[0.22em] text-foreground/55">
+              Preview
+            </p>
+            <p className="font-serif text-[0.95rem] leading-snug text-foreground/75">
+              Hover a name to see their work
+            </p>
+          </div>
         </div>
       )}
     </aside>

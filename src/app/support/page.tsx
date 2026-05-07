@@ -1,5 +1,6 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
 import { SupportBody } from "@/components/SupportBody";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
@@ -28,6 +29,7 @@ export default async function Support() {
       className="relative flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden text-black"
       style={{ backgroundColor: "#F3916B" }}
     >
+      <PageBackground color="#F3916B" />
       <SlideOutMenu />
 
       <Link

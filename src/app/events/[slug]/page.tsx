@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
 import { ArticleHeader } from "@/components/ArticleHeader";
 import { BlurImage } from "@/components/BlurImage";
 import { getEvents } from "@/lib/cms/events-repo";
@@ -40,6 +41,7 @@ export default async function EventDetail({ params }: PageProps) {
 
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(140, 30%, 70%)" }}>
+      <PageBackground color="hsl(140, 30%, 70%)" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -75,7 +77,7 @@ export default async function EventDetail({ params }: PageProps) {
 
       {/* Event Image */}
       <div className="flex justify-center px-4 sm:px-8 pb-6">
-        <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" className="max-w-2xl mx-auto" sizes="(max-width: 768px) 100vw, 672px" />
+        <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" className="max-w-2xl mx-auto rounded-md" sizes="(max-width: 768px) 100vw, 672px" />
       </div>
 
       {/* Date */}

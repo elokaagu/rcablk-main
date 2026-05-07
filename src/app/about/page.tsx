@@ -1,8 +1,10 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
 import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
+import { RevealText } from "@/components/RevealText";
 import Image from "next/image";
 import type { Metadata } from "next";
 
@@ -24,6 +26,7 @@ export default function About() {
           "linear-gradient(to right, #ffffff 0%, #ffffff 50%, hsl(207, 70%, 88%) 50%, hsl(207, 70%, 88%) 100%)",
       }}
     >
+      <PageBackground background="linear-gradient(to right, #ffffff 0%, #ffffff 50%, hsl(207, 70%, 88%) 50%, hsl(207, 70%, 88%) 100%) fixed" />
       <SlideOutMenu />
 
       <main className="relative flex-1 lg:min-h-screen">
@@ -49,11 +52,17 @@ export default function About() {
         <div className="grid min-h-screen grid-cols-1 gap-0 lg:grid-cols-2">
         {/* Left column - Text */}
         <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 bg-white">
-          <AnimateIn delay={0.2} duration={0.6} y={20}>
-            <h2 className="text-2xl sm:text-3xl font-display font-normal text-foreground mb-4 sm:mb-6">About Us</h2>
-          </AnimateIn>
+          <RevealText
+            as="h2"
+            delay={0.1}
+            duration={1}
+            stagger={0.06}
+            className="text-2xl sm:text-3xl font-display font-normal text-foreground mb-4 sm:mb-6 block"
+          >
+            About Us
+          </RevealText>
 
-          <AnimateStagger delay={0.3} stagger={0.06} className="space-y-6 text-foreground text-lg leading-relaxed max-w-xl">
+          <AnimateStagger delay={0.25} stagger={0.08} duration={0.95} y={18} className="space-y-6 text-foreground text-lg leading-relaxed max-w-xl">
             <p>
               The Royal College of Art Association of Black Students, Alumni & Friends started as a grassroots organisation and community group in 2020.
             </p>
@@ -82,14 +91,14 @@ export default function About() {
         <div className="px-4 sm:px-8 lg:px-16 py-6 sm:py-8 lg:py-12 flex flex-col gap-6 sm:gap-8 items-center pt-6 sm:pt-8" style={{ backgroundColor: "hsl(207, 70%, 88%)" }}>
           <AnimateStagger delay={0.35} stagger={0.1} className="flex flex-col gap-6 sm:gap-8 items-center w-full">
           <div className="w-full max-w-sm self-start">
-            <BlurImage src="/3_Website Images/Chris Ofili.jpg" alt="Chris Ofili" aspectRatio="3/4" />
+            <BlurImage src="/3_Website Images/Chris Ofili.jpg" alt="Chris Ofili" aspectRatio="3/4" className="rounded-md" />
             <p className="mt-3 text-xl font-display font-black text-foreground tracking-wide uppercase">
               Chris Ofili
             </p>
           </div>
 
           <div className="w-full max-w-sm self-end">
-            <BlurImage src="/3_Website Images/magdalene odundo2.jpeg" alt="Magdalene Odundo" aspectRatio="3/4" />
+            <BlurImage src="/3_Website Images/magdalene odundo2.jpeg" alt="Magdalene Odundo" aspectRatio="3/4" className="rounded-md" />
             <p className="mt-3 text-xl font-display font-black text-foreground tracking-wide uppercase">
               Magdalene Odundo
             </p>

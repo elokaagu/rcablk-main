@@ -4,15 +4,64 @@ import { useState, useRef, useLayoutEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-const LETTERS = [
-  /** R: white Γ + yellow notch (mask); tiny serif “R” in crook — see brand mock. */
-  { id: "r", label: "RESOURCES", href: "/resources", svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg", whiteHover: null },
-  { id: "c", label: "EVENTS", href: "/events", svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg", whiteHover: null },
-  { id: "a", label: "ABOUT", href: "/about", svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg", whiteHover: null },
-  { id: "b", label: "CONTACT", href: "/contact", svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg", whiteHover: null },
-  { id: "l", label: "NEWS", href: "/news", svg: "/SVG Letterforms/RCA BLK–Letterforms-L.svg", whiteHover: null },
-  { id: "k", label: "ALUMNI", href: "/alumni", svg: "/SVG Letterforms/RCA BLK–Letterforms-K.svg", whiteHover: null },
-] as const;
+/**
+ * Label is anchored to a specific corner of the tile on hover instead of being
+ * masked to the letter shape, matching the brand reference set where each
+ * navigation label sits in a fixed quadrant of its letterform.
+ */
+type LabelPosition =
+  | "top-left"
+  | "top-center"
+  | "top-right"
+  | "middle-left"
+  | "middle-center"
+  | "middle-right"
+  | "bottom-left"
+  | "bottom-center"
+  | "bottom-right";
+
+const LETTERS: ReadonlyArray<{
+  id: string;
+  label: string;
+  href: string;
+  svg: string;
+  whiteHover: string | null;
+  labelPosition: LabelPosition;
+}> = [
+  /** R: white Γ + yellow notch (mask); tiny serif "R" in crook — see brand mock. */
+  { id: "r", label: "ABOUT", href: "/about", svg: "/SVG Letterforms/RCA BLK–Letterforms-R.svg", whiteHover: null, labelPosition: "top-left" },
+  { id: "c", label: "EVENTS", href: "/events", svg: "/SVG Letterforms/RCA BLK–Letterforms-C.svg", whiteHover: null, labelPosition: "bottom-center" },
+  { id: "a", label: "RESOURCES", href: "/resources", svg: "/SVG Letterforms/RCA BLK–Letterforms-A.svg", whiteHover: null, labelPosition: "top-center" },
+  { id: "b", label: "ALUMNI", href: "/alumni", svg: "/SVG Letterforms/RCA BLK–Letterforms-B.svg", whiteHover: null, labelPosition: "middle-left" },
+  { id: "l", label: "NEWS", href: "/news", svg: "/SVG Letterforms/RCA BLK–Letterforms-L.svg", whiteHover: null, labelPosition: "top-right" },
+  { id: "k", label: "CONTACT", href: "/contact", svg: "/SVG Letterforms/RCA BLK–Letterforms-K.svg", whiteHover: null, labelPosition: "middle-center" },
+];
+
+function labelPositionStyle(position: LabelPosition): React.CSSProperties {
+  // 8% inset keeps the label safely off the cell edge while still landing in
+  // the corner shown in the reference tiles.
+  const INSET = "8%";
+  switch (position) {
+    case "top-left":
+      return { top: INSET, left: INSET };
+    case "top-center":
+      return { top: INSET, left: "50%", transform: "translateX(-50%)" };
+    case "top-right":
+      return { top: INSET, right: INSET };
+    case "middle-left":
+      return { top: "50%", left: INSET, transform: "translateY(-50%)" };
+    case "middle-center":
+      return { top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
+    case "middle-right":
+      return { top: "50%", right: INSET, transform: "translateY(-50%)" };
+    case "bottom-left":
+      return { bottom: INSET, left: INSET };
+    case "bottom-center":
+      return { bottom: INSET, left: "50%", transform: "translateX(-50%)" };
+    case "bottom-right":
+      return { bottom: INSET, right: INSET };
+  }
+}
 
 function LetterCell({
   letter,
@@ -53,16 +102,14 @@ function LetterCell({
       onTouchEnd={() => setTimeout(onLeave, 150)}
     >
       <div className="absolute inset-0 flex items-center justify-center p-0 overflow-hidden">
-        {/* Label (on hover) - masked to letter shape */}
+        {/* Label (on hover) — anchored to the per-letter quadrant defined in
+            the brand reference set rather than masked to the letter shape. */}
         {showLabel && (
           <span
-            className={`absolute inset-0 z-10 flex items-center justify-center font-serif text-sm font-bold text-center whitespace-nowrap sm:text-base ${
+            className={`pointer-events-none absolute z-20 font-serif text-sm font-normal whitespace-nowrap sm:text-base ${
               isR && isHovered ? "text-white" : "text-black"
             }`}
-            style={{
-              ...maskStyle,
-              transform: "scale(0.5)",
-            }}
+            style={labelPositionStyle(letter.labelPosition)}
           >
             {letter.label}
           </span>

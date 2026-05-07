@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
 import { NewsArticleGallery } from "@/components/NewsArticleGallery";
 import { BlurImage } from "@/components/BlurImage";
 import { getNewsArticles } from "@/lib/cms/news-repo";
@@ -43,6 +44,7 @@ export default async function NewsArticle({ params }: PageProps) {
 
   return (
     <div className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden bg-[#FFDD00] text-black">
+      <PageBackground color="#FFDD00" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -96,7 +98,7 @@ export default async function NewsArticle({ params }: PageProps) {
                 src={article.image}
                 alt={article.title}
                 aspectRatio="3/4"
-                className="w-full"
+                className="w-full rounded-md"
                 sizes="(max-width: 768px) 100vw, 512px"
               />
             </div>

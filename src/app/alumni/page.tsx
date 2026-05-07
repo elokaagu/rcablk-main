@@ -1,5 +1,6 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
+import PageBackground from "@/components/PageBackground";
 import { AlumniName } from "@/components/AlumniName";
 import { AlumniPreviewAside, AlumniPreviewProvider } from "@/components/alumni/AlumniPreviewContext";
 import { AnimateIn } from "@/components/AnimateIn";
@@ -35,6 +36,7 @@ const NameList = ({ members }: { members: typeof foundingMembers }) => {
 export default function Alumni() {
   return (
     <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(207, 70%, 85%)" }}>
+      <PageBackground color="hsl(207, 70%, 85%)" />
       <SlideOutMenu />
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>

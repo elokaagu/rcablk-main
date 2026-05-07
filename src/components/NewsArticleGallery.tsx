@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { BlurImage } from "@/components/BlurImage";
 
 interface NewsArticleGalleryProps {
   images: string[];
@@ -19,13 +19,12 @@ export function NewsArticleGallery({ images, title }: NewsArticleGalleryProps) {
         <div
           key={`${src}-${i}`}
           role="listitem"
-          className="relative h-48 w-[4.25rem] shrink-0 overflow-hidden sm:h-56 sm:w-24 md:h-64 md:w-[6.5rem]"
+          className="relative h-48 w-[4.25rem] shrink-0 overflow-hidden rounded-sm sm:h-56 sm:w-24 md:h-64 md:w-[6.5rem]"
         >
-          <Image
+          <BlurImage
             src={src}
             alt={`${title} — gallery image ${i + 1} of ${images.length}`}
             fill
-            className="object-cover object-center"
             sizes="(max-width: 640px) 68px, (max-width: 768px) 96px, 104px"
           />
         </div>
