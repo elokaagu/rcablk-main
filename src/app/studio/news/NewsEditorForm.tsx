@@ -20,6 +20,9 @@ import { isVideoMediaUrl } from "@/lib/media-url";
 export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: "new" | "edit" }) {
   const router = useRouter();
   const [article, setArticle] = useState<NewsArticle>(initial);
+  // Remember the slug we loaded with so PUT can target the existing row even
+  // after the editor renames it.
+  const [originalSlug] = useState(initial.slug);
   // The body is stored on disk as `string[]` for legacy compatibility. When
   // edited through the rich text editor we save the entire HTML payload as a
   // single-element array. Normalising on load means the editor always
@@ -83,7 +86,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
     };
     try {
       const method = mode === "new" ? "POST" : "PUT";
-      const url = mode === "new" ? "/api/studio/news" : `/api/studio/news/${encodeURIComponent(article.slug)}`;
+      const url = mode === "new" ? "/api/studio/news" : `/api/studio/news/${encodeURIComponent(originalSlug)}`;
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
@@ -105,7 +108,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch(`/api/studio/news/${encodeURIComponent(article.slug)}`, { method: "DELETE" });
+      const res = await fetch(`/api/studio/news/${encodeURIComponent(originalSlug)}`, { method: "DELETE" });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) throw new Error(data.error || "Delete failed");
       router.push("/studio/news");
@@ -124,7 +127,9 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
           label="Slug · URL"
           hint={
             mode === "edit"
-              ? "Locked once an article is created"
+              ? article.slug !== originalSlug
+                ? `Renaming — public URL will change to /news/${article.slug || "…"}`
+                : "Edit to change the public URL (existing links will break)"
               : slugTouched
                 ? "Custom — won't auto-update from Title"
                 : "Auto-filled from Title; type to customise"
@@ -133,7 +138,6 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
           <StudioInput
             value={article.slug}
             onChange={(e) => onSlugChange(e.target.value)}
-            disabled={mode === "edit"}
           />
         </StudioField>
 
