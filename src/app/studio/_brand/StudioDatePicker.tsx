@@ -129,7 +129,7 @@ export function StudioDatePicker({
 
   return (
     <div>
-      <StudioFieldLabel htmlFor={htmlFor ?? inputId} hint={hint}>
+      <StudioFieldLabel htmlFor={htmlFor ?? inputId}>
         {label}
       </StudioFieldLabel>
 
@@ -139,6 +139,12 @@ export function StudioDatePicker({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder ?? "e.g. 12 June 2026"}
       />
+
+      {hint && (
+        <p className="mt-2 font-serif text-[0.85rem] leading-relaxed text-black/55">
+          {hint}
+        </p>
+      )}
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <Popover.Root open={open} onOpenChange={setOpen}>
