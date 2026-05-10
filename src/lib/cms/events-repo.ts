@@ -12,7 +12,6 @@ type EventRow = {
   date: string;
   image: string;
   body: string | null;
-  sort_order: number;
 };
 
 const FALLBACK_EVENT_IMAGE = "/rca_logo.png";
@@ -32,7 +31,6 @@ function rowToEvent(row: unknown): EventData | null {
     date: asString(r.date),
     image: asTrimmedString(r.image) || FALLBACK_EVENT_IMAGE,
     body,
-    sort_order: typeof r.sort_order === "number" && Number.isFinite(r.sort_order) ? r.sort_order : undefined,
   };
 }
 
@@ -44,8 +42,8 @@ export async function getEvents(): Promise<EventData[]> {
 
     const { data, error } = await anon
       .from("events")
-      .select("slug,name,description,venue,date,image,body,sort_order")
-      .order("sort_order", { ascending: true });
+      .select("slug,name,description,venue,date,image,body")
+      .order("updated_at", { ascending: false });
 
     if (error || !data?.length) return staticEvents;
 
@@ -64,8 +62,8 @@ export async function listEventsAdmin(): Promise<EventData[]> {
   const supabase = createSupabaseAdmin();
   const { data, error } = await supabase
     .from("events")
-    .select("slug,name,description,venue,date,image,body,sort_order")
-    .order("sort_order", { ascending: true });
+    .select("slug,name,description,venue,date,image,body")
+    .order("updated_at", { ascending: false });
   if (error) throw error;
   return ((data ?? []) as EventRow[])
     .map((row) => rowToEvent(row))
@@ -76,7 +74,7 @@ export async function getEventBySlugAdmin(slug: string): Promise<EventData | nul
   const supabase = createSupabaseAdmin();
   const { data, error } = await supabase
     .from("events")
-    .select("slug,name,description,venue,date,image,body,sort_order")
+    .select("slug,name,description,venue,date,image,body")
     .eq("slug", slug)
     .maybeSingle();
   if (error) throw error;
@@ -84,7 +82,7 @@ export async function getEventBySlugAdmin(slug: string): Promise<EventData | nul
   return rowToEvent(data);
 }
 
-export async function upsertEventAdmin(event: EventData, sortOrder: number): Promise<void> {
+export async function upsertEventAdmin(event: EventData): Promise<void> {
   const supabase = createSupabaseAdmin();
   const row = {
     slug: event.slug,
@@ -94,7 +92,7 @@ export async function upsertEventAdmin(event: EventData, sortOrder: number): Pro
     date: event.date,
     image: event.image,
     body: event.body ?? null,
-    sort_order: sortOrder,
+    sort_order: 0,
     updated_at: new Date().toISOString(),
   };
   const { error } = await supabase.from("events").upsert(row, { onConflict: "slug" });

@@ -37,7 +37,6 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
   // receives one string (legacy multi-paragraph entries get joined into a
   // single block of text that `legacyBodyToHtml` then converts to <p> tags).
   const [bodyHtml, setBodyHtml] = useState(bodyArrayToString(initial.body));
-  const [sortOrder, setSortOrder] = useState(initial.sort_order ?? 0);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -98,7 +97,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ article: payload, sortOrder }),
+        body: JSON.stringify({ article: payload }),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) throw new Error(data.error || "Save failed");
@@ -131,32 +130,22 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
   return (
     <StudioCard className="mx-auto max-w-3xl !p-5 sm:!p-8 lg:!p-10">
       <div className="space-y-6">
-        <div className="grid gap-6 sm:grid-cols-2">
-          <StudioField
-            label="Slug · URL"
-            hint={
-              mode === "edit"
-                ? "Locked once an article is created"
-                : slugTouched
-                  ? "Custom — won't auto-update from Title"
-                  : "Auto-filled from Title; type to customise"
-            }
-          >
-            <StudioInput
-              value={article.slug}
-              onChange={(e) => onSlugChange(e.target.value)}
-              disabled={mode === "edit"}
-            />
-          </StudioField>
-
-          <StudioField label="Sort order" hint="Lower numbers appear first">
-            <StudioInput
-              type="number"
-              value={sortOrder}
-              onChange={(e) => setSortOrder(parseInt(e.target.value, 10) || 0)}
-            />
-          </StudioField>
-        </div>
+        <StudioField
+          label="Slug · URL"
+          hint={
+            mode === "edit"
+              ? "Locked once an article is created"
+              : slugTouched
+                ? "Custom — won't auto-update from Title"
+                : "Auto-filled from Title; type to customise"
+          }
+        >
+          <StudioInput
+            value={article.slug}
+            onChange={(e) => onSlugChange(e.target.value)}
+            disabled={mode === "edit"}
+          />
+        </StudioField>
 
         <StudioField label="Title">
           <StudioInput value={article.title} onChange={(e) => onTitleChange(e.target.value)} />

@@ -17,7 +17,6 @@ type NewsRow = {
   image: string;
   gallery: string[] | null;
   body: unknown;
-  sort_order: number;
 };
 
 const FALLBACK_NEWS_IMAGE = "/rca_logo.png";
@@ -38,7 +37,6 @@ function rowToArticle(row: unknown): NewsArticle | null {
     image: asTrimmedString(r.image) || FALLBACK_NEWS_IMAGE,
     gallery,
     body: body.length ? body : [],
-    sort_order: typeof r.sort_order === "number" && Number.isFinite(r.sort_order) ? r.sort_order : undefined,
   };
 }
 
@@ -49,8 +47,8 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
 
     const { data, error } = await anon
       .from("news_articles")
-      .select("slug,title,category,date,image,gallery,body,sort_order")
-      .order("sort_order", { ascending: true });
+      .select("slug,title,category,date,image,gallery,body")
+      .order("updated_at", { ascending: false });
 
     if (error || !data?.length) return staticNews;
 
@@ -68,8 +66,8 @@ export async function listNewsAdmin(): Promise<NewsArticle[]> {
   const supabase = createSupabaseAdmin();
   const { data, error } = await supabase
     .from("news_articles")
-    .select("slug,title,category,date,image,gallery,body,sort_order")
-    .order("sort_order", { ascending: true });
+    .select("slug,title,category,date,image,gallery,body")
+    .order("updated_at", { ascending: false });
   if (error) throw error;
   return ((data ?? []) as NewsRow[])
     .map((row) => rowToArticle(row))
@@ -80,7 +78,7 @@ export async function getNewsBySlugAdmin(slug: string): Promise<NewsArticle | nu
   const supabase = createSupabaseAdmin();
   const { data, error } = await supabase
     .from("news_articles")
-    .select("slug,title,category,date,image,gallery,body,sort_order")
+    .select("slug,title,category,date,image,gallery,body")
     .eq("slug", slug)
     .maybeSingle();
   if (error) throw error;
@@ -88,7 +86,7 @@ export async function getNewsBySlugAdmin(slug: string): Promise<NewsArticle | nu
   return rowToArticle(data);
 }
 
-export async function upsertNewsAdmin(article: NewsArticle, sortOrder: number): Promise<void> {
+export async function upsertNewsAdmin(article: NewsArticle): Promise<void> {
   const supabase = createSupabaseAdmin();
   const row = {
     slug: article.slug,
@@ -98,7 +96,7 @@ export async function upsertNewsAdmin(article: NewsArticle, sortOrder: number): 
     image: article.image,
     gallery: article.gallery ?? null,
     body: article.body,
-    sort_order: sortOrder,
+    sort_order: 0,
     updated_at: new Date().toISOString(),
   };
   const { error } = await supabase.from("news_articles").upsert(row, { onConflict: "slug" });

@@ -17,10 +17,10 @@ export async function POST() {
   }
   try {
     for (let i = 0; i < events.length; i++) {
-      await upsertEventAdmin(events[i], i);
+      await upsertEventAdmin(events[i]);
     }
     for (let i = 0; i < newsArticles.length; i++) {
-      await upsertNewsAdmin(newsArticles[i], i);
+      await upsertNewsAdmin(newsArticles[i]);
     }
     for (const page of SITE_PAGES) {
       await upsertSitePageAdmin({

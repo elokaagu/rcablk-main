@@ -60,6 +60,10 @@ create policy "news_select_public" on public.news_articles for select using (tru
 create index if not exists events_sort_idx on public.events (sort_order, slug);
 create index if not exists news_sort_idx on public.news_articles (sort_order, slug);
 
+-- Public / Studio lists order by `updated_at` (most recently saved first).
+create index if not exists events_updated_at_list_idx on public.events (updated_at desc);
+create index if not exists news_articles_updated_at_list_idx on public.news_articles (updated_at desc);
+
 -- Editable marketing copy (e.g. Support page paragraphs)
 create table if not exists public.site_pages (
   slug text primary key,

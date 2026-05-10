@@ -24,11 +24,11 @@ export async function PUT(req: Request, ctx: Ctx) {
   if (!isCmsConfigured()) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
   const { slug } = await ctx.params;
   try {
-    const body = (await req.json()) as { article: NewsArticle; sortOrder?: number };
+    const body = (await req.json()) as { article: NewsArticle };
     if (body.article.slug !== decodeURIComponent(slug)) {
       return NextResponse.json({ error: "Slug mismatch" }, { status: 400 });
     }
-    await upsertNewsAdmin(body.article, body.sortOrder ?? 0);
+    await upsertNewsAdmin(body.article);
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error(e);

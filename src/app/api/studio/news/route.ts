@@ -26,11 +26,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Supabase CMS is not configured." }, { status: 503 });
   }
   try {
-    const body = (await req.json()) as { article: NewsArticle; sortOrder?: number };
+    const body = (await req.json()) as { article: NewsArticle };
     if (!body.article?.slug?.trim() || !body.article.title?.trim()) {
       return NextResponse.json({ error: "slug and title are required" }, { status: 400 });
     }
-    await upsertNewsAdmin(body.article, body.sortOrder ?? 0);
+    await upsertNewsAdmin(body.article);
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error(e);

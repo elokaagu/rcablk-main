@@ -23,7 +23,6 @@ export function EventEditorForm({
 }) {
   const router = useRouter();
   const [event, setEvent] = useState<EventData>(initial);
-  const [sortOrder, setSortOrder] = useState(initial.sort_order ?? 0);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,7 +77,6 @@ export function EventEditorForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           event: { ...event, body: event.body?.trim() ? event.body : undefined },
-          sortOrder,
         }),
       });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
@@ -112,32 +110,22 @@ export function EventEditorForm({
   return (
     <StudioCard className="mx-auto max-w-3xl !p-5 sm:!p-8 lg:!p-10">
       <div className="space-y-6">
-        <div className="grid gap-6 sm:grid-cols-2">
-          <StudioField
-            label="Slug · URL"
-            hint={
-              mode === "edit"
-                ? "Locked once an entry is created"
-                : slugTouched
-                  ? "Custom — won't auto-update from Name"
-                  : "Auto-filled from Name; type to customise"
-            }
-          >
-            <StudioInput
-              value={event.slug}
-              onChange={(e) => onSlugChange(e.target.value)}
-              disabled={mode === "edit"}
-            />
-          </StudioField>
-
-          <StudioField label="Sort order" hint="Lower numbers appear first">
-            <StudioInput
-              type="number"
-              value={sortOrder}
-              onChange={(e) => setSortOrder(parseInt(e.target.value, 10) || 0)}
-            />
-          </StudioField>
-        </div>
+        <StudioField
+          label="Slug · URL"
+          hint={
+            mode === "edit"
+              ? "Locked once an entry is created"
+              : slugTouched
+                ? "Custom — won't auto-update from Name"
+                : "Auto-filled from Name; type to customise"
+          }
+        >
+          <StudioInput
+            value={event.slug}
+            onChange={(e) => onSlugChange(e.target.value)}
+            disabled={mode === "edit"}
+          />
+        </StudioField>
 
         <StudioField label="Name">
           <StudioInput value={event.name} onChange={(e) => onNameChange(e.target.value)} />

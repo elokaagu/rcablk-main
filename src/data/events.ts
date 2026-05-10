@@ -8,8 +8,6 @@ export interface EventData {
   date: string;
   image: string;
   body?: string;
-  /** Optional CMS ordering (not required for static fallback entries). */
-  sort_order?: number;
 }
 
 export const events: EventData[] = [
