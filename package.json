@@ -89,5 +89,9 @@
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
+  },
+  "overrides": {
+    "@tiptap/extension-image": "3.22.5",
+    "@tiptap/extension-underline": "3.22.5"
   }
 }
