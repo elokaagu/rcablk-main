@@ -1,5 +1,6 @@
 import type { NewsArticle } from "@/data/news";
 import { newsArticles as staticNews } from "@/data/news";
+import { sortNewsArticlesByCalendarDate } from "@/lib/news-sort";
 import { createSupabaseAdmin } from "@/lib/cms/supabase-admin";
 import { createSupabaseAnon } from "@/lib/cms/supabase-anon";
 import {
@@ -50,15 +51,15 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
       .select("slug,title,category,date,image,gallery,body")
       .order("updated_at", { ascending: false });
 
-    if (error || !data?.length) return staticNews;
+    if (error || !data?.length) return sortNewsArticlesByCalendarDate(staticNews, "desc");
 
     const articles = (data as NewsRow[])
       .map((row) => rowToArticle(row))
       .filter((a): a is NewsArticle => a != null);
 
-    return articles.length ? articles : staticNews;
+    return articles.length ? sortNewsArticlesByCalendarDate(articles, "desc") : sortNewsArticlesByCalendarDate(staticNews, "desc");
   } catch {
-    return staticNews;
+    return sortNewsArticlesByCalendarDate(staticNews, "desc");
   }
 }
 
@@ -69,9 +70,12 @@ export async function listNewsAdmin(): Promise<NewsArticle[]> {
     .select("slug,title,category,date,image,gallery,body")
     .order("updated_at", { ascending: false });
   if (error) throw error;
-  return ((data ?? []) as NewsRow[])
-    .map((row) => rowToArticle(row))
-    .filter((a): a is NewsArticle => a != null);
+  return sortNewsArticlesByCalendarDate(
+    ((data ?? []) as NewsRow[])
+      .map((row) => rowToArticle(row))
+      .filter((a): a is NewsArticle => a != null),
+    "desc",
+  );
 }
 
 export async function getNewsBySlugAdmin(slug: string): Promise<NewsArticle | null> {

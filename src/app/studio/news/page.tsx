@@ -1,10 +1,10 @@
-import Link from "next/link";
 import type { NewsArticle } from "@/data/news";
 import { isCmsConfigured } from "@/lib/cms/supabase-admin";
 import { listNewsAdmin } from "@/lib/cms/news-repo";
 import { StudioButton, StudioNotice, StudioPageHeader } from "../_brand/StudioBrand";
 import { StudioSchemaSetup } from "../_brand/StudioSchemaSetup";
 import { extractErrorMessage, isSchemaMissingError } from "../_brand/studio-errors";
+import { StudioNewsArticleTable } from "./StudioNewsArticleTable";
 
 // Editors create new articles at runtime; render fresh on every request so
 // the table reflects the current Supabase state (no build-time snapshot).
@@ -64,47 +64,7 @@ export default async function StudioNewsPage() {
           Publish the first announcement to populate the public news index.
         </StudioNotice>
       ) : (
-        <div className="overflow-x-auto rounded-md border border-black/10 bg-white">
-          <table className="w-full min-w-[20rem] text-left">
-            <thead className="border-b border-black/10 bg-black/[0.02]">
-              <tr className="font-serif text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-black/55">
-                <th className="px-4 py-3 sm:px-5 sm:py-4">Title</th>
-                <th className="hidden px-4 py-3 sm:table-cell sm:px-5 sm:py-4">Slug</th>
-                <th className="hidden px-4 py-3 lg:table-cell lg:px-5 lg:py-4">Date</th>
-                <th className="px-4 py-3 text-right sm:px-5 sm:py-4">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {articles.map((a) => (
-                <tr
-                  key={a.slug}
-                  className="border-b border-black/5 transition-colors last:border-0 hover:bg-homeHero/[0.06]"
-                >
-                  <td className="break-words px-4 py-3 font-serif text-[0.95rem] text-black sm:px-5 sm:py-4 sm:text-[0.98rem]">
-                    {a.title}
-                  </td>
-                  <td className="hidden break-all px-4 py-3 font-mono text-[0.8rem] text-black/55 sm:table-cell sm:px-5 sm:py-4 sm:text-[0.85rem]">
-                    {a.slug}
-                  </td>
-                  <td className="hidden px-4 py-3 font-serif text-[0.9rem] text-black/65 lg:table-cell lg:px-5 lg:py-4 lg:text-[0.95rem]">
-                    {a.date}
-                  </td>
-                  <td className="px-4 py-3 text-right sm:px-5 sm:py-4">
-                    <Link
-                      href={`/studio/news/${encodeURIComponent(a.slug)}/edit`}
-                      className="group inline-flex min-h-[44px] items-center gap-2 font-serif text-[0.78rem] font-semibold uppercase tracking-[0.18em] text-black transition-colors hover:text-black/60"
-                    >
-                      <span>Edit</span>
-                      <span aria-hidden className="inline-block transition-transform group-hover:translate-x-0.5">
-                        →
-                      </span>
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <StudioNewsArticleTable articles={articles} />
       )}
     </div>
   );
