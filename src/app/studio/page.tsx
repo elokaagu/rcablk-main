@@ -16,6 +16,11 @@ import { StudioSchemaSetup } from "./_brand/StudioSchemaSetup";
 import { extractErrorMessage, isSchemaMissingError } from "./_brand/studio-errors";
 import { isVideoMediaUrl } from "@/lib/media-url";
 
+// Tiles show live counts + the most recent hero from each collection — must
+// re-fetch on every visit, otherwise the dashboard freezes at build state.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 type CountState =
   | { ok: true; value: number; preview?: { src: string; alt: string } }
   | { ok: false; error: unknown };

@@ -6,6 +6,11 @@ import { StudioNotice, StudioPageHeader } from "../_brand/StudioBrand";
 import { StudioSchemaSetup } from "../_brand/StudioSchemaSetup";
 import { extractErrorMessage, isSchemaMissingError } from "../_brand/studio-errors";
 
+// Page overrides are written at runtime; re-fetch on every visit so the
+// "In database / Using defaults" status is always current.
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function StudioPagesIndex() {
   if (!isCmsConfigured()) {
     return (

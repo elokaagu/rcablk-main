@@ -6,6 +6,11 @@ import { StudioButton, StudioNotice, StudioPageHeader } from "../_brand/StudioBr
 import { StudioSchemaSetup } from "../_brand/StudioSchemaSetup";
 import { extractErrorMessage, isSchemaMissingError } from "../_brand/studio-errors";
 
+// Editors create new events at runtime; render fresh on every request so
+// the table reflects the current Supabase state (no build-time snapshot).
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export default async function StudioEventsPage() {
   if (!isCmsConfigured()) {
     return (
