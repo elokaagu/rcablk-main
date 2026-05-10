@@ -16,8 +16,30 @@ export async function POST(req: Request) {
   if (!(file instanceof File) || file.size === 0) {
     return NextResponse.json({ error: "Missing file" }, { status: 400 });
   }
-  if (file.size > 12 * 1024 * 1024) {
-    return NextResponse.json({ error: "File too large (max 12MB)" }, { status: 400 });
+
+  const name = file.name || "";
+  const mime = (file.type || "").toLowerCase();
+  const looksVideo =
+    mime.startsWith("video/") || /\.(mp4|webm|mov|m4v|ogv|mkv|avi)$/i.test(name);
+  const looksImage =
+    mime.startsWith("image/") || /\.(jpe?g|png|gif|webp|avif|svg|heic|heif)$/i.test(name);
+  if (!looksVideo && !looksImage) {
+    return NextResponse.json(
+      { error: "Only image or video files are allowed for this upload." },
+      { status: 400 }
+    );
+  }
+
+  const maxBytes = looksVideo ? 100 * 1024 * 1024 : 20 * 1024 * 1024;
+  if (file.size > maxBytes) {
+    return NextResponse.json(
+      {
+        error: looksVideo
+          ? "Video too large (max 100MB)"
+          : "Image too large (max 20MB)",
+      },
+      { status: 400 }
+    );
   }
 
   try {

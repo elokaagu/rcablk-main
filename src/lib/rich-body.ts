@@ -38,19 +38,37 @@ const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
     "blockquote",
     "code",
     "hr",
+    "img",
+    "figure",
+    "figcaption",
   ],
   allowedAttributes: {
     a: ["href", "target", "rel", "class"],
+    img: ["src", "alt", "title", "width", "height", "loading", "class"],
     "*": ["class"],
   },
   allowedSchemes: ["http", "https", "mailto", "tel"],
   allowedSchemesByTag: {
     a: ["http", "https", "mailto", "tel"],
+    img: ["http", "https"],
   },
   // sanitize-html allows protocol-relative URLs by default; same-origin
   // links (relative paths and #anchors) are allowed because they have no
   // scheme to validate against.
   allowProtocolRelative: false,
+  transformTags: {
+    img: (tagName, attribs) => ({
+      tagName,
+      attribs: {
+        ...attribs,
+        loading: attribs.loading || "lazy",
+        alt: attribs.alt ?? "",
+        class: [attribs.class, "rounded-md border border-black/10"]
+          .filter(Boolean)
+          .join(" "),
+      },
+    }),
+  },
 };
 
 export function sanitizeBodyHtml(html: string): string {

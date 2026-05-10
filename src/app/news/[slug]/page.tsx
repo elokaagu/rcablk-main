@@ -6,6 +6,7 @@ import PageBackground from "@/components/PageBackground";
 import { NewsArticleGallery } from "@/components/NewsArticleGallery";
 import { NewsBody } from "@/components/NewsBody";
 import { BlurImage } from "@/components/BlurImage";
+import { isVideoMediaUrl } from "@/lib/media-url";
 import { getNewsArticles } from "@/lib/cms/news-repo";
 import { bodyArrayToString, htmlToPlainText, isHtmlBody } from "@/lib/rich-body";
 import type { Metadata } from "next";
@@ -59,7 +60,11 @@ export default async function NewsArticle({ params }: PageProps) {
             "@type": "NewsArticle",
             headline: article.title,
             datePublished: article.date,
-            image: article.image.startsWith("/") ? `${baseUrl}${article.image}` : article.image,
+            ...(isVideoMediaUrl(article.image)
+              ? {}
+              : {
+                  image: article.image.startsWith("/") ? `${baseUrl}${article.image}` : article.image,
+                }),
           }),
         }}
       />
@@ -101,13 +106,23 @@ export default async function NewsArticle({ params }: PageProps) {
             </header>
 
             <div className="mx-auto mb-10 w-full max-w-md sm:mb-12 md:max-w-lg">
-              <BlurImage
-                src={article.image}
-                alt={article.title}
-                aspectRatio="3/4"
-                className="w-full rounded-md"
-                sizes="(max-width: 768px) 100vw, 512px"
-              />
+              {isVideoMediaUrl(article.image) ? (
+                <video
+                  src={article.image}
+                  controls
+                  playsInline
+                  className="aspect-video w-full rounded-md bg-black object-contain"
+                  aria-label={`${article.title} — hero video`}
+                />
+              ) : (
+                <BlurImage
+                  src={article.image}
+                  alt={article.title}
+                  aspectRatio="3/4"
+                  className="w-full rounded-md"
+                  sizes="(max-width: 768px) 100vw, 512px"
+                />
+              )}
             </div>
 
             <div className="mx-auto max-w-prose">

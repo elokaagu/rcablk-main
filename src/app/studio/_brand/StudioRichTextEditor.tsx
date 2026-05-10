@@ -5,15 +5,24 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import Image from "@tiptap/extension-image";
+import Underline from "@tiptap/extension-underline";
 import {
   Bold,
   Italic,
+  Underline as UnderlineIcon,
+  Strikethrough,
+  Code,
   Heading2,
   Heading3,
   List,
   ListOrdered,
   Quote,
   Link as LinkIcon,
+  ImagePlus,
+  Minus,
+  Undo2,
+  Redo2,
   Eraser,
 } from "lucide-react";
 import { StudioFieldLabel } from "./StudioBrand";
@@ -111,6 +120,8 @@ export function StudioRichTextEditor({
   onChange,
   placeholder = "Start writing…",
   minRows = 8,
+  /** Storage prefix for inline body images (`/api/studio/upload`). */
+  bodyImageUploadPrefix = "news/body",
 }: {
   label: string;
   hint?: React.ReactNode;
@@ -118,6 +129,7 @@ export function StudioRichTextEditor({
   onChange: (next: string) => void;
   placeholder?: string;
   minRows?: number;
+  bodyImageUploadPrefix?: string;
 }) {
   // Convert legacy plain text on first mount so the editor opens with the
   // user's existing content already rendered as HTML.
@@ -127,11 +139,9 @@ export function StudioRichTextEditor({
     extensions: [
       StarterKit.configure({
         heading: { levels: [2, 3] },
-        // Drop default code block / horizontal rule from the toolbar surface;
-        // they're still available via shortcuts if anyone wants them.
         codeBlock: false,
-        horizontalRule: false,
       }),
+      Underline,
       Link.configure({
         openOnClick: false,
         autolink: true,
@@ -144,6 +154,13 @@ export function StudioRichTextEditor({
         placeholder,
         emptyEditorClass:
           "is-editor-empty before:content-[attr(data-placeholder)] before:text-black/35 before:float-left before:pointer-events-none before:h-0",
+      }),
+      Image.configure({
+        inline: false,
+        allowBase64: false,
+        HTMLAttributes: {
+          class: "rounded-md border border-black/10 my-4 max-w-full h-auto",
+        },
       }),
     ],
     content: initialContent,
@@ -191,6 +208,36 @@ export function StudioRichTextEditor({
     editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run();
   }
 
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const [imageUploading, setImageUploading] = React.useState(false);
+  const [imageError, setImageError] = React.useState<string | null>(null);
+
+  async function uploadAndInsertImage(file: File) {
+    if (!editor) return;
+    setImageUploading(true);
+    setImageError(null);
+    try {
+      const fd = new FormData();
+      fd.set("file", file);
+      fd.set("prefix", bodyImageUploadPrefix);
+      const res = await fetch("/api/studio/upload", { method: "POST", body: fd });
+      const data = (await res.json()) as { url?: string; error?: string };
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      if (data.url) {
+        editor
+          .chain()
+          .focus()
+          .setImage({ src: data.url, alt: "" })
+          .createParagraphNear()
+          .run();
+      }
+    } catch (e) {
+      setImageError(e instanceof Error ? e.message : "Upload failed");
+    } finally {
+      setImageUploading(false);
+    }
+  }
+
   return (
     <div>
       <StudioFieldLabel hint={hint}>{label}</StudioFieldLabel>
@@ -213,6 +260,30 @@ export function StudioRichTextEditor({
             disabled={!editor}
           >
             <Italic size={15} strokeWidth={2.25} />
+          </ToolbarButton>
+          <ToolbarButton
+            ariaLabel="Underline"
+            active={editor?.isActive("underline")}
+            onClick={() => editor?.chain().focus().toggleUnderline().run()}
+            disabled={!editor}
+          >
+            <UnderlineIcon size={15} strokeWidth={2.25} />
+          </ToolbarButton>
+          <ToolbarButton
+            ariaLabel="Strikethrough"
+            active={editor?.isActive("strike")}
+            onClick={() => editor?.chain().focus().toggleStrike().run()}
+            disabled={!editor}
+          >
+            <Strikethrough size={15} strokeWidth={2.25} />
+          </ToolbarButton>
+          <ToolbarButton
+            ariaLabel="Inline code"
+            active={editor?.isActive("code")}
+            onClick={() => editor?.chain().focus().toggleCode().run()}
+            disabled={!editor}
+          >
+            <Code size={15} strokeWidth={2.25} />
           </ToolbarButton>
 
           <ToolbarDivider />
@@ -271,6 +342,51 @@ export function StudioRichTextEditor({
           >
             <LinkIcon size={15} strokeWidth={2.25} />
           </ToolbarButton>
+          <ToolbarButton
+            ariaLabel={imageUploading ? "Uploading image…" : "Insert image"}
+            onClick={() => fileInputRef.current?.click()}
+            disabled={!editor || imageUploading}
+          >
+            <ImagePlus size={15} strokeWidth={2.25} />
+          </ToolbarButton>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const f = e.target.files?.[0];
+              if (f) void uploadAndInsertImage(f);
+              e.target.value = "";
+            }}
+          />
+
+          <ToolbarDivider />
+
+          <ToolbarButton
+            ariaLabel="Horizontal rule"
+            onClick={() => editor?.chain().focus().setHorizontalRule().run()}
+            disabled={!editor}
+          >
+            <Minus size={15} strokeWidth={2.25} />
+          </ToolbarButton>
+
+          <ToolbarDivider />
+
+          <ToolbarButton
+            ariaLabel="Undo"
+            onClick={() => editor?.chain().focus().undo().run()}
+            disabled={!editor || !editor.can().undo()}
+          >
+            <Undo2 size={15} strokeWidth={2.25} />
+          </ToolbarButton>
+          <ToolbarButton
+            ariaLabel="Redo"
+            onClick={() => editor?.chain().focus().redo().run()}
+            disabled={!editor || !editor.can().redo()}
+          >
+            <Redo2 size={15} strokeWidth={2.25} />
+          </ToolbarButton>
 
           <ToolbarDivider />
 
@@ -292,6 +408,18 @@ export function StudioRichTextEditor({
 
         <EditorContent editor={editor} />
       </div>
+
+      {imageUploading ? (
+        <p className="mt-2 font-serif text-[0.82rem] text-black/55">Uploading image…</p>
+      ) : null}
+      {imageError ? (
+        <p
+          role="alert"
+          className="mt-2 font-serif text-[0.82rem] text-red-700"
+        >
+          {imageError}
+        </p>
+      ) : null}
     </div>
   );
 }

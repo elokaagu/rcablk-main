@@ -8,29 +8,18 @@ import {
   StudioCard,
   StudioField,
   StudioInput,
-  StudioTextarea,
 } from "../_brand/StudioBrand";
 import { StudioDatePicker } from "../_brand/StudioDatePicker";
+import { StudioNewsGalleryField } from "../_brand/StudioNewsGalleryField";
+import { StudioNewsCategoryField } from "../_brand/StudioNewsCategoryField";
 import { StudioRichTextEditor } from "../_brand/StudioRichTextEditor";
 import { slugify } from "../_brand/slugify";
 import { bodyArrayToString } from "@/lib/rich-body";
-
-function galleryToText(g?: string[]) {
-  return g?.length ? g.join("\n") : "";
-}
-
-function textToGallery(text: string): string[] | undefined {
-  const lines = text
-    .split("\n")
-    .map((s) => s.trim())
-    .filter(Boolean);
-  return lines.length ? lines : undefined;
-}
+import { isVideoMediaUrl } from "@/lib/media-url";
 
 export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: "new" | "edit" }) {
   const router = useRouter();
   const [article, setArticle] = useState<NewsArticle>(initial);
-  const [galleryText, setGalleryText] = useState(galleryToText(initial.gallery));
   // The body is stored on disk as `string[]` for legacy compatibility. When
   // edited through the rich text editor we save the entire HTML payload as a
   // single-element array. Normalising on load means the editor always
@@ -44,6 +33,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
   // they type into the slug field directly, we stop syncing. In edit mode
   // the slug field is disabled anyway.
   const [slugTouched, setSlugTouched] = useState(mode === "edit" || Boolean(initial.slug));
+  const [heroUrlEditorOpen, setHeroUrlEditorOpen] = useState(false);
 
   function set<K extends keyof NewsArticle>(key: K, value: NewsArticle[K]) {
     setArticle((prev) => ({ ...prev, [key]: value }));
@@ -62,7 +52,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
     set("slug", slugify(value));
   }
 
-  async function uploadImage(file: File) {
+  async function uploadHeroMedia(file: File) {
     setUploading(true);
     setError(null);
     try {
@@ -88,7 +78,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
     const body = bodyHtml.trim() ? [bodyHtml] : [];
     const payload: NewsArticle = {
       ...article,
-      gallery: textToGallery(galleryText),
+      gallery: article.gallery?.length ? article.gallery : undefined,
       body,
     };
     try {
@@ -153,7 +143,7 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
 
         <div className="grid gap-6 sm:grid-cols-2">
           <StudioField label="Category">
-            <StudioInput value={article.category} onChange={(e) => set("category", e.target.value)} />
+            <StudioNewsCategoryField value={article.category} onChange={(v) => set("category", v)} />
           </StudioField>
 
           <StudioDatePicker
@@ -165,30 +155,90 @@ export function NewsEditorForm({ initial, mode }: { initial: NewsArticle; mode: 
           />
         </div>
 
-        <StudioField label="Hero image" hint="Paste an image URL or upload one from your computer">
-          <StudioInput value={article.image} onChange={(e) => set("image", e.target.value)} />
-          <input
-            type="file"
-            accept="image/*"
-            disabled={uploading}
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) void uploadImage(f);
-            }}
-            className="mt-3 block w-full max-w-full font-serif text-[0.82rem] text-black/55 file:mb-2 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-3 file:font-serif file:text-[0.78rem] file:font-semibold file:uppercase file:tracking-[0.18em] file:text-white hover:file:bg-homeHero hover:file:text-black sm:file:mb-0 sm:file:py-2"
-          />
+        <StudioField
+          label="Hero image or video"
+          hint="Upload an image or video (MP4, WebM, MOV…) — preview updates automatically. Open “Paste media URL” if you need to paste a link."
+        >
+          {article.image.trim() ? (
+            <div className="mt-2 overflow-hidden rounded-md border border-black/15 bg-black/[0.03]">
+              {isVideoMediaUrl(article.image) ? (
+                <video
+                  key={article.image}
+                  src={article.image}
+                  controls
+                  playsInline
+                  className="mx-auto max-h-[min(40vh,22rem)] w-full object-contain"
+                />
+              ) : (
+                /* eslint-disable-next-line @next/next/no-img-element -- arbitrary studio/CMS URLs */
+                <img
+                  key={article.image}
+                  src={article.image}
+                  alt=""
+                  className="mx-auto max-h-[min(40vh,22rem)] w-full object-contain"
+                />
+              )}
+            </div>
+          ) : (
+            <p className="mt-2 font-serif text-[0.9rem] text-black/45">No hero image or video yet.</p>
+          )}
+
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <input
+              type="file"
+              accept="image/*,video/mp4,video/webm,video/quicktime,video/x-m4v"
+              disabled={uploading}
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) void uploadHeroMedia(f);
+                e.target.value = "";
+              }}
+              className="block max-w-full font-serif text-[0.82rem] text-black/55 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-3 file:font-serif file:text-[0.78rem] file:font-semibold file:uppercase file:tracking-[0.18em] file:text-white hover:file:bg-homeHero hover:file:text-black sm:file:py-2"
+            />
+            {article.image.trim() ? (
+              <StudioButton type="button" variant="ghost" className="!min-h-10 !px-4" onClick={() => set("image", "")}>
+                Clear hero
+              </StudioButton>
+            ) : null}
+            <StudioButton
+              type="button"
+              variant="ghost"
+              className="!min-h-10 !px-4"
+              onClick={() => setHeroUrlEditorOpen((o) => !o)}
+            >
+              {heroUrlEditorOpen ? "Hide URL field" : "Paste media URL"}
+            </StudioButton>
+          </div>
+
+          {heroUrlEditorOpen ? (
+            <StudioInput
+              value={article.image}
+              onChange={(e) => set("image", e.target.value)}
+              placeholder="https://… (image or video)"
+              className="!mt-3"
+            />
+          ) : null}
         </StudioField>
 
-        <StudioField label="Gallery" hint="One image URL per line — optional">
-          <StudioTextarea value={galleryText} onChange={(e) => setGalleryText(e.target.value)} rows={4} />
+        <StudioField
+          label="Gallery"
+          hint="Add images or videos with the file picker — previews appear below. Reorder with the arrows or remove items. Optional."
+        >
+          <StudioNewsGalleryField
+            items={article.gallery ?? []}
+            onChange={(next) => set("gallery", next.length ? next : undefined)}
+            onError={setError}
+            disabled={saving}
+          />
         </StudioField>
 
         <StudioRichTextEditor
           label="Body"
-          hint="Long-form copy for the article. Formatting (headings, lists, links, emphasis) renders identically on the public site."
+          hint="Headings, lists, quotes, links, inline images, underline, strikethrough, code, rules, undo/redo — matches the public article layout."
           value={bodyHtml}
           onChange={setBodyHtml}
           minRows={10}
+          bodyImageUploadPrefix="news/body"
         />
 
         {error && (

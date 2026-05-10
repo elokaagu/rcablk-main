@@ -109,6 +109,20 @@
   .prose-rcablk blockquote p::after {
     content: "";
   }
+  .prose-rcablk hr {
+    border-color: hsl(0 0% 0% / 0.12);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  .prose-rcablk code {
+    font-size: 0.9em;
+    padding: 0.125rem 0.35rem;
+    border-radius: 0.25rem;
+    background: hsl(0 0% 0% / 0.06);
+  }
+  .prose-rcablk u {
+    text-underline-offset: 0.15em;
+  }
 }
 
 /* Focus styles for accessibility */

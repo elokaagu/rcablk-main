@@ -128,10 +128,11 @@ export function SitePageEditor({ slug }: { slug: string }) {
 
         <StudioRichTextEditor
           label="Body"
-          hint="Format with headings, lists, links and emphasis. Output renders identically on the public site."
+          hint="Full toolbar: headings, lists, quotes, links, images, underline, strikethrough, code, horizontal rules, undo/redo. Renders identically on the live page."
           value={bodyHtml}
           onChange={setBodyHtml}
           minRows={14}
+          bodyImageUploadPrefix="pages/body"
         />
 
         {error && (

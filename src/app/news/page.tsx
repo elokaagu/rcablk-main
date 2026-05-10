@@ -2,7 +2,7 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
 import Link from "next/link";
-import { BlurImage } from "@/components/BlurImage";
+import { ListingCardMedia } from "@/components/ListingCardMedia";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import { getNewsArticles } from "@/lib/cms/news-repo";
@@ -75,7 +75,7 @@ export default async function News() {
                 bottom so nothing sits in a white panel below the image.
               */}
               <article className="relative overflow-hidden rounded-lg bg-black/5 shadow-[0_1px_24px_-18px_rgba(0,0,0,0.20)] transition-shadow duration-500 ease-out group-hover:shadow-[0_18px_44px_-16px_rgba(0,0,0,0.40)]">
-                <BlurImage
+                <ListingCardMedia
                   src={item.image}
                   alt={item.title}
                   aspectRatio={CARD_ASPECTS[i % CARD_ASPECTS.length]}

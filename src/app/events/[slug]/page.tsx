@@ -5,6 +5,7 @@ import PageBackground from "@/components/PageBackground";
 import { ArticleHeader } from "@/components/ArticleHeader";
 import { BlurImage } from "@/components/BlurImage";
 import { EventBody } from "@/components/EventBody";
+import { isVideoMediaUrl } from "@/lib/media-url";
 import { getEvents } from "@/lib/cms/events-repo";
 import type { Metadata } from "next";
 
@@ -53,7 +54,11 @@ export default async function EventDetail({ params }: PageProps) {
             description: event.description || event.body,
             ...(event.date && { startDate: event.date }),
             ...(event.venue && { location: { "@type": "Place", name: event.venue } }),
-            image: event.image.startsWith("/") ? `${baseUrl}${event.image}` : event.image,
+            ...(isVideoMediaUrl(event.image)
+              ? {}
+              : {
+                  image: event.image.startsWith("/") ? `${baseUrl}${event.image}` : event.image,
+                }),
           }),
         }}
       />
@@ -76,9 +81,25 @@ export default async function EventDetail({ params }: PageProps) {
         </h1>
       </div>
 
-      {/* Event Image */}
+      {/* Event Image or video */}
       <div className="flex justify-center px-5 pb-6 sm:px-8">
-        <BlurImage src={event.image} alt={event.name} aspectRatio="4/3" className="mx-auto w-full max-w-2xl rounded-md" sizes="(max-width: 768px) 100vw, 672px" />
+        {isVideoMediaUrl(event.image) ? (
+          <video
+            src={event.image}
+            controls
+            playsInline
+            className="mx-auto aspect-video w-full max-w-2xl rounded-md bg-black object-contain"
+            aria-label={`${event.name} — hero video`}
+          />
+        ) : (
+          <BlurImage
+            src={event.image}
+            alt={event.name}
+            aspectRatio="4/3"
+            className="mx-auto w-full max-w-2xl rounded-md"
+            sizes="(max-width: 768px) 100vw, 672px"
+          />
+        )}
       </div>
 
       {/* Date */}

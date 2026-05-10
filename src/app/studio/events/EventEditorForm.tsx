@@ -13,6 +13,7 @@ import {
 import { StudioDatePicker } from "../_brand/StudioDatePicker";
 import { StudioRichTextEditor } from "../_brand/StudioRichTextEditor";
 import { slugify } from "../_brand/slugify";
+import { isVideoMediaUrl } from "@/lib/media-url";
 
 export function EventEditorForm({
   initial,
@@ -30,6 +31,7 @@ export function EventEditorForm({
   // they type into the slug field directly, we stop syncing so the manual
   // value is preserved. In edit mode the slug field is disabled anyway.
   const [slugTouched, setSlugTouched] = useState(mode === "edit" || Boolean(initial.slug));
+  const [heroUrlEditorOpen, setHeroUrlEditorOpen] = useState(false);
 
   function set<K extends keyof EventData>(key: K, value: EventData[K]) {
     setEvent((prev) => ({ ...prev, [key]: value }));
@@ -48,7 +50,7 @@ export function EventEditorForm({
     set("slug", slugify(value));
   }
 
-  async function uploadImage(file: File) {
+  async function uploadHeroMedia(file: File) {
     setUploading(true);
     setError(null);
     try {
@@ -153,26 +155,78 @@ export function EventEditorForm({
           />
         </div>
 
-        <StudioField label="Image" hint="Paste an image URL or upload one from your computer">
-          <StudioInput value={event.image} onChange={(e) => set("image", e.target.value)} />
-          <input
-            type="file"
-            accept="image/*"
-            disabled={uploading}
-            onChange={(e) => {
-              const f = e.target.files?.[0];
-              if (f) void uploadImage(f);
-            }}
-            className="mt-3 block w-full max-w-full font-serif text-[0.82rem] text-black/55 file:mb-2 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-3 file:font-serif file:text-[0.78rem] file:font-semibold file:uppercase file:tracking-[0.18em] file:text-white hover:file:bg-homeHero hover:file:text-black sm:file:mb-0 sm:file:py-2"
-          />
+        <StudioField
+          label="Hero image or video"
+          hint="Upload an image or video (MP4, WebM, MOV…) — preview updates automatically. Open “Paste media URL” if you need to paste a link."
+        >
+          {event.image.trim() ? (
+            <div className="mt-2 overflow-hidden rounded-md border border-black/15 bg-black/[0.03]">
+              {isVideoMediaUrl(event.image) ? (
+                <video
+                  key={event.image}
+                  src={event.image}
+                  controls
+                  playsInline
+                  className="mx-auto max-h-[min(40vh,22rem)] w-full object-contain"
+                />
+              ) : (
+                /* eslint-disable-next-line @next/next/no-img-element -- arbitrary studio/CMS URLs */
+                <img
+                  key={event.image}
+                  src={event.image}
+                  alt=""
+                  className="mx-auto max-h-[min(40vh,22rem)] w-full object-contain"
+                />
+              )}
+            </div>
+          ) : (
+            <p className="mt-2 font-serif text-[0.9rem] text-black/45">No hero image or video yet.</p>
+          )}
+
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <input
+              type="file"
+              accept="image/*,video/mp4,video/webm,video/quicktime,video/x-m4v"
+              disabled={uploading}
+              onChange={(e) => {
+                const f = e.target.files?.[0];
+                if (f) void uploadHeroMedia(f);
+                e.target.value = "";
+              }}
+              className="block max-w-full font-serif text-[0.82rem] text-black/55 file:mr-3 file:rounded-md file:border-0 file:bg-black file:px-4 file:py-3 file:font-serif file:text-[0.78rem] file:font-semibold file:uppercase file:tracking-[0.18em] file:text-white hover:file:bg-homeHero hover:file:text-black sm:file:py-2"
+            />
+            {event.image.trim() ? (
+              <StudioButton type="button" variant="ghost" className="!min-h-10 !px-4" onClick={() => set("image", "")}>
+                Clear hero
+              </StudioButton>
+            ) : null}
+            <StudioButton
+              type="button"
+              variant="ghost"
+              className="!min-h-10 !px-4"
+              onClick={() => setHeroUrlEditorOpen((o) => !o)}
+            >
+              {heroUrlEditorOpen ? "Hide URL field" : "Paste media URL"}
+            </StudioButton>
+          </div>
+
+          {heroUrlEditorOpen ? (
+            <StudioInput
+              value={event.image}
+              onChange={(e) => set("image", e.target.value)}
+              placeholder="https://… (image or video)"
+              className="!mt-3"
+            />
+          ) : null}
         </StudioField>
 
         <StudioRichTextEditor
           label="Body"
-          hint="Optional long-form copy for the event detail page. Formatting (headings, lists, links, emphasis) renders identically on the public site."
+          hint="Optional detail copy: headings, lists, quotes, links, images, underline, strikethrough, code, rules, undo/redo — same toolbar as news and site pages."
           value={event.body ?? ""}
           onChange={(html) => set("body", html)}
           minRows={8}
+          bodyImageUploadPrefix="events/body"
         />
 
         {error && (

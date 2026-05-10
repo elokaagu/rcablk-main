@@ -14,6 +14,7 @@ import {
 } from "./_brand/StudioBrand";
 import { StudioSchemaSetup } from "./_brand/StudioSchemaSetup";
 import { extractErrorMessage, isSchemaMissingError } from "./_brand/studio-errors";
+import { isVideoMediaUrl } from "@/lib/media-url";
 
 type CountState =
   | { ok: true; value: number; preview?: { src: string; alt: string } }
@@ -73,6 +74,20 @@ function TilePreview({
   fallback: { letter: "B" | "L" | "K"; bg: string };
 }) {
   if (image) {
+    if (isVideoMediaUrl(image.src)) {
+      return (
+        <div className="relative aspect-[3/2] w-full overflow-hidden bg-black">
+          <video
+            src={image.src}
+            muted
+            playsInline
+            className="h-full w-full object-cover opacity-90 transition-opacity duration-500 group-hover:opacity-100"
+            aria-label={image.alt}
+            preload="metadata"
+          />
+        </div>
+      );
+    }
     return (
       <BlurImage
         src={image.src}

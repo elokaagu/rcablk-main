@@ -2,7 +2,7 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
 import Link from "next/link";
-import { BlurImage } from "@/components/BlurImage";
+import { ListingCardMedia } from "@/components/ListingCardMedia";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import { getEvents } from "@/lib/cms/events-repo";
@@ -46,7 +46,7 @@ export default async function Events() {
               href={`/events/${event.slug}`}
               className="group flex min-w-0 flex-col no-underline outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-[#A8C9A7]"
             >
-              <BlurImage
+              <ListingCardMedia
                 src={event.image}
                 alt={event.name}
                 aspectRatio="3/2"
