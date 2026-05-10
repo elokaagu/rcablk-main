@@ -1,7 +1,24 @@
 -- RCA BLK Studio / CMS tables (run in Supabase SQL editor)
--- Requires: Project → Storage → create bucket `media` (public)
+--
+-- Storage: the Studio upload API (`/api/studio/upload`) writes to bucket `media`.
+-- The block below creates that bucket if missing and allows public reads so
+-- `getPublicUrl()` URLs work on the public site. (You can instead create the
+-- bucket manually: Dashboard → Storage → New bucket → name `media` → Public.)
 
 create extension if not exists "pgcrypto";
+
+-- ---------------------------------------------------------------------------
+-- Storage bucket `media` (public read; uploads use service role from API)
+-- ---------------------------------------------------------------------------
+
+insert into storage.buckets (id, name, public)
+values ('media', 'media', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "Public read media objects" on storage.objects;
+create policy "Public read media objects"
+on storage.objects for select
+using (bucket_id = 'media');
 
 create table if not exists public.events (
   id uuid primary key default gen_random_uuid(),

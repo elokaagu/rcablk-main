@@ -31,8 +31,12 @@ export async function POST(req: Request) {
     });
     if (upErr) {
       console.error(upErr);
+      const detail =
+        typeof upErr.message === "string" && upErr.message.trim().length > 0 ? upErr.message.trim() : "";
+      const hint =
+        "Ensure a public Storage bucket named `media` exists (Supabase → Storage → New bucket, or run the Storage block at the top of `supabase/schema.sql`).";
       return NextResponse.json(
-        { error: "Upload failed. Create a public bucket named `media` in Supabase Storage." },
+        { error: detail ? `${detail} ${hint}` : `Upload failed. ${hint}` },
         { status: 500 }
       );
     }
