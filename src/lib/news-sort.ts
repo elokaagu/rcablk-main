@@ -50,6 +50,52 @@ function dateCandidates(raw: string): string[] {
   return [...new Set(out)];
 }
 
+export type NewsListSort = "date-desc" | "date-asc" | "title-asc" | "title-desc";
+
+export function applyNewsListSort(
+  articles: readonly NewsArticle[],
+  sort: NewsListSort,
+): NewsArticle[] {
+  switch (sort) {
+    case "date-desc":
+      return sortNewsArticlesByCalendarDate(articles, "desc");
+    case "date-asc":
+      return sortNewsArticlesByCalendarDate(articles, "asc");
+    case "title-asc":
+      return [...articles].sort(
+        (a, b) =>
+          a.title.localeCompare(b.title, undefined, { sensitivity: "base" }) ||
+          a.slug.localeCompare(b.slug, undefined, { sensitivity: "base" }),
+      );
+    case "title-desc":
+      return [...articles].sort(
+        (a, b) =>
+          b.title.localeCompare(a.title, undefined, { sensitivity: "base" }) ||
+          b.slug.localeCompare(a.slug, undefined, { sensitivity: "base" }),
+      );
+  }
+}
+
+export function filterNewsArticles(
+  articles: readonly NewsArticle[],
+  query: string,
+  category: string,
+): NewsArticle[] {
+  const q = query.trim().toLowerCase();
+  const cat = category.trim().toLowerCase();
+
+  return articles.filter((a) => {
+    if (cat && cat !== "all" && a.category.toLowerCase() !== cat) return false;
+    if (!q) return true;
+    return (
+      a.title.toLowerCase().includes(q) ||
+      a.category.toLowerCase().includes(q) ||
+      a.date.toLowerCase().includes(q) ||
+      a.slug.toLowerCase().includes(q)
+    );
+  });
+}
+
 /** Public index + Studio list: newest editorial calendar date first by default. */
 export function sortNewsArticlesByCalendarDate(
   articles: readonly NewsArticle[],
@@ -60,6 +106,6 @@ export function sortNewsArticlesByCalendarDate(
     const ta = getNewsCalendarTimeMs(a.date);
     const tb = getNewsCalendarTimeMs(b.date);
     if (ta !== tb) return dir * (ta - tb);
-    return a.title.localeCompare(b.title, undefined, { sensitivity: "base" });
+    return dir * a.title.localeCompare(b.title, undefined, { sensitivity: "base" });
   });
 }

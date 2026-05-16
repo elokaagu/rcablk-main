@@ -5,7 +5,14 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
-const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
+const SlideOutMenu = ({
+  iconOnDark = false,
+  /** Renders toggle inside PageHeader instead of fixed to viewport */
+  embedded = false,
+}: {
+  iconOnDark?: boolean;
+  embedded?: boolean;
+}) => {
   const [open, setOpen] = useState(false);
   const [logoLoaded, setLogoLoaded] = useState(false);
   const [menuIconLoaded, setMenuIconLoaded] = useState(false);
@@ -31,16 +38,22 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
       {/* Toggle button - hidden when menu is open to avoid overlap with close button */}
       <button
         onClick={() => setOpen(!open)}
-        className={`fixed z-50 text-foreground hover:opacity-70 transition-opacity flex items-center justify-center w-12 h-12 min-w-[44px] min-h-[44px] ${open ? "pointer-events-none opacity-0" : ""}`}
-        style={{ top: "max(1rem, env(safe-area-inset-top))", right: "max(1rem, env(safe-area-inset-right))" }}
+        className={`z-50 text-foreground hover:opacity-70 transition-opacity flex items-center justify-center min-w-[44px] min-h-[44px] ${
+          embedded ? "relative h-10 w-10" : "fixed w-12 h-12"
+        } ${open ? "pointer-events-none opacity-0" : ""}`}
+        style={
+          embedded
+            ? undefined
+            : { top: "max(1rem, env(safe-area-inset-top))", right: "max(1rem, env(safe-area-inset-right))" }
+        }
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
       >
         <Image
           src="/RCA BLK–MENU ICON.svg"
           alt="Menu"
-          width={32}
-          height={32}
+          width={embedded ? 26 : 32}
+          height={embedded ? 26 : 32}
           loading="lazy"
           onLoad={() => setMenuIconLoaded(true)}
           className={`flex-shrink-0 transition-opacity duration-300 ${

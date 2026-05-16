@@ -10,6 +10,8 @@ interface Props {
 
 export default async function EditEventPage({ params }: Props) {
   const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
+
   if (!isCmsConfigured()) {
     return (
       <div className="space-y-10">
@@ -18,14 +20,19 @@ export default async function EditEventPage({ params }: Props) {
           title="Edit event"
           back={{ href: "/studio/events", label: "Events" }}
         />
+
         <StudioNotice tone="warn" title="Supabase not configured">
           Configure Supabase first.
         </StudioNotice>
       </div>
     );
   }
-  const event = await getEventBySlugAdmin(decodeURIComponent(slug));
-  if (!event) notFound();
+
+  const event = await getEventBySlugAdmin(decodedSlug);
+
+  if (!event) {
+    notFound();
+  }
 
   return (
     <div className="space-y-10">
@@ -35,6 +42,7 @@ export default async function EditEventPage({ params }: Props) {
         description="Edit the public-facing programme entry. Changes take effect on save."
         back={{ href: "/studio/events", label: "Events" }}
       />
+
       <EventEditorForm initial={event} mode="edit" />
     </div>
   );

@@ -4,13 +4,13 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { NewsletterSignup } from "@/components/NewsletterSignup";
 
 const Footer = () => {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [logoLoaded, setLogoLoaded] = useState(false);
 
-  /** Full footer on inner pages — primary nav lives in the homepage letterforms. */
   const columns = [
     {
       items: ["Royal College of Art", "Kensington Gore", "London, SW7 2EU"],
@@ -46,12 +46,12 @@ const Footer = () => {
         style={{ paddingBottom: "max(2rem, env(safe-area-inset-bottom))" }}
       >
         <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-start md:justify-between">
-          <div className="max-w-xs font-serif text-sm leading-relaxed text-white/75">
+          <div className="max-w-xs font-serif text-sm leading-snug tracking-brand text-white/75">
             <p>Royal College of Art</p>
             <p>Kensington Gore</p>
             <p>London, SW7 2EU</p>
           </div>
-          <div className="flex flex-wrap gap-x-6 gap-y-2 font-serif text-sm">
+          <div className="flex flex-wrap gap-x-6 gap-y-2 font-serif text-sm tracking-brand">
             <Link href="/accessibility" className="text-white/80 underline-offset-4 hover:text-white hover:underline">
               Accessibility
             </Link>
@@ -101,28 +101,34 @@ const Footer = () => {
 
   return (
     <footer
-      className="bg-secondary text-secondary-foreground px-5 py-8 sm:px-8 sm:py-10"
-      style={{ paddingBottom: "max(2rem, env(safe-area-inset-bottom))" }}
+      className="bg-black px-5 py-10 text-white sm:px-8 sm:py-12"
+      style={{ paddingBottom: "max(2.5rem, env(safe-area-inset-bottom))" }}
     >
-      <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-10">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-[0.95rem] leading-snug sm:grid-cols-4 sm:gap-x-8 sm:text-base md:flex-1">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10 md:flex-row md:items-start md:justify-between md:gap-12">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-3 text-[0.95rem] leading-snug tracking-brand sm:grid-cols-4 sm:gap-x-10 sm:text-base md:flex-1">
           {columns.map((col, i) => (
             <div key={i} className="flex min-w-0 flex-col gap-2">
               {col.items.map((item, j) =>
                 typeof item === "string" ? (
-                  <span key={j} className="break-words">{item}</span>
+                  <span key={j} className="break-words text-white/85">
+                    {item}
+                  </span>
                 ) : "external" in item && item.external ? (
                   <a
                     key={j}
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cursor-pointer break-words hover:underline"
+                    className="cursor-pointer break-words text-white/90 underline decoration-white/40 underline-offset-[0.22em] hover:text-white"
                   >
                     {item.label}
                   </a>
                 ) : (
-                  <Link key={j} href={item.href} className="cursor-pointer break-words no-underline hover:underline">
+                  <Link
+                    key={j}
+                    href={item.href}
+                    className="cursor-pointer break-words text-white/90 no-underline hover:underline hover:underline-offset-[0.22em]"
+                  >
                     {item.label}
                   </Link>
                 )
@@ -130,7 +136,9 @@ const Footer = () => {
             </div>
           ))}
         </div>
-        <div className="flex shrink-0 items-start justify-start md:justify-end">
+
+        <div className="flex flex-col gap-8 sm:flex-row sm:items-end sm:justify-between md:flex-col md:items-end">
+          <NewsletterSignup variant="dark" />
           <Image
             src="/rca_logo.png"
             alt="Royal College of Art"
@@ -138,7 +146,7 @@ const Footer = () => {
             height={60}
             loading="lazy"
             onLoad={() => setLogoLoaded(true)}
-            className={`h-10 w-auto object-contain transition-all duration-700 ease-out sm:h-12 md:h-14 ${
+            className={`h-10 w-auto object-contain invert transition-all duration-700 ease-out sm:h-12 ${
               logoLoaded ? "opacity-100 blur-0" : "opacity-60 blur-md"
             }`}
           />

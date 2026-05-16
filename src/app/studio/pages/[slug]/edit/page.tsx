@@ -9,8 +9,8 @@ interface Props {
 
 export default async function StudioPageEdit({ params }: Props) {
   const { slug } = await params;
-  const decoded = decodeURIComponent(slug);
-  const defaults = getSitePageDefaults(decoded);
+  const pageSlug = decodeURIComponent(slug);
+  const defaults = getSitePageDefaults(pageSlug);
 
   if (!defaults) {
     // Editor only knows how to manage pages we've registered; unknown slugs
@@ -27,7 +27,7 @@ export default async function StudioPageEdit({ params }: Props) {
         description={`Edit the on-site copy for ${defaults.path}. Formatting renders identically on the public site.`}
         back={{ href: "/studio/pages", label: "Site pages" }}
       />
-      <SitePageEditor slug={decoded} />
+      <SitePageEditor slug={pageSlug} />
     </div>
   );
 }

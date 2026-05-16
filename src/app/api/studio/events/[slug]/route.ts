@@ -1,51 +1,90 @@
 import { NextResponse } from "next/server";
-import type { EventData } from "@/data/events";
-import { deleteEventAdmin, getEventBySlugAdmin, upsertEventAdmin } from "@/lib/cms/events-repo";
-import { requireStudioCookie } from "@/lib/studio/auth-route";
-import { isCmsConfigured } from "@/lib/cms/supabase-admin";
+import { isValidEventPayload } from "@/lib/cms/event-payload";
+import {
+  deleteEventAdmin,
+  getEventBySlugAdmin,
+  upsertEventAdmin,
+} from "@/lib/cms/events-repo";
+import { guardStudioRoute } from "@/lib/studio/guard-studio-route";
 
 interface Ctx {
   params: Promise<{ slug: string }>;
 }
 
-export async function GET(_req: Request, ctx: Ctx) {
-  const auth = await requireStudioCookie();
-  if (auth) return auth;
-  if (!isCmsConfigured()) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
+async function getDecodedSlug(ctx: Ctx) {
   const { slug } = await ctx.params;
-  const event = await getEventBySlugAdmin(decodeURIComponent(slug));
-  if (!event) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return decodeURIComponent(slug);
+}
+
+export async function GET(_req: Request, ctx: Ctx) {
+  const guard = await guardStudioRoute();
+
+  if (guard) {
+    return guard;
+  }
+
+  const slug = await getDecodedSlug(ctx);
+  const event = await getEventBySlugAdmin(slug);
+
+  if (!event) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   return NextResponse.json(event);
 }
 
 export async function PUT(req: Request, ctx: Ctx) {
-  const auth = await requireStudioCookie();
-  if (auth) return auth;
-  if (!isCmsConfigured()) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
-  const { slug } = await ctx.params;
+  const guard = await guardStudioRoute();
+
+  if (guard) {
+    return guard;
+  }
+
+  const slug = await getDecodedSlug(ctx);
+
   try {
-    const body = (await req.json()) as { event: EventData };
-    if (body.event.slug !== decodeURIComponent(slug)) {
+    const body = await req.json();
+
+    if (!isValidEventPayload(body)) {
+      return NextResponse.json({ error: "Invalid event payload" }, { status: 400 });
+    }
+
+    if (body.event.slug !== slug) {
       return NextResponse.json({ error: "Slug mismatch" }, { status: 400 });
     }
+
     await upsertEventAdmin(body.event);
-    return NextResponse.json({ ok: true });
-  } catch (e) {
-    console.error(e);
+
+    return NextResponse.json({
+      ok: true,
+      event: body.event,
+    });
+  } catch (error) {
+    console.error("Failed to update event", error);
+
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
 }
 
 export async function DELETE(_req: Request, ctx: Ctx) {
-  const auth = await requireStudioCookie();
-  if (auth) return auth;
-  if (!isCmsConfigured()) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
-  const { slug } = await ctx.params;
+  const guard = await guardStudioRoute();
+
+  if (guard) {
+    return guard;
+  }
+
+  const slug = await getDecodedSlug(ctx);
+
   try {
-    await deleteEventAdmin(decodeURIComponent(slug));
-    return NextResponse.json({ ok: true });
-  } catch (e) {
-    console.error(e);
+    await deleteEventAdmin(slug);
+
+    return NextResponse.json({
+      ok: true,
+      slug,
+    });
+  } catch (error) {
+    console.error("Failed to delete event", error);
+
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }

@@ -1,37 +1,63 @@
 import { NextResponse } from "next/server";
-import type { SitePageRecord } from "@/lib/cms/pages-repo";
+import { isValidPagePayload } from "@/lib/cms/page-payload";
 import { getSitePageAdmin, upsertSitePageAdmin } from "@/lib/cms/pages-repo";
-import { isCmsConfigured } from "@/lib/cms/supabase-admin";
-import { requireStudioCookie } from "@/lib/studio/auth-route";
+import { guardStudioRoute } from "@/lib/studio/guard-studio-route";
 
 interface Ctx {
   params: Promise<{ slug: string }>;
 }
 
-export async function GET(_req: Request, ctx: Ctx) {
-  const auth = await requireStudioCookie();
-  if (auth) return auth;
-  if (!isCmsConfigured()) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
+async function getDecodedSlug(ctx: Ctx) {
   const { slug } = await ctx.params;
-  const page = await getSitePageAdmin(decodeURIComponent(slug));
-  if (!page) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return decodeURIComponent(slug);
+}
+
+export async function GET(_req: Request, ctx: Ctx) {
+  const guard = await guardStudioRoute();
+
+  if (guard) {
+    return guard;
+  }
+
+  const slug = await getDecodedSlug(ctx);
+  const page = await getSitePageAdmin(slug);
+
+  if (!page) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   return NextResponse.json(page);
 }
 
 export async function PUT(req: Request, ctx: Ctx) {
-  const auth = await requireStudioCookie();
-  if (auth) return auth;
-  if (!isCmsConfigured()) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
-  const { slug } = await ctx.params;
+  const guard = await guardStudioRoute();
+
+  if (guard) {
+    return guard;
+  }
+
+  const slug = await getDecodedSlug(ctx);
+
   try {
-    const body = (await req.json()) as { page: SitePageRecord };
-    if (body.page.slug !== decodeURIComponent(slug)) {
+    const body = await req.json();
+
+    if (!isValidPagePayload(body)) {
+      return NextResponse.json({ error: "Valid page payload is required" }, { status: 400 });
+    }
+
+    if (body.page.slug !== slug) {
       return NextResponse.json({ error: "Slug mismatch" }, { status: 400 });
     }
+
     await upsertSitePageAdmin(body.page);
-    return NextResponse.json({ ok: true });
-  } catch (e) {
-    console.error(e);
+
+    return NextResponse.json({
+      ok: true,
+      page: body.page,
+    });
+  } catch (error) {
+    console.error("Failed to save site page", error);
+
     return NextResponse.json({ error: "Failed to save page" }, { status: 500 });
   }
 }

@@ -1,74 +1,92 @@
-import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
+import { PageHeader } from "@/components/PageHeader";
+import { PageTitle } from "@/components/PageTitle";
 import { AlumniName } from "@/components/AlumniName";
-import { AlumniPreviewAside, AlumniPreviewProvider } from "@/components/alumni/AlumniPreviewContext";
+import {
+  AlumniPreviewAside,
+  AlumniPreviewProvider,
+} from "@/components/alumni/AlumniPreviewContext";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
-import { foundingMembers, alumni } from "@/data/alumni";
+import { foundingMembers, alumni, type AlumniMember } from "@/data/alumni";
+import { brand } from "@/lib/brand-colors";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Alumni | RCA BLK",
-  description: "RCA BLK founding members and alumni. Artists and practitioners of Black and African heritage.",
-  openGraph: { title: "Alumni | RCA BLK" },
+  description:
+    "RCA BLK founding members and alumni. Artists and practitioners of Black and African heritage.",
+  openGraph: {
+    title: "Alumni | RCA BLK",
+    description:
+      "RCA BLK founding members and alumni. Artists and practitioners of Black and African heritage.",
+  },
 };
 
-const NameList = ({ members }: { members: typeof foundingMembers }) => {
-  const col1 = members.filter((_, i) => i % 2 === 0);
-  const col2 = members.filter((_, i) => i % 2 === 1);
+type NameListProps = {
+  members: AlumniMember[];
+};
+
+function memberListKey(member: AlumniMember, index: number) {
+  return member.link ? `${member.name}::${member.link}` : `${member.name}::${index}`;
+}
+
+const NameList = ({ members }: NameListProps) => {
   return (
-    <div className="grid grid-cols-2 gap-x-4 sm:gap-x-16 gap-y-1">
-      <div className="flex flex-col gap-1">
-        {col1.map((m, i) => (
-          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} />
-        ))}
-      </div>
-      <div className="flex flex-col gap-1">
-        {col2.map((m, i) => (
-          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} />
-        ))}
-      </div>
-    </div>
+    <ul className="columns-2 gap-x-6 space-y-1 sm:gap-x-10">
+      {members.map((member, index) => (
+        <li key={memberListKey(member, index)} className="break-inside-avoid">
+          <AlumniName
+            name={member.name}
+            snapshot={member.snapshot}
+            link={member.link}
+          />
+        </li>
+      ))}
+    </ul>
   );
 };
 
 export default function Alumni() {
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(207, 70%, 85%)" }}>
-      <PageBackground color="hsl(207, 70%, 85%)" />
-      <SlideOutMenu />
+    <div className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden bg-brand-blue text-black">
+      <PageBackground color={brand.blue} />
+      <PageHeader />
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>
-        <div
-          className="px-5 pb-6 pt-12 text-center sm:py-10"
-          style={{ paddingTop: "max(3rem, calc(env(safe-area-inset-top) + 2rem))" }}
-        >
-          <h2 className="font-display text-2xl font-normal text-foreground sm:text-3xl">Alumni</h2>
-        </div>
+        <header className="px-6 pb-8 pt-10 text-center sm:px-10 sm:py-12">
+          <PageTitle>Alumni</PageTitle>
+        </header>
       </AnimateIn>
 
       <AlumniPreviewProvider>
-        <main className="mx-auto w-full max-w-6xl flex-1 px-5 pb-12 sm:px-10 sm:pb-16 lg:px-12">
-          {/*
-            Mobile: founding → preview strip → alumni (nothing overlays the lists).
-            lg+: names in column 1; sticky preview in the right margin (column 2, spans both rows).
-          */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-x-14 lg:items-start">
-            <AnimateStagger delay={0.3} stagger={0.08} className="min-w-0 space-y-6 lg:col-start-1 lg:row-start-1">
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
-                <h3 className="text-xl font-medium italic text-foreground">Founding Members</h3>
+        <main className="mx-auto w-full max-w-6xl flex-1 px-6 pb-14 sm:px-10 sm:pb-16 lg:px-14">
+          <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start lg:gap-x-12">
+            <AnimateStagger
+              delay={0.3}
+              stagger={0.08}
+              className="min-w-0 space-y-8 lg:col-start-1 lg:row-start-1"
+            >
+              <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
+                <h2 className="text-xl font-medium italic tracking-brand text-black">
+                  Founding Members
+                </h2>
                 <NameList members={foundingMembers} />
-              </div>
+              </section>
             </AnimateStagger>
 
             <AlumniPreviewAside />
 
-            <AnimateStagger delay={0.38} stagger={0.08} className="min-w-0 space-y-6 lg:col-start-1 lg:row-start-2">
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
-                <h3 className="text-xl font-medium italic text-foreground">Alumni</h3>
+            <AnimateStagger
+              delay={0.38}
+              stagger={0.08}
+              className="min-w-0 space-y-8 lg:col-start-1 lg:row-start-2"
+            >
+              <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
+                <h2 className="text-xl font-medium italic tracking-brand text-black">Alumni</h2>
                 <NameList members={alumni} />
-              </div>
+              </section>
             </AnimateStagger>
           </div>
         </main>
@@ -78,3 +96,4 @@ export default function Alumni() {
     </div>
   );
 }
+

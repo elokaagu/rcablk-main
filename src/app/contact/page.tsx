@@ -1,9 +1,10 @@
 import Link from "next/link";
-import SlideOutMenu from "@/components/SlideOutMenu";
-import PageBackground from "@/components/PageBackground";
+import { PageHeader } from "@/components/PageHeader";
+import { DesignCredits } from "@/components/DesignCredits";
 import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
 import { ContactNewsletterForm } from "./ContactNewsletterForm";
+import { brand } from "@/lib/brand-colors";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,11 +13,10 @@ export const metadata: Metadata = {
   openGraph: { title: "Contact | RCA BLK" },
 };
 
-// Reference-matched coral. Slightly redder than the Support coral (#F3916B)
-// so Contact has its own identity within the brand colour family.
-const CONTACT_BG = "#DC5C4A";
+const CONTACT_BG = brand.coral;
 
 const HERO_IMAGE = "/assets/event-seriki.jpg";
+const HERO_ALT = "RCA BLK event photography at an exhibition opening";
 
 /* ------------------------------------------------------------------ */
 /* Building blocks                                                     */
@@ -37,7 +37,7 @@ function Wordmark() {
 function AddressBlock() {
   return (
     <address className="not-italic">
-      <p className="font-serif text-[1.05rem] leading-[1.55] text-black sm:text-[1.1rem]">
+      <p className="font-serif text-[1.05rem] leading-[1.35] tracking-brand text-black sm:text-[1.1rem]">
         RCA BLK
         <br />
         Royal College of Art
@@ -53,7 +53,7 @@ function AddressBlock() {
           href="mailto:rcablk@rca.ac.uk"
           className="group/lnk inline-flex w-fit items-center gap-1.5"
         >
-          <span className="border-b border-black pb-0.5 transition-opacity group-hover/lnk:opacity-70">
+          <span className="link-offset-underline transition-opacity group-hover/lnk:opacity-70">
             rcablk@rca.ac.uk
           </span>
         </a>
@@ -63,7 +63,7 @@ function AddressBlock() {
           rel="noopener noreferrer"
           className="group/lnk inline-flex w-fit items-center gap-1.5"
         >
-          <span className="border-b border-black pb-0.5 transition-opacity group-hover/lnk:opacity-70">
+          <span className="link-offset-underline transition-opacity group-hover/lnk:opacity-70">
             rcablk.com
           </span>
         </a>
@@ -72,43 +72,25 @@ function AddressBlock() {
   );
 }
 
-function CircularHero({ className = "" }: { className?: string }) {
+function CircularHero({
+  className = "",
+  priority = false,
+}: {
+  className?: string;
+  priority?: boolean;
+}) {
   return (
-    <div className={`relative aspect-square w-full overflow-hidden rounded-full ${className}`}>
+    <div
+      className={`relative aspect-square w-full overflow-hidden rounded-full ${className}`}
+    >
       <BlurImage
         src={HERO_IMAGE}
-        alt=""
+        alt={HERO_ALT}
         aspectRatio="1/1"
         sizes="(max-width: 1024px) 80vmin, 60vmin"
-        priority
+        priority={priority}
       />
     </div>
-  );
-}
-
-function Credits({ className = "" }: { className?: string }) {
-  return (
-    <dl
-      className={`flex flex-col gap-1 font-serif text-[1rem] leading-snug text-black sm:text-[1.05rem] ${className}`}
-    >
-      <div className="flex gap-2">
-        <dt className="font-normal">Identity:</dt>
-        <dd>Studio Frith</dd>
-      </div>
-      <div className="flex gap-2">
-        <dt className="font-normal">Web Development :</dt>
-        <dd>
-          <a
-            href="https://www.satellitelabs.xyz"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border-b border-black/40 transition-colors hover:border-black"
-          >
-            Satellite Labs
-          </a>
-        </dd>
-      </div>
-    </dl>
   );
 }
 
@@ -122,19 +104,11 @@ export default function Contact() {
       className="relative min-h-screen w-full overflow-hidden text-black"
       style={{ backgroundColor: CONTACT_BG }}
     >
-      <PageBackground color={CONTACT_BG} />
-      <SlideOutMenu />
+      <h1 className="sr-only">Contact RCA BLK</h1>
 
-      {/* ----------------------------------------------------------- */}
-      {/* Mobile / tablet — vertical stack                            */}
-      {/* ----------------------------------------------------------- */}
-      <div
-        className="flex min-h-screen flex-col gap-10 px-5 pb-16 sm:gap-14 sm:px-10 sm:pb-20 lg:hidden"
-        style={{
-          paddingTop: "max(5rem, calc(env(safe-area-inset-top) + 4rem))",
-          paddingBottom: "max(4rem, env(safe-area-inset-bottom))",
-        }}
-      >
+      <PageHeader />
+
+      <div className="flex min-h-screen flex-col gap-10 px-5 pb-16 safe-bottom-padding sm:gap-14 sm:px-10 sm:pb-20 lg:hidden">
         <AnimateIn delay={0.05} duration={0.7} y={10}>
           <div className="flex flex-col gap-8">
             <Wordmark />
@@ -144,7 +118,7 @@ export default function Contact() {
 
         <AnimateIn delay={0.18} duration={0.85} y={14} className="self-center">
           <div className="w-[min(82vmin,28rem)]">
-            <CircularHero />
+            <CircularHero priority />
           </div>
         </AnimateIn>
 
@@ -153,15 +127,11 @@ export default function Contact() {
         </AnimateIn>
 
         <AnimateIn delay={0.32} duration={0.7} y={10}>
-          <Credits />
+          <DesignCredits />
         </AnimateIn>
       </div>
 
-      {/* ----------------------------------------------------------- */}
-      {/* Desktop — corner-anchored layout matching the reference      */}
-      {/* ----------------------------------------------------------- */}
       <div className="relative hidden min-h-screen lg:block">
-        {/* Top-left: wordmark + address */}
         <AnimateIn
           delay={0.06}
           duration={0.75}
@@ -174,8 +144,6 @@ export default function Contact() {
           </div>
         </AnimateIn>
 
-        {/* Centre — large circular hero. The wrapper is pointer-events-none so
-            the corner content beneath the visual circle stays interactive. */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center px-12 py-20">
           <AnimateIn delay={0.18} duration={0.95} y={20} className="pointer-events-auto">
             <div className="aspect-square w-[min(58vmin,560px)]">
@@ -184,7 +152,6 @@ export default function Contact() {
           </AnimateIn>
         </div>
 
-        {/* Bottom-left: newsletter */}
         <AnimateIn
           delay={0.28}
           duration={0.75}
@@ -194,14 +161,13 @@ export default function Contact() {
           <ContactNewsletterForm />
         </AnimateIn>
 
-        {/* Bottom-right: credits */}
         <AnimateIn
           delay={0.32}
           duration={0.75}
           y={10}
           className="absolute bottom-12 right-12 xl:bottom-16 xl:right-16"
         >
-          <Credits className="items-end text-right" />
+          <DesignCredits className="items-end text-right" />
         </AnimateIn>
       </div>
     </div>

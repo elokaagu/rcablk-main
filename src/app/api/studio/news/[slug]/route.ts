@@ -1,69 +1,119 @@
 import { NextResponse } from "next/server";
-import type { NewsArticle } from "@/data/news";
 import { slugify } from "@/app/studio/_brand/slugify";
-import { deleteNewsAdmin, getNewsBySlugAdmin, upsertNewsAdmin } from "@/lib/cms/news-repo";
-import { requireStudioCookie } from "@/lib/studio/auth-route";
-import { isCmsConfigured } from "@/lib/cms/supabase-admin";
+import { isValidNewsPayload } from "@/lib/cms/news-payload";
+import {
+  deleteNewsAdmin,
+  getNewsBySlugAdmin,
+  renameNewsAdmin,
+  upsertNewsAdmin,
+} from "@/lib/cms/news-repo";
+import { guardStudioRoute } from "@/lib/studio/guard-studio-route";
 
 interface Ctx {
   params: Promise<{ slug: string }>;
 }
 
-export async function GET(_req: Request, ctx: Ctx) {
-  const auth = await requireStudioCookie();
-  if (auth) return auth;
-  if (!isCmsConfigured()) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
+async function getDecodedSlug(ctx: Ctx) {
   const { slug } = await ctx.params;
-  const article = await getNewsBySlugAdmin(decodeURIComponent(slug));
-  if (!article) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  return decodeURIComponent(slug);
+}
+
+export async function GET(_req: Request, ctx: Ctx) {
+  const guard = await guardStudioRoute();
+
+  if (guard) {
+    return guard;
+  }
+
+  const slug = await getDecodedSlug(ctx);
+  const article = await getNewsBySlugAdmin(slug);
+
+  if (!article) {
+    return NextResponse.json({ error: "Not found" }, { status: 404 });
+  }
+
   return NextResponse.json(article);
 }
 
 export async function PUT(req: Request, ctx: Ctx) {
-  const auth = await requireStudioCookie();
-  if (auth) return auth;
-  if (!isCmsConfigured()) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
-  const originalSlug = decodeURIComponent((await ctx.params).slug);
+  const guard = await guardStudioRoute();
+
+  if (guard) {
+    return guard;
+  }
+
+  const originalSlug = await getDecodedSlug(ctx);
+
   try {
-    const body = (await req.json()) as { article: NewsArticle };
-    const nextSlug = slugify(body.article.slug ?? "");
+    const body = await req.json();
+
+    if (!isValidNewsPayload(body)) {
+      return NextResponse.json(
+        { error: "Valid article with slug is required" },
+        { status: 400 }
+      );
+    }
+
+    const nextSlug = slugify(body.article.slug);
+
     if (!nextSlug) {
       return NextResponse.json({ error: "Slug is required" }, { status: 400 });
     }
 
+    const article = { ...body.article, slug: nextSlug };
+
     if (nextSlug !== originalSlug) {
-      // Rename: ensure the new slug isn't already taken by another article,
-      // then write the new row and remove the old one.
       const collision = await getNewsBySlugAdmin(nextSlug);
+
       if (collision) {
         return NextResponse.json(
           { error: `Slug “${nextSlug}” is already used by another article.` },
-          { status: 409 },
+          { status: 409 }
         );
       }
-      await upsertNewsAdmin({ ...body.article, slug: nextSlug });
-      await deleteNewsAdmin(originalSlug);
-      return NextResponse.json({ ok: true, slug: nextSlug });
+
+      await renameNewsAdmin(originalSlug, article);
+
+      return NextResponse.json({
+        ok: true,
+        slug: nextSlug,
+        article,
+      });
     }
 
-    await upsertNewsAdmin({ ...body.article, slug: nextSlug });
-    return NextResponse.json({ ok: true, slug: nextSlug });
-  } catch (e) {
-    console.error(e);
+    await upsertNewsAdmin(article);
+
+    return NextResponse.json({
+      ok: true,
+      slug: nextSlug,
+      article,
+    });
+  } catch (error) {
+    console.error("Failed to update news article", error);
+
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
 }
 
 export async function DELETE(_req: Request, ctx: Ctx) {
-  const auth = await requireStudioCookie();
-  if (auth) return auth;
-  if (!isCmsConfigured()) return NextResponse.json({ error: "Supabase not configured" }, { status: 503 });
-  const { slug } = await ctx.params;
+  const guard = await guardStudioRoute();
+
+  if (guard) {
+    return guard;
+  }
+
+  const slug = await getDecodedSlug(ctx);
+
   try {
-    await deleteNewsAdmin(decodeURIComponent(slug));
-    return NextResponse.json({ ok: true });
-  } catch (e) {
-    console.error(e);
+    await deleteNewsAdmin(slug);
+
+    return NextResponse.json({
+      ok: true,
+      slug,
+    });
+  } catch (error) {
+    console.error("Failed to delete news article", error);
+
     return NextResponse.json({ error: "Failed to delete" }, { status: 500 });
   }
 }

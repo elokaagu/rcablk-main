@@ -1,15 +1,6 @@
-import type { NewsArticle } from "@/data/news";
+import { createEmptyNewsArticle } from "@/data/news";
 import { NewsEditorForm } from "../NewsEditorForm";
 import { StudioPageHeader } from "../../_brand/StudioBrand";
-
-const empty: NewsArticle = {
-  slug: "",
-  title: "",
-  category: "Announcement",
-  date: "",
-  image: "",
-  body: [],
-};
 
 export default function NewNewsPage() {
   return (
@@ -20,7 +11,8 @@ export default function NewNewsPage() {
         description="Add a new announcement or article to the public news index."
         back={{ href: "/studio/news", label: "News" }}
       />
-      <NewsEditorForm initial={empty} mode="new" />
+
+      <NewsEditorForm initial={createEmptyNewsArticle()} mode="new" />
     </div>
   );
 }

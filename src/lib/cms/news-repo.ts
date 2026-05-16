@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { NewsArticle } from "@/data/news";
 import { newsArticles as staticNews } from "@/data/news";
 import { sortNewsArticlesByCalendarDate } from "@/lib/news-sort";
@@ -48,8 +49,7 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
 
     const { data, error } = await anon
       .from("news_articles")
-      .select("slug,title,category,date,image,gallery,body")
-      .order("updated_at", { ascending: false });
+      .select("slug,title,category,date,image,gallery,body");
 
     if (error || !data?.length) return sortNewsArticlesByCalendarDate(staticNews, "desc");
 
@@ -62,6 +62,34 @@ export async function getNewsArticles(): Promise<NewsArticle[]> {
     return sortNewsArticlesByCalendarDate(staticNews, "desc");
   }
 }
+
+/** Public site: single article by slug (Supabase row or static fallback). */
+export const getNewsBySlug = cache(async function getNewsBySlug(
+  slug: string,
+): Promise<NewsArticle | null> {
+  try {
+    const anon = createSupabaseAnon();
+
+    if (anon) {
+      const { data, error } = await anon
+        .from("news_articles")
+        .select("slug,title,category,date,image,gallery,body")
+        .eq("slug", slug)
+        .maybeSingle();
+
+      if (!error && data) {
+        const article = rowToArticle(data);
+        if (article) {
+          return article;
+        }
+      }
+    }
+  } catch {
+    // fall through to bundled data
+  }
+
+  return staticNews.find((article) => article.slug === slug) ?? null;
+});
 
 export async function listNewsAdmin(): Promise<NewsArticle[]> {
   const supabase = createSupabaseAdmin();
@@ -110,5 +138,22 @@ export async function upsertNewsAdmin(article: NewsArticle): Promise<void> {
 export async function deleteNewsAdmin(slug: string): Promise<void> {
   const supabase = createSupabaseAdmin();
   const { error } = await supabase.from("news_articles").delete().eq("slug", slug);
+  if (error) throw error;
+}
+
+/** Update slug and fields in one write (avoids upsert+delete duplicate risk). */
+export async function renameNewsAdmin(originalSlug: string, article: NewsArticle): Promise<void> {
+  const supabase = createSupabaseAdmin();
+  const row = {
+    slug: article.slug,
+    title: article.title,
+    category: article.category,
+    date: article.date,
+    image: article.image,
+    gallery: article.gallery ?? null,
+    body: article.body,
+    updated_at: new Date().toISOString(),
+  };
+  const { error } = await supabase.from("news_articles").update(row).eq("slug", originalSlug);
   if (error) throw error;
 }

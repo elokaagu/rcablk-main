@@ -10,6 +10,8 @@ interface Props {
 
 export default async function EditNewsPage({ params }: Props) {
   const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
+
   if (!isCmsConfigured()) {
     return (
       <div className="space-y-10">
@@ -18,14 +20,19 @@ export default async function EditNewsPage({ params }: Props) {
           title="Edit article"
           back={{ href: "/studio/news", label: "News" }}
         />
+
         <StudioNotice tone="warn" title="Supabase not configured">
           Configure Supabase first.
         </StudioNotice>
       </div>
     );
   }
-  const article = await getNewsBySlugAdmin(decodeURIComponent(slug));
-  if (!article) notFound();
+
+  const article = await getNewsBySlugAdmin(decodedSlug);
+
+  if (!article) {
+    notFound();
+  }
 
   return (
     <div className="space-y-10">
@@ -35,6 +42,7 @@ export default async function EditNewsPage({ params }: Props) {
         description="Edit the public-facing article. Changes take effect on save."
         back={{ href: "/studio/news", label: "News" }}
       />
+
       <NewsEditorForm initial={article} mode="edit" />
     </div>
   );
