@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "node:path";
 
 function supabaseImageHost(): string | null {
   const u = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -13,6 +14,8 @@ function supabaseImageHost(): string | null {
 const host = supabaseImageHost();
 
 const nextConfig: NextConfig = {
+  // Parent directory also has a package-lock.json; pin tracing to this app.
+  outputFileTracingRoot: path.join(process.cwd()),
   images: {
     remotePatterns: host
       ? [{ protocol: "https", hostname: host, pathname: "/storage/v1/object/public/**" }]

@@ -1,6 +1,7 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
+import { VerticalLogotypeBackdrop } from "@/components/VerticalLogotypeBackdrop";
 import { SitePageBody } from "@/components/SitePageBody";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
@@ -24,32 +25,37 @@ export default async function Resources() {
 
   return (
     <div
-      className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0"
+      className="relative flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden"
       style={{ backgroundColor: "#FAF05A" }}
     >
       <PageBackground color="#FAF05A" />
+      <VerticalLogotypeBackdrop />
       <SlideOutMenu />
 
-      <AnimateIn delay={0.2} duration={0.6} y={20}>
-        <div
-          className="px-5 pb-6 pt-12 text-center sm:py-10"
-          style={{ paddingTop: "max(3rem, calc(env(safe-area-inset-top) + 2rem))" }}
-        >
-          <h2 className="px-2 font-display text-2xl font-normal text-foreground sm:text-3xl">{heading}</h2>
-        </div>
-      </AnimateIn>
+      <div className="relative z-10 flex min-h-0 flex-1 flex-col">
+        <AnimateIn delay={0.2} duration={0.6} y={20}>
+          <div
+            className="px-5 pb-6 pt-12 text-center sm:py-10"
+            style={{ paddingTop: "max(3rem, calc(env(safe-area-inset-top) + 2rem))" }}
+          >
+            <h2 className="px-2 font-display text-2xl font-normal text-foreground sm:text-3xl">{heading}</h2>
+          </div>
+        </AnimateIn>
 
-      <main className="mx-auto w-full max-w-2xl flex-1 px-5 pb-12 sm:px-10 sm:pb-16 lg:px-12">
-        <AnimateStagger
-          delay={0.3}
-          stagger={0.08}
-          className="space-y-6 text-base leading-relaxed text-foreground sm:space-y-8 sm:text-lg md:text-xl"
-        >
-          <SitePageBody paragraphs={paragraphs} />
-        </AnimateStagger>
-      </main>
+        <main className="mx-auto w-full max-w-2xl flex-1 px-5 pb-12 sm:px-10 sm:pb-16 lg:px-12">
+          <AnimateStagger
+            delay={0.3}
+            stagger={0.08}
+            className="space-y-6 text-base leading-relaxed text-foreground sm:space-y-8 sm:text-lg md:text-xl"
+          >
+            <SitePageBody paragraphs={paragraphs} />
+          </AnimateStagger>
+        </main>
+      </div>
 
-      <Footer />
+      <div className="relative z-10">
+        <Footer />
+      </div>
     </div>
   );
 }

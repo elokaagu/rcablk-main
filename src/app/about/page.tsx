@@ -10,7 +10,7 @@ import { getSitePage, pickLiveSiteTitle } from "@/lib/cms/pages-repo";
 import Image from "next/image";
 import type { Metadata } from "next";
 
-const ABOUT_SEAM_LOGO = "/1_RGB Logotype/Stepped Logotype/RCA BLK–Logotype-Black.png";
+const ABOUT_SEAM_LOGO = "/1_RGB Logotype/Square Logotype/RCA BLK–Logotype-Black.png";
 
 export const metadata: Metadata = {
   title: "About Us | RCA BLK",
@@ -56,8 +56,8 @@ export default async function About() {
             <Image
               src={ABOUT_SEAM_LOGO}
               alt="RCA BLK"
-              width={220}
-              height={88}
+              width={120}
+              height={120}
               className="pointer-events-none h-14 w-auto select-none sm:h-16 lg:h-[4.5rem]"
               priority
             />
@@ -71,8 +71,8 @@ export default async function About() {
           <Image
             src={ABOUT_SEAM_LOGO}
             alt="RCA BLK"
-            width={220}
-            height={88}
+            width={120}
+            height={120}
             className="mb-6 h-12 w-auto sm:h-14 lg:hidden"
             priority
           />
