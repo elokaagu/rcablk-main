@@ -24,7 +24,6 @@ export function EventEditorForm({
 }) {
   const router = useRouter();
   const [event, setEvent] = useState<EventData>(initial);
-  const [originalSlug] = useState(initial.slug);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,21 +69,11 @@ export function EventEditorForm({
   }
 
   async function save() {
-    if (saving) return;
-
-    if (!event.slug.trim() || !event.name.trim()) {
-      setError("Slug and name are required.");
-      return;
-    }
-
     setSaving(true);
     setError(null);
     try {
       const method = mode === "new" ? "POST" : "PUT";
-      const url =
-        mode === "new"
-          ? "/api/studio/events"
-          : `/api/studio/events/${encodeURIComponent(originalSlug)}`;
+      const url = mode === "new" ? "/api/studio/events" : `/api/studio/events/${encodeURIComponent(event.slug)}`;
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
@@ -104,15 +93,11 @@ export function EventEditorForm({
   }
 
   async function remove() {
-    if (saving) return;
     if (!confirm("Delete this event?")) return;
-
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch(`/api/studio/events/${encodeURIComponent(originalSlug)}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(`/api/studio/events/${encodeURIComponent(event.slug)}`, { method: "DELETE" });
       const data = (await res.json().catch(() => ({}))) as { error?: string };
       if (!res.ok) throw new Error(data.error || "Delete failed");
       router.push("/studio/events");
@@ -189,7 +174,7 @@ export function EventEditorForm({
                 <img
                   key={event.image}
                   src={event.image}
-                  alt={event.name ? `${event.name} hero preview` : "Event hero preview"}
+                  alt=""
                   className="mx-auto max-h-[min(40vh,22rem)] w-full object-contain"
                 />
               )}

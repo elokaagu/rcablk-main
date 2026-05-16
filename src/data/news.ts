@@ -8,18 +8,6 @@ export interface NewsArticle {
   body: string[];
 }
 
-/** Default shape for the Studio “new article” editor. */
-export function createEmptyNewsArticle(): NewsArticle {
-  return {
-    slug: "",
-    title: "",
-    category: "Announcement",
-    date: "",
-    image: "",
-    body: [],
-  };
-}
-
 export const newsArticles: NewsArticle[] = [
   {
     slug: "rca-blk-research-fellowship",

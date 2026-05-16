@@ -17,8 +17,7 @@
     --background: 0 0% 100%;
     --foreground: 0 0% 0%;
 
-    /* #FAC100 — Studio Frith homepage yellow */
-    --home-hero: 45 100% 49%;
+    --home-hero: 40 100% 50%;
 
     --card: 0 0% 100%;
     --card-foreground: 0 0% 0%;
@@ -85,31 +84,18 @@
   }
   .prose-rcablk h2 {
     font-family: jubilat, Georgia, serif;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    line-height: 1.25;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
   .prose-rcablk h3 {
     font-family: jubilat, Georgia, serif;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    line-height: 1.25;
-  }
-  .prose-rcablk p,
-  .prose-rcablk li {
-    letter-spacing: 0.1em;
-    line-height: 1.35;
+    font-weight: 500;
+    letter-spacing: -0.005em;
   }
   .prose-rcablk a {
     text-decoration-color: hsl(0 0% 0% / 0.4);
-    text-underline-offset: 0.22em;
+    text-underline-offset: 0.18em;
     transition: opacity 0.2s;
-  }
-  .link-offset-underline {
-    text-decoration: underline;
-    text-decoration-color: currentColor;
-    text-underline-offset: 0.22em;
-    text-decoration-thickness: 1px;
   }
   .prose-rcablk a:hover {
     opacity: 0.7;
@@ -159,28 +145,9 @@
   body {
     @apply bg-background text-foreground;
     font-family: jubilat, Georgia, serif;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    line-height: 1.35;
-    color: #000000;
     margin: 0;
     padding: 0;
     overflow-x: clip;
     -webkit-tap-highlight-color: transparent;
-  }
-}
-
-@layer utilities {
-  /* Notch / safe-area aware top padding for full-bleed headers (legal pages, etc.) */
-  .safe-top-spacing {
-    padding-top: max(3rem, calc(env(safe-area-inset-top) + 2rem));
-  }
-
-  .safe-bottom-padding {
-    padding-bottom: max(4rem, env(safe-area-inset-bottom));
-  }
-
-  .safe-bottom-padding-studio {
-    padding-bottom: max(2rem, env(safe-area-inset-bottom));
   }
 }

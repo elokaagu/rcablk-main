@@ -4,41 +4,11 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import type { NewsArticle } from "@/data/news";
-import {
-  applyNewsListSort,
-  filterNewsArticles,
-  type NewsListSort,
-} from "@/lib/news-sort";
+import { getNewsCalendarTimeMs } from "@/lib/news-sort";
 import { StudioFieldLabel, StudioInput } from "../_brand/StudioBrand";
 import { cn } from "@/lib/utils";
 
 type SortKey = "date" | "title" | "slug";
-
-const SORT_SELECT: { value: NewsListSort; label: string }[] = [
-  { value: "date-desc", label: "Date · newest first" },
-  { value: "date-asc", label: "Date · oldest first" },
-  { value: "title-asc", label: "Title · A–Z" },
-  { value: "title-desc", label: "Title · Z–A" },
-];
-
-function sortKeyToNewsListSort(key: SortKey, dir: "asc" | "desc"): NewsListSort {
-  if (key === "date") return dir === "desc" ? "date-desc" : "date-asc";
-  if (key === "title") return dir === "asc" ? "title-asc" : "title-desc";
-  return dir === "asc" ? "title-asc" : "title-desc";
-}
-
-function newsListSortToKey(sort: NewsListSort): { key: SortKey; dir: "asc" | "desc" } {
-  switch (sort) {
-    case "date-desc":
-      return { key: "date", dir: "desc" };
-    case "date-asc":
-      return { key: "date", dir: "asc" };
-    case "title-asc":
-      return { key: "title", dir: "asc" };
-    case "title-desc":
-      return { key: "title", dir: "desc" };
-  }
-}
 
 function SortTh({
   label,
@@ -82,16 +52,33 @@ export function StudioNewsArticleTable({ articles }: { articles: NewsArticle[] }
   const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
 
   const rows = useMemo(() => {
-    const filtered = filterNewsArticles(articles, query, "all");
-    if (sortKey === "slug") {
-      const dir = sortDir === "asc" ? 1 : -1;
-      return [...filtered].sort(
-        (a, b) =>
-          dir * a.slug.localeCompare(b.slug, undefined, { sensitivity: "base" }) ||
-          a.title.localeCompare(b.title, undefined, { sensitivity: "base" }),
+    const q = query.trim().toLowerCase();
+    let list = articles.filter((a) => {
+      if (!q) return true;
+      return (
+        a.title.toLowerCase().includes(q) ||
+        a.slug.toLowerCase().includes(q) ||
+        a.category.toLowerCase().includes(q) ||
+        a.date.toLowerCase().includes(q)
       );
-    }
-    return applyNewsListSort(filtered, sortKeyToNewsListSort(sortKey, sortDir));
+    });
+
+    const dir = sortDir === "asc" ? 1 : -1;
+    list = [...list].sort((a, b) => {
+      let cmp = 0;
+      if (sortKey === "date") {
+        const ta = getNewsCalendarTimeMs(a.date);
+        const tb = getNewsCalendarTimeMs(b.date);
+        cmp = ta - tb;
+      } else if (sortKey === "title") {
+        cmp = a.title.localeCompare(b.title, undefined, { sensitivity: "base" });
+      } else {
+        cmp = a.slug.localeCompare(b.slug, undefined, { sensitivity: "base" });
+      }
+      if (cmp !== 0) return dir * cmp;
+      return a.slug.localeCompare(b.slug, undefined, { sensitivity: "base" });
+    });
+    return list;
   }, [articles, query, sortKey, sortDir]);
 
   function onHeaderClick(key: SortKey) {
@@ -105,43 +92,22 @@ export function StudioNewsArticleTable({ articles }: { articles: NewsArticle[] }
 
   return (
     <div className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="sm:col-span-2">
-          <StudioFieldLabel htmlFor="studio-news-search">Search articles</StudioFieldLabel>
-          <StudioInput
-            id="studio-news-search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Title, slug, category, or date…"
-            className="!mt-2"
-            autoComplete="off"
-          />
-        </div>
-        <div>
-          <StudioFieldLabel htmlFor="studio-news-sort">Sort by</StudioFieldLabel>
-          <select
-            id="studio-news-sort"
-            value={sortKey === "slug" ? "date-desc" : sortKeyToNewsListSort(sortKey, sortDir)}
-            onChange={(e) => {
-              const next = newsListSortToKey(e.target.value as NewsListSort);
-              setSortKey(next.key);
-              setSortDir(next.dir);
-            }}
-            className="mt-2 flex h-11 w-full rounded-md border border-black/20 bg-white px-3 font-serif text-[0.95rem] tracking-brand text-black outline-none focus-visible:border-black focus-visible:ring-2 focus-visible:ring-black/10"
-          >
-            {SORT_SELECT.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div>
+        <StudioFieldLabel htmlFor="studio-news-search">Search articles</StudioFieldLabel>
+        <StudioInput
+          id="studio-news-search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Title, slug, category, or date…"
+          className="!mt-2"
+          autoComplete="off"
+        />
       </div>
 
       <p className="font-serif text-[0.82rem] text-black/55" aria-live="polite">
         Showing {rows.length} of {articles.length}
         {query.trim() ? ` matching “${query.trim()}”` : ""}
-        . Use the dropdown or column headers to change order.
+        . Sort by column header; calendar order uses the article’s date field.
       </p>
 
       <div className="overflow-x-auto rounded-md border border-black/10 bg-white">

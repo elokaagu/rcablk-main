@@ -1,52 +1,39 @@
 import { NextResponse } from "next/server";
-import { isValidNewsPayload } from "@/lib/cms/news-payload";
+import type { NewsArticle } from "@/data/news";
 import { listNewsAdmin, upsertNewsAdmin } from "@/lib/cms/news-repo";
-import { guardStudioRoute } from "@/lib/studio/guard-studio-route";
+import { requireStudioCookie } from "@/lib/studio/auth-route";
+import { isCmsConfigured } from "@/lib/cms/supabase-admin";
 
 export async function GET() {
-  const guard = await guardStudioRoute();
-
-  if (guard) {
-    return guard;
+  const auth = await requireStudioCookie();
+  if (auth) return auth;
+  if (!isCmsConfigured()) {
+    return NextResponse.json({ error: "Supabase CMS is not configured." }, { status: 503 });
   }
-
   try {
     const articles = await listNewsAdmin();
-
     return NextResponse.json(articles);
-  } catch (error) {
-    console.error("Failed to load news articles", error);
-
+  } catch (e) {
+    console.error(e);
     return NextResponse.json({ error: "Failed to load news" }, { status: 500 });
   }
 }
 
 export async function POST(req: Request) {
-  const guard = await guardStudioRoute();
-
-  if (guard) {
-    return guard;
+  const auth = await requireStudioCookie();
+  if (auth) return auth;
+  if (!isCmsConfigured()) {
+    return NextResponse.json({ error: "Supabase CMS is not configured." }, { status: 503 });
   }
-
   try {
-    const body = await req.json();
-
-    if (!isValidNewsPayload(body)) {
-      return NextResponse.json(
-        { error: "Valid article with slug and title is required" },
-        { status: 400 }
-      );
+    const body = (await req.json()) as { article: NewsArticle };
+    if (!body.article?.slug?.trim() || !body.article.title?.trim()) {
+      return NextResponse.json({ error: "slug and title are required" }, { status: 400 });
     }
-
     await upsertNewsAdmin(body.article);
-
-    return NextResponse.json({
-      ok: true,
-      article: body.article,
-    });
-  } catch (error) {
-    console.error("Failed to save news article", error);
-
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    console.error(e);
     return NextResponse.json({ error: "Failed to save article" }, { status: 500 });
   }
 }

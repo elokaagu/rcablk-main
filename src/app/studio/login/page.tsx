@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   StudioButton,
@@ -17,35 +17,23 @@ export default function StudioLoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-
-    if (loading) return;
-
     setError(null);
     setLoading(true);
-
     try {
       const res = await fetch("/api/studio/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: email.trim(),
-          password,
-        }),
+        body: JSON.stringify({ email, password }),
       });
-
       const data = (await res.json().catch(() => ({}))) as { error?: string };
-
       if (!res.ok) {
         setError(data.error || "Login failed");
         return;
       }
-
       router.push("/studio");
       router.refresh();
-    } catch {
-      setError("Login failed. Please try again.");
     } finally {
       setLoading(false);
     }

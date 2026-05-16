@@ -214,9 +214,8 @@ export default function RCALetterforms() {
       if (!el) return;
       const { width: cw, height: ch } = el.getBoundingClientRect();
       if (ch <= 0 || cw <= 0) return;
-      // Fill viewport height first (Studio Frith: logotype top-to-bottom, minimal padding)
-      const gridH = Math.min(ch * 0.96, (cw * 2) / 3);
-      const gridW = gridH * 1.5;
+      const gridW = Math.min(cw, ch * 1.5);
+      const gridH = (gridW * 2) / 3;
       setGridSize({ w: gridW, h: gridH });
     }
 
@@ -240,7 +239,7 @@ export default function RCALetterforms() {
     >
       <div
         ref={measureRef}
-        className="flex min-h-0 flex-1 w-full items-center justify-center px-2 sm:px-4"
+        className="flex min-h-0 flex-1 w-full items-center justify-center px-4 sm:px-6"
       >
         <div
           className="grid shrink-0 gap-0"

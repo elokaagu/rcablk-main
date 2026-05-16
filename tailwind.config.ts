@@ -21,7 +21,6 @@ export default {
       },
       letterSpacing: {
         "display-tight": "-0.04em",
-        brand: "0.1em",
       },
       colors: {
         border: "hsl(var(--border))",
@@ -30,15 +29,6 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         homeHero: "hsl(var(--home-hero))",
-        brand: {
-          black: "#000000",
-          green: "#006C2C",
-          yellow: "#FAC100",
-          yellowSoft: "#F4E965",
-          blue: "#C4E5FA",
-          sage: "#A5D3B3",
-          coral: "#EA5046",
-        },
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",

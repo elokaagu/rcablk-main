@@ -1,4 +1,3 @@
-import { cache } from "react";
 import type { EventData } from "@/data/events";
 import { events as staticEvents } from "@/data/events";
 import { createSupabaseAdmin } from "@/lib/cms/supabase-admin";
@@ -57,34 +56,6 @@ export async function getEvents(): Promise<EventData[]> {
     return staticEvents;
   }
 }
-
-/** Public site: single event by slug (Supabase row or static fallback). */
-export const getEventBySlug = cache(async function getEventBySlug(
-  slug: string,
-): Promise<EventData | null> {
-  try {
-    const anon = createSupabaseAnon();
-
-    if (anon) {
-      const { data, error } = await anon
-        .from("events")
-        .select("slug,name,description,venue,date,image,body")
-        .eq("slug", slug)
-        .maybeSingle();
-
-      if (!error && data) {
-        const event = rowToEvent(data);
-        if (event) {
-          return event;
-        }
-      }
-    }
-  } catch {
-    // fall through to bundled data
-  }
-
-  return staticEvents.find((event) => event.slug === slug) ?? null;
-});
 
 /** Studio: always hits Supabase with service role. */
 export async function listEventsAdmin(): Promise<EventData[]> {
