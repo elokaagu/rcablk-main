@@ -4,7 +4,7 @@ import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { ListingToolbar } from "@/components/listing/ListingToolbar";
-import { searchSiteIndex, type SiteSearchResult } from "@/lib/site-search-index";
+import { searchSiteIndex, typeLabel, type SiteSearchResult } from "@/lib/site-search-index";
 import type { SortOption } from "@/lib/listing-filters";
 
 type SiteSearchPageClientProps = {
@@ -12,10 +12,51 @@ type SiteSearchPageClientProps = {
 };
 
 const TYPE_OPTIONS = [
-  { value: "all", label: "News & events" },
-  { value: "news", label: "News only" },
-  { value: "event", label: "Events only" },
+  { value: "all", label: "All" },
+  { value: "news", label: "News" },
+  { value: "event", label: "Events" },
+  { value: "alumni", label: "Alumni" },
 ];
+
+function SearchResultRow({ item }: { item: SiteSearchResult }) {
+  const rowClass =
+    "group flex flex-col gap-1 px-5 py-4 no-underline outline-none transition-colors hover:bg-black/[0.04] focus-visible:bg-black/[0.06] sm:flex-row sm:items-baseline sm:justify-between sm:gap-6 sm:px-6 sm:py-5";
+
+  const content = (
+    <>
+      <div className="min-w-0 flex-1">
+        <p className="font-display text-[0.6rem] font-black uppercase tracking-[0.22em] text-black/55">
+          {typeLabel(item.type)}
+          {item.subtitle ? ` · ${item.subtitle}` : ""}
+        </p>
+        <h2 className="mt-1 font-serif text-lg font-medium leading-snug text-black group-hover:underline sm:text-xl">
+          {item.title}
+        </h2>
+      </div>
+      {item.date ? (
+        <p className="shrink-0 font-serif text-sm text-black/60 sm:text-right">{item.date}</p>
+      ) : item.external ? (
+        <p className="shrink-0 font-serif text-sm text-black/50 sm:text-right">Portfolio ↗</p>
+      ) : item.type === "alumni" ? (
+        <p className="shrink-0 font-serif text-sm text-black/50 sm:text-right">View on Alumni</p>
+      ) : null}
+    </>
+  );
+
+  if (item.external) {
+    return (
+      <a href={item.href} target="_blank" rel="noopener noreferrer" className={rowClass}>
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link href={item.href} className={rowClass}>
+      {content}
+    </Link>
+  );
+}
 
 export function SiteSearchPageClient({ index }: SiteSearchPageClientProps) {
   const searchParams = useSearchParams();
@@ -50,36 +91,20 @@ export function SiteSearchPageClient({ index }: SiteSearchPageClientProps) {
         filterLabel="Type"
         resultCount={filtered.length}
         totalCount={index.length}
-        searchPlaceholder="Search across news and events…"
+        searchPlaceholder="Search news, events, and alumni…"
       />
 
       {filtered.length === 0 ? (
-        <p className="rounded-lg border-2 border-dashed border-black/30 bg-white/60 px-6 py-12 text-center font-serif text-base text-black/70">
+        <p className="border-t border-black/12 pt-8 text-center font-serif text-base text-black/70">
           {query.trim()
-            ? "No results for that search. Try another term or browse News and Events."
-            : "Enter a term above to search articles and events."}
+            ? "No results for that search. Try another term or browse News, Events, and Alumni."
+            : "Enter a term above to search articles, events, and alumni names."}
         </p>
       ) : (
-        <ul className="divide-y-2 divide-black/15 rounded-lg border-2 border-black bg-white/80 shadow-[4px_4px_0_0_rgba(0,0,0,1)]">
+        <ul className="divide-y divide-black/12 border-t border-black/12">
           {filtered.map((item) => (
             <li key={item.id}>
-              <Link
-                href={item.href}
-                className="group flex flex-col gap-1 px-5 py-4 no-underline outline-none transition-colors hover:bg-black/[0.04] focus-visible:bg-black/[0.06] sm:flex-row sm:items-baseline sm:justify-between sm:gap-6 sm:px-6 sm:py-5"
-              >
-                <div className="min-w-0 flex-1">
-                  <p className="font-display text-[0.6rem] font-black uppercase tracking-[0.22em] text-black/55">
-                    {item.type === "news" ? "News" : "Event"}
-                    {item.subtitle ? ` · ${item.subtitle}` : ""}
-                  </p>
-                  <h2 className="mt-1 font-serif text-lg font-medium leading-snug text-black group-hover:underline sm:text-xl">
-                    {item.title}
-                  </h2>
-                </div>
-                {item.date ? (
-                  <p className="shrink-0 font-serif text-sm text-black/60 sm:text-right">{item.date}</p>
-                ) : null}
-              </Link>
+              <SearchResultRow item={item} />
             </li>
           ))}
         </ul>

@@ -32,7 +32,7 @@ export function SiteSearchForm({
   return (
     <form onSubmit={submit} className={cn("w-full", className)} role="search">
       <label htmlFor={inputId} className="sr-only">
-        Search news and events
+        Search news, events, and alumni
       </label>
       <div className="relative">
         <Search
@@ -44,7 +44,7 @@ export function SiteSearchForm({
           type="search"
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder={compact ? "Search…" : "Search news & events"}
+          placeholder={compact ? "Search…" : "Search news, events & alumni"}
           className={cn(
             "w-full rounded-md border-2 border-black bg-white font-serif text-sm text-black outline-none transition-colors placeholder:text-black/45 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-secondary",
             compact ? "h-10 pl-9 pr-3" : "h-11 pl-10 pr-3",

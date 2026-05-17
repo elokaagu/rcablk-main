@@ -7,6 +7,7 @@ import { AnimateIn } from "@/components/AnimateIn";
 import { SiteSearchPageClient } from "@/components/search/SiteSearchPageClient";
 import { getNewsArticles } from "@/lib/cms/news-repo";
 import { getEvents } from "@/lib/cms/events-repo";
+import { foundingMembers, alumni } from "@/data/alumni";
 import { buildSiteSearchIndex } from "@/lib/site-search-index";
 import type { Metadata } from "next";
 import { Suspense } from "react";
@@ -15,13 +16,13 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Search | RCA BLK",
-  description: "Search news articles and events from RCA BLK.",
+  description: "Search news, events, and alumni from RCA BLK.",
   openGraph: { title: "Search | RCA BLK" },
 };
 
 export default async function SearchPage() {
   const [news, events] = await Promise.all([getNewsArticles(), getEvents()]);
-  const index = buildSiteSearchIndex(news, events);
+  const index = buildSiteSearchIndex(news, events, foundingMembers, alumni);
 
   return (
     <div className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden bg-[#E8E4DC] text-black">
@@ -38,7 +39,7 @@ export default async function SearchPage() {
             Search
           </h1>
           <p className="mx-auto mt-3 max-w-md font-serif text-sm leading-relaxed text-black/70 sm:text-[0.95rem]">
-            Find news articles and events across the RCA BLK site.
+            Find news, events, and alumni across the RCA BLK site.
           </p>
         </header>
       </AnimateIn>
