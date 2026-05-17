@@ -64,7 +64,7 @@ export function BlkBackdropSitePage({
                 <AnimateStagger
                   delay={0.2}
                   stagger={0.08}
-                  className="space-y-7 text-center font-serif text-lg leading-relaxed text-black sm:space-y-8 sm:text-xl sm:leading-relaxed [&_.prose]:mx-auto [&_.prose]:max-w-none [&_.prose]:text-center [&_.prose_p]:font-serif"
+                  className="space-y-7 text-center font-serif text-lg leading-relaxed text-black sm:space-y-8 sm:text-xl sm:leading-relaxed [&_.prose]:mx-auto [&_.prose]:max-w-none [&_.prose]:text-center [&_.prose_p]:font-serif [&_.prose_ol]:mx-auto [&_.prose_ol]:w-fit [&_.prose_ol]:list-inside [&_.prose_ol]:text-left [&_.prose_ol]:pl-0 [&_.prose_ul]:mx-auto [&_.prose_ul]:w-fit [&_.prose_ul]:list-inside [&_.prose_ul]:text-left [&_.prose_ul]:pl-0"
                 >
                   <SitePageBody paragraphs={paragraphs} />
                 </AnimateStagger>
