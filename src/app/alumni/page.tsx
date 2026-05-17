@@ -29,7 +29,7 @@ function memberListKey(member: AlumniMember, index: number) {
 }
 
 const NameList = ({ members }: NameListProps) => (
-  <ul className="columns-1 gap-x-4 space-y-1 sm:columns-2 sm:gap-x-10">
+  <ul className="space-y-1 sm:columns-2 sm:gap-x-10">
     {members.map((member, index) => (
       <li key={memberListKey(member, index)} className="break-inside-avoid">
         <AlumniName
@@ -57,7 +57,7 @@ export default async function Alumni() {
     >
       <PageBackground color="hsl(207, 70%, 85%)" />
       <SlideOutMenu />
-      <PageLogotype src={BRAND_LOGOTYPES.forest} />
+      <PageLogotype src={BRAND_LOGOTYPES.forest} blockOnMobile />
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>
         <div className="px-page-safe pb-6 pt-page-chrome text-center sm:py-10">
@@ -74,15 +74,15 @@ export default async function Alumni() {
           <div className="flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start lg:gap-x-14">
             <div className="min-w-0 flex-1 space-y-8 overflow-x-clip">
               <AnimateStagger delay={0.3} stagger={0.08} className="min-w-0 space-y-6">
-                <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
-                  <h2 className="text-xl font-medium italic text-foreground">Founding Members</h2>
+                <section className="grid grid-cols-[minmax(0,6.5rem)_1fr] items-start gap-x-4 gap-y-2 sm:grid-cols-[minmax(0,8rem)_1fr] sm:gap-x-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
+                  <h2 className="text-base font-medium italic text-foreground sm:text-xl">Founding Members</h2>
                   <NameList members={resolvedFounding} />
                 </section>
               </AnimateStagger>
 
               <AnimateStagger delay={0.38} stagger={0.08} className="min-w-0 space-y-6">
-                <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
-                  <h2 className="text-xl font-medium italic text-foreground">Alumni</h2>
+                <section className="grid grid-cols-[minmax(0,6.5rem)_1fr] items-start gap-x-4 gap-y-2 sm:grid-cols-[minmax(0,8rem)_1fr] sm:gap-x-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
+                  <h2 className="text-base font-medium italic text-foreground sm:text-xl">Alumni</h2>
                   <NameList members={resolvedAlumni} />
                 </section>
               </AnimateStagger>

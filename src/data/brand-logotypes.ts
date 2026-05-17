@@ -20,6 +20,8 @@ export const BRAND_LOGOTYPES = {
   black: "/1_RGB Logotype/Stepped Logotype/RCA BLK–Logotype-Black.png",
   /** Stepped white — Contact coral field */
   white: "/1_RGB Logotype/Stepped Logotype/RCA BLK–Logotype-White.png",
+  /** Square block lockup — mobile corner wordmark & About hero */
+  squareBlack: "/1_RGB Logotype/Square Logotype/RCA BLK–Logotype-Black.png",
 } as const;
 
 export type BrandLogotypeKey = keyof typeof BRAND_LOGOTYPES;

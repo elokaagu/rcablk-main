@@ -5,13 +5,39 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
+type FooterLink = { label: string; href: string; external?: boolean };
+type FooterItem = string | FooterLink;
+
+function FooterItemRow({ item }: { item: FooterItem }) {
+  if (typeof item === "string") {
+    return <span className="break-words">{item}</span>;
+  }
+  if (item.external) {
+    return (
+      <a
+        href={item.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="break-words hover:underline"
+      >
+        {item.label}
+      </a>
+    );
+  }
+  return (
+    <Link href={item.href} className="break-words no-underline hover:underline">
+      {item.label}
+    </Link>
+  );
+}
+
 const Footer = () => {
   const pathname = usePathname();
   const isHome = pathname === "/";
   const [logoLoaded, setLogoLoaded] = useState(false);
 
   /** Full footer on inner pages — primary nav lives in the homepage letterforms. */
-  const columns = [
+  const columns: { items: FooterItem[] }[] = [
     {
       items: ["Royal College of Art", "Kensington Gore", "London, SW7 2EU"],
     },
@@ -99,37 +125,50 @@ const Footer = () => {
     );
   }
 
+  const addressLines = columns[0].items.filter((item): item is string => typeof item === "string");
+  const navCol = columns[1].items;
+  const legalCol = columns[2].items;
+  const contactCol = columns[3].items;
+
   return (
     <footer
       className="bg-secondary text-secondary-foreground px-5 py-8 sm:px-8 sm:py-10"
       style={{ paddingBottom: "max(2rem, env(safe-area-inset-bottom))" }}
     >
       <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-10">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-[0.95rem] leading-snug sm:grid-cols-4 sm:gap-x-8 sm:text-base md:flex-1">
+        <div className="grid min-w-0 flex-1 grid-cols-2 gap-x-8 gap-y-4 text-[0.95rem] leading-snug md:hidden">
+          <div className="flex min-w-0 flex-col gap-2">
+            {addressLines.map((line) => (
+              <span key={line} className="break-words">
+                {line}
+              </span>
+            ))}
+            <div className="mt-3 flex flex-col gap-2">
+              {legalCol.map((item) => (
+                <FooterItemRow key={typeof item === "string" ? item : item.href} item={item} />
+              ))}
+            </div>
+          </div>
+          <div className="flex min-w-0 flex-col gap-2">
+            {navCol.map((item) => (
+              <FooterItemRow key={typeof item === "string" ? item : item.href} item={item} />
+            ))}
+            {contactCol.map((item) => (
+              <FooterItemRow key={typeof item === "string" ? item : item.href} item={item} />
+            ))}
+          </div>
+        </div>
+
+        <div className="hidden min-w-0 flex-1 grid-cols-4 gap-x-8 gap-y-3 text-[0.95rem] leading-snug sm:text-base md:grid">
           {columns.map((col, i) => (
             <div key={i} className="flex min-w-0 flex-col gap-2">
-              {col.items.map((item, j) =>
-                typeof item === "string" ? (
-                  <span key={j} className="break-words">{item}</span>
-                ) : "external" in item && item.external ? (
-                  <a
-                    key={j}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="cursor-pointer break-words hover:underline"
-                  >
-                    {item.label}
-                  </a>
-                ) : (
-                  <Link key={j} href={item.href} className="cursor-pointer break-words no-underline hover:underline">
-                    {item.label}
-                  </Link>
-                )
-              )}
+              {col.items.map((item, j) => (
+                <FooterItemRow key={j} item={item} />
+              ))}
             </div>
           ))}
         </div>
+
         <div className="flex shrink-0 items-start justify-start md:justify-end">
           <Image
             src="/rca_logo.png"

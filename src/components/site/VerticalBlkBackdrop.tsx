@@ -1,10 +1,16 @@
 import type { CSSProperties } from "react";
 import Image from "next/image";
 
-const LETTER_SVGS = [
+const BLK_LETTER_SVGS = [
   "/SVG Letterforms/RCA BLK–Letterforms-B.svg",
   "/SVG Letterforms/RCA BLK–Letterforms-L.svg",
   "/SVG Letterforms/RCA BLK–Letterforms-K.svg",
+] as const;
+
+const RCA_LETTER_SVGS = [
+  "/SVG Letterforms/RCA BLK–Letterforms-R.svg",
+  "/SVG Letterforms/RCA BLK–Letterforms-C.svg",
+  "/SVG Letterforms/RCA BLK–Letterforms-A.svg",
 ] as const;
 
 /** Glyph viewBox from brand SVGs (79.37 × 124.72). */
@@ -30,12 +36,21 @@ type VerticalBlkBackdropProps = {
   letterColor?: string;
   /** Brand BLK lockup image — used on Resources (pre-coloured artwork). */
   letterformImage?: string;
+  /** Stacked glyph row — Support uses RCA watermark on mobile reference. */
+  stack?: "blk" | "rca";
 };
 
-function StackedLetterforms({ letterColor }: { letterColor: string }) {
+function StackedLetterforms({
+  letterColor,
+  stack = "blk",
+}: {
+  letterColor: string;
+  stack?: "blk" | "rca";
+}) {
+  const svgs = stack === "rca" ? RCA_LETTER_SVGS : BLK_LETTER_SVGS;
   return (
     <div className="flex h-full flex-col items-center justify-center gap-10 py-20 sm:gap-12 sm:py-24 md:gap-14 md:py-28 lg:gap-16">
-      {LETTER_SVGS.map((svg) => (
+      {svgs.map((svg) => (
         <div
           key={svg}
           className="w-[min(22vw,6.75rem)] shrink-0 sm:w-[min(18vw,7.75rem)] md:w-[min(15vw,8.75rem)]"
@@ -69,17 +84,23 @@ function BlkLetterformArtwork({ src }: { src: string }) {
  * Vertical BLK behind scrolling copy (Support, Resources).
  * Render inside a sticky `h-[100dvh]` wrapper so it scrolls away before the footer.
  */
-export function VerticalBlkBackdrop({ letterColor, letterformImage }: VerticalBlkBackdropProps) {
+export function VerticalBlkBackdrop({
+  letterColor,
+  letterformImage,
+  stack = "blk",
+}: VerticalBlkBackdropProps) {
+  const tint = letterColor ?? "#FFDD00";
+
   return (
     <div
       className="pointer-events-none relative flex h-full w-full justify-center overflow-hidden"
-      style={{ color: letterColor }}
+      style={{ color: tint }}
       aria-hidden
     >
       {letterformImage ? (
         <BlkLetterformArtwork src={letterformImage} />
       ) : (
-        <StackedLetterforms letterColor={letterColor ?? "#FFDD00"} />
+        <StackedLetterforms letterColor={tint} stack={stack} />
       )}
     </div>
   );

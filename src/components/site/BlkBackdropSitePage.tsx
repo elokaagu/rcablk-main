@@ -13,8 +13,12 @@ export type BlkBackdropSitePageProps = {
   letterColor?: string;
   /** Pre-rendered BLK lockup (Resources). */
   letterformImage?: string;
+  /** Stacked glyph row behind copy (Support → RCA). */
+  stack?: "blk" | "rca";
   /** Horizontal “rca blk” wordmark in the corner */
   logotypeSrc: string;
+  /** Omit corner wordmark below `lg` (Support reference). */
+  hideLogotypeOnMobile?: boolean;
   title: string;
   paragraphs: string[];
 };
@@ -27,7 +31,9 @@ export function BlkBackdropSitePage({
   backgroundColor,
   letterColor,
   letterformImage,
+  stack = "blk",
   logotypeSrc,
+  hideLogotypeOnMobile = false,
   title,
   paragraphs,
 }: BlkBackdropSitePageProps) {
@@ -39,7 +45,7 @@ export function BlkBackdropSitePage({
       <PageBackground color={backgroundColor} />
       <SlideOutMenu />
 
-      <PageLogotype src={logotypeSrc} />
+      <PageLogotype src={logotypeSrc} hideOnMobile={hideLogotypeOnMobile} />
 
       <div className="relative flex min-h-0 flex-1 flex-col">
         <div className="grid flex-1 grid-cols-1 [&>*]:col-start-1 [&>*]:row-start-1">
@@ -47,7 +53,11 @@ export function BlkBackdropSitePage({
             className="pointer-events-none sticky top-0 z-0 h-[100dvh] w-full self-start overflow-hidden"
             aria-hidden
           >
-            <VerticalBlkBackdrop letterColor={letterColor} letterformImage={letterformImage} />
+            <VerticalBlkBackdrop
+              letterColor={letterColor}
+              letterformImage={letterformImage}
+              stack={stack}
+            />
           </div>
 
           <div className="relative z-10 flex min-h-0 flex-1 flex-col px-page-safe sm:px-10 lg:px-12">

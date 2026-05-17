@@ -11,7 +11,10 @@ import { getSitePage, pickLiveSiteTitle } from "@/lib/cms/pages-repo";
 import Image from "next/image";
 import type { Metadata } from "next";
 
-const ABOUT_SEAM_LOGO = "/1_RGB Logotype/Square Logotype/RCA BLK–Logotype-Black.png";
+import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
+
+const ABOUT_SEAM_LOGO = BRAND_LOGOTYPES.squareBlack;
+const ABOUT_BLUE = "hsl(207, 70%, 88%)";
 
 export const metadata: Metadata = {
   title: "About Us | RCA BLK",
@@ -29,8 +32,8 @@ export default async function About() {
   const heading = pickLiveSiteTitle(cms, defaults.title);
 
   return (
-    <div className="about-page flex min-h-screen-safe min-w-0 w-full flex-col overflow-x-clip bg-white">
-      <PageBackground background="linear-gradient(to right, #ffffff 0%, #ffffff 50%, hsl(207, 70%, 88%) 50%, hsl(207, 70%, 88%) 100%) fixed" />
+    <div className="about-page flex min-h-screen-safe min-w-0 w-full flex-col overflow-x-clip lg:bg-white" style={{ backgroundColor: ABOUT_BLUE }}>
+      <PageBackground color={ABOUT_BLUE} />
       {/*
         Mobile / tablet: stack vertically with each column owning its own
         background colour, so there's no awkward white/blue split at the seam.
@@ -46,7 +49,50 @@ export default async function About() {
       <SlideOutMenu />
 
       <main className="relative flex-1 lg:min-h-screen">
-        <div className="grid min-h-screen grid-cols-1 gap-0 lg:grid-cols-2">
+        {/* Mobile — full blue field, centred block logo, left-aligned copy (reference) */}
+        <div className="lg:hidden" style={{ backgroundColor: ABOUT_BLUE }}>
+          <div className="flex justify-center px-page-safe pb-6 pt-page-chrome">
+            <Image
+              src={ABOUT_SEAM_LOGO}
+              alt="RCA BLK"
+              width={200}
+              height={200}
+              priority
+              className="h-28 w-auto sm:h-32"
+            />
+          </div>
+          <div className="px-page-safe pb-10 text-left sm:px-8">
+            <RevealText
+              as="h2"
+              delay={0.1}
+              duration={1}
+              stagger={0.06}
+              className="mb-5 block text-left font-display text-2xl font-normal text-foreground sm:mb-6 sm:text-3xl"
+            >
+              {heading}
+            </RevealText>
+            <AnimateStagger
+              delay={0.25}
+              stagger={0.08}
+              duration={0.95}
+              y={18}
+              className="max-w-none space-y-6 text-left text-lg leading-relaxed text-foreground"
+            >
+              <SitePageBody paragraphs={paragraphs} />
+            </AnimateStagger>
+          </div>
+          <div className="flex flex-col items-center gap-6 px-5 pb-12 sm:gap-8 sm:px-8">
+            <AnimateStagger
+              delay={0.35}
+              stagger={0.1}
+              className="flex w-full flex-col items-center gap-6 sm:gap-8"
+            >
+              <AboutGalleryColumn items={ABOUT_GALLERY} />
+            </AnimateStagger>
+          </div>
+        </div>
+
+        <div className="hidden min-h-screen grid-cols-2 gap-0 lg:grid">
         {/* Left column — seam logotype top-aligned with the heading (lg+ only) */}
         <div className="relative bg-white px-page-safe py-10 pt-page-chrome sm:px-8 sm:py-12 lg:px-16 lg:py-12 lg:pt-12">
           <div

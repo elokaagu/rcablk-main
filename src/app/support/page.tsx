@@ -24,6 +24,8 @@ export default async function Support() {
     <BlkBackdropSitePage
       backgroundColor={SUPPORT_BG}
       letterColor={SUPPORT_LETTER_COLOR}
+      stack="rca"
+      hideLogotypeOnMobile
       logotypeSrc={BRAND_LOGOTYPES.yellow}
       title={pickLiveSiteTitle(cms, defaults.title)}
       paragraphs={paragraphs}

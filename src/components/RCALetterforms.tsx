@@ -2,6 +2,7 @@
 
 import { useState, useRef, useLayoutEffect, useMemo } from "react";
 import Link from "next/link";
+import { HomeMobileHero } from "@/components/home/HomeMobileHero";
 
 /**
  * Flex alignment for labels clipped to each letter SVG (same mask as the
@@ -230,8 +231,10 @@ export default function RCALetterforms() {
   }, []);
 
   return (
+    <>
+      <HomeMobileHero />
     <div
-      className="flex min-h-0 w-full flex-1 flex-col"
+      className="hidden min-h-0 w-full flex-1 flex-col lg:flex"
       style={{
         paddingTop: "max(1rem, env(safe-area-inset-top))",
         paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
@@ -264,5 +267,6 @@ export default function RCALetterforms() {
         </div>
       </div>
     </div>
+    </>
   );
 }
