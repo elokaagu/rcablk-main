@@ -4,11 +4,11 @@
 export const BRAND_LOGOTYPES = {
   /** Warm yellow — Support coral field + yellow BLK stack */
   yellow: "/brand-logotypes/logotype-yellow.png",
-  /** Pale blue — Resources corner wordmark + Alumni field */
+  /** Pale blue — Resources corner wordmark */
   blue: "/brand-logotypes/logotype-blue.png",
   /** Coral red — Contact red-coral field */
   coral: "/brand-logotypes/logotype-coral.png",
-  /** Sage mint — Events listing green */
+  /** Sage mint — reserved for sage-on-sage contexts */
   sage: "/brand-logotypes/logotype-sage.png",
   /** Soft gold — cream legal / utility pages */
   gold: "/brand-logotypes/logotype-gold.png",
@@ -18,6 +18,8 @@ export const BRAND_LOGOTYPES = {
   orange: "/brand-logotypes/logotype-orange.png",
   /** Stepped black — About (white panel) and high-contrast needs */
   black: "/1_RGB Logotype/Stepped Logotype/RCA BLK–Logotype-Black.png",
+  /** Stepped white — Contact coral field */
+  white: "/1_RGB Logotype/Stepped Logotype/RCA BLK–Logotype-White.png",
 } as const;
 
 export type BrandLogotypeKey = keyof typeof BRAND_LOGOTYPES;
@@ -26,9 +28,9 @@ export type BrandLogotypeKey = keyof typeof BRAND_LOGOTYPES;
 export const PAGE_LOGOTYPE: Record<string, BrandLogotypeKey> = {
   support: "yellow",
   resources: "blue",
-  contact: "coral",
-  events: "sage",
-  alumni: "blue",
+  contact: "white",
+  events: "yellow",
+  alumni: "forest",
   news: "forest",
   search: "gold",
   "privacy-policy": "gold",

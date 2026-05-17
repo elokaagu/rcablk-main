@@ -32,7 +32,7 @@ function Wordmark() {
   return (
     <Link href="/" aria-label="RCA BLK home" className="inline-block">
       <Image
-        src={BRAND_LOGOTYPES.coral}
+        src={BRAND_LOGOTYPES.white}
         alt="RCA BLK"
         width={200}
         height={43}

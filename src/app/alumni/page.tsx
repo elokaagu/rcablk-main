@@ -51,7 +51,7 @@ export default function Alumni() {
     >
       <PageBackground color="hsl(207, 70%, 85%)" />
       <SlideOutMenu />
-      <PageLogotype src={BRAND_LOGOTYPES.blue} />
+      <PageLogotype src={BRAND_LOGOTYPES.forest} />
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>
         <div

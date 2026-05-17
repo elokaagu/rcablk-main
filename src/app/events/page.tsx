@@ -26,7 +26,7 @@ export default async function Events() {
     >
       <PageBackground color="#A8C9A7" />
       <SlideOutMenu />
-      <PageLogotype src={BRAND_LOGOTYPES.sage} />
+      <PageLogotype src={BRAND_LOGOTYPES.yellow} />
 
       <AnimateIn delay={0.2} duration={0.6} y={16}>
         <header
