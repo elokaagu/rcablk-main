@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useAlumniPreview } from "@/components/alumni/AlumniPreviewContext";
+import { isPreviewableLink } from "@/lib/alumni-preview-url";
 
 interface AlumniNameProps {
   name: string;
@@ -10,19 +11,23 @@ interface AlumniNameProps {
 }
 
 export function AlumniName({ name, snapshot, link }: AlumniNameProps) {
-  const { openPreview, scheduleCloseFromName } = useAlumniPreview();
+  const { openPreviewForMember, scheduleCloseFromName } = useAlumniPreview();
+
+  const canPreview = Boolean(snapshot || (link && isPreviewableLink(link)));
 
   const handleEnter = () => {
-    if (!snapshot) return;
-    openPreview({ name, snapshot, link });
+    if (!canPreview) return;
+    openPreviewForMember({ name, snapshot, link });
   };
 
   const sharedProps = {
     className: "inline-block cursor-default",
     onMouseEnter: handleEnter,
     onMouseLeave: scheduleCloseFromName,
+    onFocus: handleEnter,
+    onBlur: scheduleCloseFromName,
     onTouchStart: () => {
-      if (snapshot) openPreview({ name, snapshot, link });
+      if (canPreview) openPreviewForMember({ name, snapshot, link });
     },
   };
 
