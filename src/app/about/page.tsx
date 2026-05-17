@@ -6,8 +6,6 @@ import { AboutGalleryColumn } from "@/components/about/AboutGalleryRotator";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import { ABOUT_GALLERY } from "@/data/about-gallery";
 import { RevealText } from "@/components/RevealText";
-import { PageLogotype } from "@/components/PageLogotype";
-import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
 import { getSitePageDefaults } from "@/data/site-pages-static";
 import { getSitePage, pickLiveSiteTitle } from "@/lib/cms/pages-repo";
 import Image from "next/image";
@@ -46,32 +44,24 @@ export default async function About() {
         }
       `}</style>
       <SlideOutMenu />
-      <PageLogotype src={BRAND_LOGOTYPES.black} />
 
       <main className="relative flex-1 lg:min-h-screen">
-        {/* Sticky seam logo, only meaningful on lg+ where the seam exists */}
-        <div
-          className="pointer-events-none sticky z-30 hidden h-0 w-full lg:block"
-          style={{
-            top: "max(5.25rem, calc(env(safe-area-inset-top) + 3.25rem))",
-          }}
-        >
-          <div className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2">
+        <div className="grid min-h-screen grid-cols-1 gap-0 lg:grid-cols-2">
+        {/* Left column — seam logotype top-aligned with the heading (lg+ only) */}
+        <div className="relative bg-white px-page-safe py-10 pt-page-chrome sm:px-8 sm:py-12 lg:px-16 lg:py-12 lg:pt-12">
+          <div
+            className="pointer-events-none absolute left-full top-12 z-30 hidden -translate-x-1/2 lg:block"
+            aria-hidden
+          >
             <Image
               src={ABOUT_SEAM_LOGO}
-              alt="RCA BLK"
+              alt=""
               width={120}
               height={120}
-              className="pointer-events-none h-14 w-auto select-none sm:h-16 lg:h-[4.5rem]"
+              className="h-[4.5rem] w-auto select-none"
               priority
             />
           </div>
-        </div>
-
-        <div className="grid min-h-screen grid-cols-1 gap-0 lg:grid-cols-2">
-        {/* Left column - Text. On mobile we drop a small wordmark above the
-            heading because the seam logo is desktop-only. */}
-        <div className="bg-white px-page-safe py-10 pt-page-chrome sm:px-8 sm:py-12 lg:px-16 lg:py-12 lg:pt-12">
           <RevealText
             as="h2"
             delay={0.1}
