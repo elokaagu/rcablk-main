@@ -1,8 +1,10 @@
 import Link from "next/link";
+import Image from "next/image";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import PageBackground from "@/components/PageBackground";
 import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
+import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
 import { ContactNewsletterForm } from "./ContactNewsletterForm";
 import type { Metadata } from "next";
 
@@ -16,7 +18,9 @@ export const metadata: Metadata = {
 // so Contact has its own identity within the brand colour family.
 const CONTACT_BG = "#DC5C4A";
 
-const HERO_IMAGE = "/assets/event-seriki.jpg";
+const HERO_IMAGE = "/assets/contact-anthea-hamilton.jpg";
+const HERO_ALT =
+  "Installation view with oversized pumpkin sculptures and a performer in a white gourd headpiece";
 
 /* ------------------------------------------------------------------ */
 /* Building blocks                                                     */
@@ -24,12 +28,15 @@ const HERO_IMAGE = "/assets/event-seriki.jpg";
 
 function Wordmark() {
   return (
-    <Link
-      href="/"
-      aria-label="RCA BLK home"
-      className="font-display text-[1.6rem] font-black uppercase leading-none tracking-[0.04em] text-black sm:text-[1.85rem]"
-    >
-      RCA BLK
+    <Link href="/" aria-label="RCA BLK home" className="inline-block">
+      <Image
+        src={BRAND_LOGOTYPES.coral}
+        alt="RCA BLK"
+        width={200}
+        height={43}
+        priority
+        className="h-7 w-auto mix-blend-screen sm:h-9"
+      />
     </Link>
   );
 }
@@ -77,10 +84,11 @@ function CircularHero({ className = "" }: { className?: string }) {
     <div className={`relative aspect-square w-full overflow-hidden rounded-full ${className}`}>
       <BlurImage
         src={HERO_IMAGE}
-        alt=""
+        alt={HERO_ALT}
         aspectRatio="1/1"
         sizes="(max-width: 1024px) 80vmin, 60vmin"
         priority
+        imgClassName="object-cover object-[center_42%]"
       />
     </div>
   );

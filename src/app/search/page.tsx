@@ -1,6 +1,8 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
+import { PageLogotype } from "@/components/PageLogotype";
+import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
 import { AnimateIn } from "@/components/AnimateIn";
 import { SiteSearchPageClient } from "@/components/search/SiteSearchPageClient";
 import { getNewsArticles } from "@/lib/cms/news-repo";
@@ -25,6 +27,7 @@ export default async function SearchPage() {
     <div className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden bg-[#E8E4DC] text-black">
       <PageBackground color="#E8E4DC" />
       <SlideOutMenu />
+      <PageLogotype src={BRAND_LOGOTYPES.gold} />
 
       <AnimateIn delay={0.15} duration={0.55} y={14}>
         <header

@@ -1,6 +1,8 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
+import { PageLogotype } from "@/components/PageLogotype";
+import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
 import { AnimateIn } from "@/components/AnimateIn";
 import { EventsListingClient } from "@/components/listing/EventsListingClient";
 import { getEvents } from "@/lib/cms/events-repo";
@@ -24,6 +26,7 @@ export default async function Events() {
     >
       <PageBackground color="#A8C9A7" />
       <SlideOutMenu />
+      <PageLogotype src={BRAND_LOGOTYPES.sage} />
 
       <AnimateIn delay={0.2} duration={0.6} y={16}>
         <header

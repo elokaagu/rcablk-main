@@ -85,13 +85,13 @@ export default async function NewsArticle({ params }: PageProps) {
 
         {hasGallery ? (
           <>
-            <NewsArticleGallery images={article.gallery!} title={article.title} />
             <header className="mb-8 text-center sm:mb-10">
               <h1 className="font-serif text-[1.5rem] font-normal leading-tight text-black [overflow-wrap:anywhere] sm:text-2xl md:text-3xl lg:text-[2rem]">
                 {article.title}
               </h1>
               <p className="mt-3 font-serif text-base text-black sm:text-lg">{article.date}</p>
             </header>
+            <NewsArticleGallery images={article.gallery!} title={article.title} />
             <div className="mx-auto max-w-prose">
               <NewsBody body={article.body} align="left" />
             </div>

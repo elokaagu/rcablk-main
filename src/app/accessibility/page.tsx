@@ -1,6 +1,8 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
+import { PageLogotype } from "@/components/PageLogotype";
+import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
 import { SitePageBody } from "@/components/SitePageBody";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
@@ -32,6 +34,7 @@ export default async function Accessibility() {
     >
       <PageBackground color={LEGAL_PAGE_BG} />
       <SlideOutMenu />
+      <PageLogotype src={BRAND_LOGOTYPES.gold} />
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>
         <div

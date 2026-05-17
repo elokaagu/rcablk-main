@@ -179,7 +179,7 @@ export function useAlumniPreview() {
   return ctx;
 }
 
-/** Desktop: sticky preview in the right margin. Mobile: block below names (no overlay). */
+/** Desktop: fixed preview beside the list (immune to overflow/sticky bugs). Mobile: below names. */
 export function AlumniPreviewAside() {
   const { preview, cancelClose, scheduleCloseFromPanel } = useAlumniPreview();
   const ref = useRef<HTMLElement>(null);
@@ -190,18 +190,20 @@ export function AlumniPreviewAside() {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [preview]);
 
-  const stickyTop = "max(5.5rem, calc(env(safe-area-inset-top, 0px) + 3.5rem))";
+  const panelTop = "max(5.5rem, calc(env(safe-area-inset-top, 0px) + 3.5rem))";
+  /** Align with right column inside centered max-w-6xl main (72rem) + lg px-12 */
+  const panelRight = "max(1.25rem, calc((100vw - 72rem) / 2 + 3rem))";
 
   return (
     <aside
       ref={ref}
-      className="mx-auto w-full max-w-[280px] shrink-0 lg:mx-0 lg:w-[280px]"
+      className="mx-auto w-full max-w-[280px] lg:mx-0 lg:w-[280px]"
       onMouseEnter={cancelClose}
       onMouseLeave={scheduleCloseFromPanel}
     >
       <div
-        className="lg:sticky lg:z-10"
-        style={{ top: stickyTop }}
+        className="w-full lg:fixed lg:z-20 lg:w-[280px]"
+        style={{ top: panelTop, right: panelRight }}
       >
       {preview ? (
         <div className="flex flex-col gap-2">

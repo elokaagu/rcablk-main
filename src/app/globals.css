@@ -150,4 +150,10 @@
     overflow-x: clip;
     -webkit-tap-highlight-color: transparent;
   }
+
+  /* overflow-x on html/body breaks position:sticky; alumni preview needs document scroll */
+  html:has([data-page="alumni"]),
+  body:has([data-page="alumni"]) {
+    overflow-x: visible;
+  }
 }

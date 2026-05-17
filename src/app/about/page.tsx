@@ -2,8 +2,9 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
 import { SitePageBody } from "@/components/SitePageBody";
-import { BlurImage } from "@/components/BlurImage";
+import { AboutGalleryColumn } from "@/components/about/AboutGalleryRotator";
 import { AnimateStagger } from "@/components/AnimateStagger";
+import { ABOUT_GALLERY } from "@/data/about-gallery";
 import { RevealText } from "@/components/RevealText";
 import { getSitePageDefaults } from "@/data/site-pages-static";
 import { getSitePage, pickLiveSiteTitle } from "@/lib/cms/pages-repo";
@@ -102,20 +103,12 @@ export default async function About() {
           className="flex flex-col items-center gap-6 px-5 py-10 sm:gap-8 sm:px-8 sm:py-12 lg:px-16 lg:py-12"
           style={{ backgroundColor: "hsl(207, 70%, 88%)" }}
         >
-          <AnimateStagger delay={0.35} stagger={0.1} className="flex flex-col gap-6 sm:gap-8 items-center w-full">
-          <div className="w-full max-w-sm self-start">
-            <BlurImage src="/3_Website Images/Chris Ofili.jpg" alt="Chris Ofili" aspectRatio="3/4" className="rounded-md" />
-            <p className="mt-3 text-xl font-display font-black text-foreground tracking-wide uppercase">
-              Chris Ofili
-            </p>
-          </div>
-
-          <div className="w-full max-w-sm self-end">
-            <BlurImage src="/3_Website Images/magdalene odundo2.jpeg" alt="Magdalene Odundo" aspectRatio="3/4" className="rounded-md" />
-            <p className="mt-3 text-xl font-display font-black text-foreground tracking-wide uppercase">
-              Magdalene Odundo
-            </p>
-          </div>
+          <AnimateStagger
+            delay={0.35}
+            stagger={0.1}
+            className="flex w-full flex-col items-center gap-6 sm:gap-8"
+          >
+            <AboutGalleryColumn items={ABOUT_GALLERY} />
           </AnimateStagger>
         </div>
         </div>
