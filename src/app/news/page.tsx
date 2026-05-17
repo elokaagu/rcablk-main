@@ -51,23 +51,21 @@ export default async function News() {
         aria-label="News articles"
       >
         {/*
-          Pinterest-style masonry: native CSS columns + `break-inside-avoid`
-          on each card. No JS layout library required; columns reflow on
-          resize and respect the cards' natural heights driven by the
-          `CARD_ASPECTS` cycle above.
+          Row-major grid so chronological order reads left-to-right, then down
+          (CSS columns fill top-to-bottom per column and break date order).
         */}
         <AnimateStagger
           delay={0.2}
           stagger={0.05}
           duration={0.85}
           y={18}
-          className="columns-1 gap-4 sm:columns-2 sm:gap-5 lg:columns-3 lg:gap-6"
+          className="grid grid-flow-row grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6"
         >
           {newsArticles.map((item, i) => (
             <Link
               key={item.slug}
               href={`/news/${item.slug}`}
-              className="group mb-4 block break-inside-avoid no-underline outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 focus-visible:ring-offset-[#FFDD00] sm:mb-5 lg:mb-6"
+              className="group block min-w-0 no-underline outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-4 focus-visible:ring-offset-[#FFDD00]"
             >
               {/*
                 Edge-to-edge image card: the photograph IS the card. Title /

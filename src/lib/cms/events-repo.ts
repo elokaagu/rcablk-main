@@ -3,6 +3,7 @@ import { events as staticEvents } from "@/data/events";
 import { createSupabaseAdmin } from "@/lib/cms/supabase-admin";
 import { createSupabaseAnon } from "@/lib/cms/supabase-anon";
 import { asString, asTrimmedString, normalizeEventBodyField } from "@/lib/cms/coerce";
+import { sortEventsByCalendarDate } from "@/lib/event-sort";
 
 type EventRow = {
   slug: string;
@@ -38,22 +39,24 @@ function rowToEvent(row: unknown): EventData | null {
 export async function getEvents(): Promise<EventData[]> {
   try {
     const anon = createSupabaseAnon();
-    if (!anon) return staticEvents;
+    if (!anon) return sortEventsByCalendarDate(staticEvents, "desc");
 
     const { data, error } = await anon
       .from("events")
       .select("slug,name,description,venue,date,image,body")
       .order("updated_at", { ascending: false });
 
-    if (error || !data?.length) return staticEvents;
+    if (error || !data?.length) return sortEventsByCalendarDate(staticEvents, "desc");
 
     const events = (data as EventRow[])
       .map((row) => rowToEvent(row))
       .filter((e): e is EventData => e != null);
 
-    return events.length ? events : staticEvents;
+    return events.length
+      ? sortEventsByCalendarDate(events, "desc")
+      : sortEventsByCalendarDate(staticEvents, "desc");
   } catch {
-    return staticEvents;
+    return sortEventsByCalendarDate(staticEvents, "desc");
   }
 }
 
@@ -65,9 +68,10 @@ export async function listEventsAdmin(): Promise<EventData[]> {
     .select("slug,name,description,venue,date,image,body")
     .order("updated_at", { ascending: false });
   if (error) throw error;
-  return ((data ?? []) as EventRow[])
+  const events = ((data ?? []) as EventRow[])
     .map((row) => rowToEvent(row))
     .filter((e): e is EventData => e != null);
+  return sortEventsByCalendarDate(events, "desc");
 }
 
 export async function getEventBySlugAdmin(slug: string): Promise<EventData | null> {

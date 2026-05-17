@@ -44,7 +44,7 @@ function rowToArticle(row: unknown): NewsArticle | null {
 export async function getNewsArticles(): Promise<NewsArticle[]> {
   try {
     const anon = createSupabaseAnon();
-    if (!anon) return staticNews;
+    if (!anon) return sortNewsArticlesByCalendarDate(staticNews, "desc");
 
     const { data, error } = await anon
       .from("news_articles")

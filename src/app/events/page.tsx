@@ -39,7 +39,11 @@ export default async function Events() {
       </AnimateIn>
 
       <main className="mx-auto w-full max-w-[1600px] flex-1 px-5 pb-14 sm:px-8 sm:pb-20 lg:px-12">
-        <AnimateStagger delay={0.25} stagger={0.05} className="grid grid-cols-1 gap-10 sm:gap-12 md:grid-cols-2 md:gap-x-8 md:gap-y-14 lg:grid-cols-3 lg:gap-x-10">
+        <AnimateStagger
+          delay={0.25}
+          stagger={0.05}
+          className="grid grid-flow-row grid-cols-1 gap-10 sm:gap-12 md:grid-cols-2 md:gap-x-8 md:gap-y-14 lg:grid-cols-3 lg:gap-x-10"
+        >
           {events.map((event) => (
             <Link
               key={event.slug}
