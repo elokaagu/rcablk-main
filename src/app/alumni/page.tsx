@@ -2,10 +2,13 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
 import { AlumniName } from "@/components/AlumniName";
-import { AlumniPreviewAside, AlumniPreviewProvider } from "@/components/alumni/AlumniPreviewContext";
+import {
+  AlumniPreviewAside,
+  AlumniPreviewProvider,
+} from "@/components/alumni/AlumniPreviewContext";
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
-import { foundingMembers, alumni } from "@/data/alumni";
+import { foundingMembers, alumni, type AlumniMember } from "@/data/alumni";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -14,28 +17,30 @@ export const metadata: Metadata = {
   openGraph: { title: "Alumni | RCA BLK" },
 };
 
-const NameList = ({ members }: { members: typeof foundingMembers }) => {
-  const col1 = members.filter((_, i) => i % 2 === 0);
-  const col2 = members.filter((_, i) => i % 2 === 1);
-  return (
-    <div className="grid grid-cols-2 gap-x-4 sm:gap-x-16 gap-y-1">
-      <div className="flex flex-col gap-1">
-        {col1.map((m, i) => (
-          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} />
-        ))}
-      </div>
-      <div className="flex flex-col gap-1">
-        {col2.map((m, i) => (
-          <AlumniName key={`${m.name}-${i}`} name={m.name} snapshot={m.snapshot} link={m.link} />
-        ))}
-      </div>
-    </div>
-  );
+type NameListProps = {
+  members: AlumniMember[];
 };
+
+function memberListKey(member: AlumniMember, index: number) {
+  return member.link ? `${member.name}::${member.link}` : `${member.name}::${index}`;
+}
+
+const NameList = ({ members }: NameListProps) => (
+  <ul className="columns-2 gap-x-4 space-y-1 sm:gap-x-10">
+    {members.map((member, index) => (
+      <li key={memberListKey(member, index)} className="break-inside-avoid">
+        <AlumniName name={member.name} snapshot={member.snapshot} link={member.link} />
+      </li>
+    ))}
+  </ul>
+);
 
 export default function Alumni() {
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(207, 70%, 85%)" }}>
+    <div
+      className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden"
+      style={{ backgroundColor: "hsl(207, 70%, 85%)" }}
+    >
       <PageBackground color="hsl(207, 70%, 85%)" />
       <SlideOutMenu />
 
@@ -44,32 +49,40 @@ export default function Alumni() {
           className="px-5 pb-6 pt-12 text-center sm:py-10"
           style={{ paddingTop: "max(3rem, calc(env(safe-area-inset-top) + 2rem))" }}
         >
-          <h2 className="font-display text-2xl font-normal text-foreground sm:text-3xl">Alumni</h2>
+          <h1 className="font-display text-2xl font-normal text-foreground sm:text-3xl">Alumni</h1>
         </div>
       </AnimateIn>
 
       <AlumniPreviewProvider>
         <main className="mx-auto w-full max-w-6xl flex-1 px-5 pb-12 sm:px-10 sm:pb-16 lg:px-12">
           {/*
-            Mobile: founding → preview strip → alumni (nothing overlays the lists).
-            lg+: names in column 1; sticky preview in the right margin (column 2, spans both rows).
+            Mobile: founding → alumni → preview (below both lists).
+            lg+: names in column 1; sticky preview spans both rows in column 2.
           */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-x-14 lg:items-start">
-            <AnimateStagger delay={0.3} stagger={0.08} className="min-w-0 space-y-6 lg:col-start-1 lg:row-start-1">
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
-                <h3 className="text-xl font-medium italic text-foreground">Founding Members</h3>
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start lg:gap-x-14">
+            <AnimateStagger
+              delay={0.3}
+              stagger={0.08}
+              className="min-w-0 space-y-6 lg:col-start-1 lg:row-start-1"
+            >
+              <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
+                <h2 className="text-xl font-medium italic text-foreground">Founding Members</h2>
                 <NameList members={foundingMembers} />
-              </div>
+              </section>
+            </AnimateStagger>
+
+            <AnimateStagger
+              delay={0.38}
+              stagger={0.08}
+              className="min-w-0 space-y-6 lg:col-start-1 lg:row-start-2"
+            >
+              <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
+                <h2 className="text-xl font-medium italic text-foreground">Alumni</h2>
+                <NameList members={alumni} />
+              </section>
             </AnimateStagger>
 
             <AlumniPreviewAside />
-
-            <AnimateStagger delay={0.38} stagger={0.08} className="min-w-0 space-y-6 lg:col-start-1 lg:row-start-2">
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
-                <h3 className="text-xl font-medium italic text-foreground">Alumni</h3>
-                <NameList members={alumni} />
-              </div>
-            </AnimateStagger>
           </div>
         </main>
       </AlumniPreviewProvider>

@@ -90,7 +90,7 @@ export function AlumniPreviewAside() {
   useEffect(() => {
     if (!preview || typeof window === "undefined") return;
     if (window.matchMedia("(min-width: 1024px)").matches) return;
-    ref.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [preview]);
 
   return (
