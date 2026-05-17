@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-05-17T15:55:00.000Z",
+  "summary": "105 screenshot files in public/alumni-previews/. Every HTTP(S) portfolio link in alumni.ts has a snapshot path.",
+  "screenshotFiles": 105,
+  "entriesWithSnapshot": 110,
+  "totalMemberEntries": 127,
+  "withoutAnyLink": [
+    "Mary Adeturinmo",
+    "Michael Forbes",
+    "Sheran Forbes",
+    "Jerome Ince-Mitchell",
+    "Emily Moore",
+    "Adama Conteh",
+    "Jareh Das",
+    "Akeelah Bertram",
+    "Michelle Mwikali",
+    "Hayden Mills",
+    "Natasha Muluswela",
+    "Bianca Saunders",
+    "Nadia Wooten",
+    "Quinn Zaffre"
+  ],
+  "mailtoOnlyNoScreenshot": [
+    { "name": "Darren Bartholomew", "link": "mailto:bartholomew_darren@hotmail.com" },
+    { "name": "Ken Nwadiogbu", "link": "mailto:nkenart@gmail.com" }
+  ],
+  "regenerate": "npm run alumni:previews"
+}

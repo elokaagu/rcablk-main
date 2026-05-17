@@ -190,13 +190,19 @@ export function AlumniPreviewAside() {
     ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [preview]);
 
+  const stickyTop = "max(5.5rem, calc(env(safe-area-inset-top, 0px) + 3.5rem))";
+
   return (
     <aside
       ref={ref}
-      className="mx-auto w-full max-w-[280px] lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:mx-0 lg:max-w-none lg:w-[280px] lg:shrink-0 lg:self-start lg:sticky lg:top-28"
+      className="mx-auto w-full max-w-[280px] shrink-0 lg:mx-0 lg:w-[280px]"
       onMouseEnter={cancelClose}
       onMouseLeave={scheduleCloseFromPanel}
     >
+      <div
+        className="lg:sticky lg:z-10"
+        style={{ top: stickyTop }}
+      >
       {preview ? (
         <div className="flex flex-col gap-2">
           <p className="text-center font-serif text-sm text-foreground/80 lg:text-left">{preview.name}</p>
@@ -253,6 +259,7 @@ export function AlumniPreviewAside() {
           </div>
         </div>
       )}
+      </div>
     </aside>
   );
 }

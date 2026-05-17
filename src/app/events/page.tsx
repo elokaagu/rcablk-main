@@ -1,10 +1,8 @@
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
-import Link from "next/link";
-import { ListingCardMedia } from "@/components/ListingCardMedia";
 import { AnimateIn } from "@/components/AnimateIn";
-import { AnimateStagger } from "@/components/AnimateStagger";
+import { EventsListingClient } from "@/components/listing/EventsListingClient";
 import { getEvents } from "@/lib/cms/events-repo";
 import type { Metadata } from "next";
 
@@ -39,47 +37,7 @@ export default async function Events() {
       </AnimateIn>
 
       <main className="mx-auto w-full max-w-[1600px] flex-1 px-5 pb-14 sm:px-8 sm:pb-20 lg:px-12">
-        <AnimateStagger
-          delay={0.25}
-          stagger={0.05}
-          className="grid grid-flow-row grid-cols-1 gap-10 sm:gap-12 md:grid-cols-2 md:gap-x-8 md:gap-y-14 lg:grid-cols-3 lg:gap-x-10"
-        >
-          {events.map((event) => (
-            <Link
-              key={event.slug}
-              href={`/events/${event.slug}`}
-              className="group flex min-w-0 flex-col no-underline outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-[#A8C9A7]"
-            >
-              <ListingCardMedia
-                src={event.image}
-                alt={event.name}
-                aspectRatio="3/2"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="w-full rounded-md"
-              />
-              <div className="mt-5 flex flex-col gap-0 text-left sm:mt-6">
-                <h2 className="font-display text-lg font-black uppercase leading-tight tracking-wide text-black sm:text-xl">
-                  {event.name}
-                </h2>
-                {event.description ? (
-                  <p className="mt-3 font-serif text-base font-normal italic leading-snug text-black sm:text-[1.05rem]">
-                    {event.description}
-                  </p>
-                ) : null}
-                {event.venue ? (
-                  <p className="mt-2 font-serif text-base font-normal not-italic leading-snug text-black sm:text-[1.05rem]">
-                    {event.venue}
-                  </p>
-                ) : null}
-                {event.date ? (
-                  <p className="mt-2 font-serif text-base font-normal not-italic leading-snug text-black sm:text-[1.05rem]">
-                    {event.date}
-                  </p>
-                ) : null}
-              </div>
-            </Link>
-          ))}
-        </AnimateStagger>
+        <EventsListingClient events={events} />
       </main>
 
       <Footer />

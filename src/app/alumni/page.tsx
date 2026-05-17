@@ -38,7 +38,7 @@ const NameList = ({ members }: NameListProps) => (
 export default function Alumni() {
   return (
     <div
-      className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden"
+      className="flex min-h-screen min-w-0 w-full flex-col overflow-x-clip"
       style={{ backgroundColor: "hsl(207, 70%, 85%)" }}
     >
       <PageBackground color="hsl(207, 70%, 85%)" />
@@ -57,30 +57,24 @@ export default function Alumni() {
         <main className="mx-auto w-full max-w-6xl flex-1 px-5 pb-12 sm:px-10 sm:pb-16 lg:px-12">
           {/*
             Mobile: founding → alumni → preview (below both lists).
-            lg+: names in column 1; sticky preview spans both rows in column 2.
+            lg+: lists on the left; preview column stays sticky while scrolling.
           */}
-          <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-start lg:gap-x-14">
-            <AnimateStagger
-              delay={0.3}
-              stagger={0.08}
-              className="min-w-0 space-y-6 lg:col-start-1 lg:row-start-1"
-            >
-              <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
-                <h2 className="text-xl font-medium italic text-foreground">Founding Members</h2>
-                <NameList members={foundingMembers} />
-              </section>
-            </AnimateStagger>
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-x-14">
+            <div className="min-w-0 flex-1 space-y-8">
+              <AnimateStagger delay={0.3} stagger={0.08} className="min-w-0 space-y-6">
+                <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
+                  <h2 className="text-xl font-medium italic text-foreground">Founding Members</h2>
+                  <NameList members={foundingMembers} />
+                </section>
+              </AnimateStagger>
 
-            <AnimateStagger
-              delay={0.38}
-              stagger={0.08}
-              className="min-w-0 space-y-6 lg:col-start-1 lg:row-start-2"
-            >
-              <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
-                <h2 className="text-xl font-medium italic text-foreground">Alumni</h2>
-                <NameList members={alumni} />
-              </section>
-            </AnimateStagger>
+              <AnimateStagger delay={0.38} stagger={0.08} className="min-w-0 space-y-6">
+                <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
+                  <h2 className="text-xl font-medium italic text-foreground">Alumni</h2>
+                  <NameList members={alumni} />
+                </section>
+              </AnimateStagger>
+            </div>
 
             <AlumniPreviewAside />
           </div>
