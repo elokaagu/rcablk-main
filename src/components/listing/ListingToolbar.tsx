@@ -89,14 +89,14 @@ export function ListingToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder={searchPlaceholder}
-              className="h-9 w-full border-0 border-b border-black/20 bg-transparent pl-7 pr-2 font-serif text-sm text-black outline-none transition-colors placeholder:text-black/40 focus-visible:border-black"
+              className="h-11 min-h-[44px] w-full border-0 border-b border-black/20 bg-transparent pl-7 pr-2 font-serif text-base text-black outline-none transition-colors placeholder:text-black/40 focus-visible:border-black sm:h-9 sm:min-h-0 sm:text-sm"
               autoComplete="off"
             />
           </div>
         </div>
 
-        <div className="flex flex-wrap items-end gap-x-6 gap-y-3 sm:shrink-0">
-          <div>
+        <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:items-end sm:gap-x-6 sm:gap-y-3 sm:shrink-0">
+          <div className="w-full min-w-0 sm:w-auto">
             <p
               id="listing-sort-label"
               className="mb-1 font-display text-[0.55rem] font-black uppercase tracking-[0.2em] text-black/45"
@@ -109,11 +109,11 @@ export function ListingToolbar({
               onValueChange={(v) => onSortChange(v as SortOption)}
               options={sortOptions}
               ariaLabel="Sort order"
-              className="min-w-[9.5rem]"
+              className="w-full min-w-0 sm:min-w-[9.5rem]"
             />
           </div>
 
-          <div>
+          <div className="w-full min-w-0 sm:w-auto">
             <p
               id="listing-filter-label"
               className="mb-1 font-display text-[0.55rem] font-black uppercase tracking-[0.2em] text-black/45"
@@ -126,7 +126,7 @@ export function ListingToolbar({
               onValueChange={onFilterChange}
               options={filterOptions}
               ariaLabel={filterLabel}
-              className="min-w-[9.5rem]"
+              className="w-full min-w-0 sm:min-w-[9.5rem]"
             />
           </div>
         </div>

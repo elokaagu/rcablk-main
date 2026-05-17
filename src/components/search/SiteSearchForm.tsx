@@ -47,14 +47,14 @@ export function SiteSearchForm({
           placeholder={compact ? "Search…" : "Search news, events & alumni"}
           className={cn(
             "w-full rounded-md border-2 border-black bg-white font-serif text-sm text-black outline-none transition-colors placeholder:text-black/45 focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 focus-visible:ring-offset-secondary",
-            compact ? "h-10 pl-9 pr-3" : "h-11 pl-10 pr-3",
+            compact ? "h-11 min-h-[44px] pl-9 pr-3 text-base sm:h-10 sm:text-sm" : "h-11 min-h-[44px] pl-10 pr-3 text-base",
           )}
           autoComplete="off"
         />
       </div>
       <button
         type="submit"
-        className="mt-2 w-full rounded-md border-2 border-black bg-black px-3 py-2 font-display text-[0.65rem] font-black uppercase tracking-[0.18em] text-white transition-opacity hover:opacity-85"
+        className="mt-2 min-h-[44px] w-full touch-manipulation rounded-md border-2 border-black bg-black px-3 py-2.5 font-display text-[0.65rem] font-black uppercase tracking-[0.18em] text-white transition-opacity hover:opacity-85"
       >
         Search
       </button>

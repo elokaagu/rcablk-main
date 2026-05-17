@@ -191,8 +191,6 @@ export function AlumniPreviewAside() {
   }, [preview]);
 
   const panelTop = "max(5.5rem, calc(env(safe-area-inset-top, 0px) + 3.5rem))";
-  /** Align with right column inside centered max-w-6xl main (72rem) + lg px-12 */
-  const panelRight = "max(1.25rem, calc((100vw - 72rem) / 2 + 3rem))";
 
   return (
     <aside
@@ -202,8 +200,8 @@ export function AlumniPreviewAside() {
       onMouseLeave={scheduleCloseFromPanel}
     >
       <div
-        className="w-full lg:fixed lg:z-20 lg:w-[280px]"
-        style={{ top: panelTop, right: panelRight }}
+        className="w-full lg:fixed lg:right-8 lg:z-20 lg:w-[280px] xl:right-[max(3rem,calc((100vw-72rem)/2+3rem))]"
+        style={{ top: panelTop }}
       >
       {preview ? (
         <div className="flex flex-col gap-2">

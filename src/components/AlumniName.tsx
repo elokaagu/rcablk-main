@@ -23,7 +23,7 @@ export function AlumniName({ name, snapshot, link, instagram }: AlumniNameProps)
   };
 
   const sharedProps = {
-    className: "inline-block cursor-default",
+    className: "inline-block max-w-full cursor-default touch-manipulation py-0.5",
     onMouseEnter: handleEnter,
     onMouseLeave: scheduleCloseFromName,
     onFocus: handleEnter,
@@ -35,7 +35,7 @@ export function AlumniName({ name, snapshot, link, instagram }: AlumniNameProps)
 
   const label = (
     <span
-      className={`text-lg text-foreground transition-colors duration-200 ${
+      className={`text-base leading-snug text-foreground transition-colors duration-200 sm:text-lg ${
         href
           ? "underline decoration-black/30 underline-offset-2 hover:bg-secondary/40 hover:text-secondary-foreground rounded-sm px-0.5 -mx-0.5"
           : canPreview

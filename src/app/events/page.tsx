@@ -21,7 +21,7 @@ export default async function Events() {
   const events = await getEvents();
   return (
     <div
-      className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden text-black"
+      className="flex min-h-screen-safe min-w-0 w-full flex-col overflow-x-hidden text-black"
       style={{ backgroundColor: "#A8C9A7" }}
     >
       <PageBackground color="#A8C9A7" />
@@ -29,10 +29,7 @@ export default async function Events() {
       <PageLogotype src={BRAND_LOGOTYPES.yellow} />
 
       <AnimateIn delay={0.2} duration={0.6} y={16}>
-        <header
-          className="px-5 pb-6 pt-12 sm:px-10 sm:pt-12 sm:pb-8"
-          style={{ paddingTop: "max(3.5rem, calc(env(safe-area-inset-top) + 2.5rem))" }}
-        >
+        <header className="px-page-safe pb-6 pt-page-chrome sm:px-10 sm:pb-8 sm:pt-12">
           <h1 className="text-center font-serif text-3xl font-normal capitalize tracking-tight text-black sm:text-4xl">
             events
           </h1>

@@ -44,7 +44,7 @@ export default async function EventDetail({ params }: PageProps) {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://rcablk.com";
 
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0" style={{ backgroundColor: "hsl(140, 30%, 70%)" }}>
+    <div className="flex min-h-screen-safe min-w-0 w-full flex-col overflow-x-hidden" style={{ backgroundColor: "hsl(140, 30%, 70%)" }}>
       <PageBackground color="hsl(140, 30%, 70%)" />
       <script
         type="application/ld+json"

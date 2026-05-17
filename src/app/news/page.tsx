@@ -19,16 +19,13 @@ export const metadata: Metadata = {
 export default async function News() {
   const newsArticles = await getNewsArticles();
   return (
-    <div className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden bg-[#FFDD00] text-black">
+    <div className="flex min-h-screen-safe min-w-0 w-full flex-col overflow-x-hidden bg-[#FFDD00] text-black">
       <PageBackground color="#FFDD00" />
       <SlideOutMenu />
       <PageLogotype src={BRAND_LOGOTYPES.forest} />
 
       <AnimateIn delay={0.15} duration={0.55} y={14}>
-        <header
-          className="px-5 pb-6 pt-12 text-center sm:px-10 sm:pt-14 sm:pb-8 lg:px-14"
-          style={{ paddingTop: "max(3.5rem, calc(env(safe-area-inset-top) + 2.5rem))" }}
-        >
+        <header className="px-page-safe pb-6 pt-page-chrome text-center sm:px-10 sm:pb-8 sm:pt-14 lg:px-14">
           <h1 className="font-serif text-[1.85rem] font-normal leading-[1.05] tracking-tight text-black sm:text-[2.25rem] md:text-[2.75rem]">
             News
           </h1>

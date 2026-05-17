@@ -52,7 +52,7 @@ export default async function NewsArticle({ params }: PageProps) {
   const hasGallery = article.gallery && article.gallery.length > 0;
 
   return (
-    <div className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden bg-[#FFDD00] text-black">
+    <div className="flex min-h-screen-safe min-w-0 w-full flex-col overflow-x-hidden bg-[#FFDD00] text-black">
       <PageBackground color="#FFDD00" />
       <script
         type="application/ld+json"

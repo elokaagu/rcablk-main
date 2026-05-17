@@ -29,7 +29,7 @@ function memberListKey(member: AlumniMember, index: number) {
 }
 
 const NameList = ({ members }: NameListProps) => (
-  <ul className="columns-2 gap-x-4 space-y-1 sm:gap-x-10">
+  <ul className="columns-1 gap-x-4 space-y-1 sm:columns-2 sm:gap-x-10">
     {members.map((member, index) => (
       <li key={memberListKey(member, index)} className="break-inside-avoid">
         <AlumniName
@@ -52,7 +52,7 @@ export default async function Alumni() {
   return (
     <div
       data-page="alumni"
-      className="flex min-h-screen min-w-0 w-full flex-col"
+      className="flex min-h-screen-safe min-w-0 w-full flex-col overflow-x-clip"
       style={{ backgroundColor: "hsl(207, 70%, 85%)" }}
     >
       <PageBackground color="hsl(207, 70%, 85%)" />
@@ -60,10 +60,7 @@ export default async function Alumni() {
       <PageLogotype src={BRAND_LOGOTYPES.forest} />
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>
-        <div
-          className="px-5 pb-6 pt-12 text-center sm:py-10"
-          style={{ paddingTop: "max(3rem, calc(env(safe-area-inset-top) + 2rem))" }}
-        >
+        <div className="px-page-safe pb-6 pt-page-chrome text-center sm:py-10">
           <h1 className="font-display text-2xl font-normal text-foreground sm:text-3xl">Alumni</h1>
         </div>
       </AnimateIn>

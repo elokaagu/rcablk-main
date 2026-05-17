@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -25,14 +25,23 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
   ];
 
   const linkClass =
-    "text-base font-serif font-medium text-black hover:opacity-70 transition-opacity py-2 min-h-[40px] flex items-center touch-manipulation block uppercase";
+    "text-base font-serif font-medium text-black hover:opacity-70 transition-opacity py-2.5 min-h-[44px] flex items-center touch-manipulation block uppercase";
+
+  useEffect(() => {
+    if (!open || typeof document === "undefined") return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   return (
     <>
       {/* Toggle button - hidden when menu is open to avoid overlap with close button */}
       <button
         onClick={() => setOpen(!open)}
-        className={`fixed z-50 text-foreground hover:opacity-70 transition-opacity flex items-center justify-center w-12 h-12 min-w-[44px] min-h-[44px] ${open ? "pointer-events-none opacity-0" : ""}`}
+        className={`fixed z-50 flex h-12 min-h-[44px] w-12 min-w-[44px] touch-manipulation items-center justify-center text-foreground transition-opacity hover:opacity-70 ${open ? "pointer-events-none opacity-0" : ""}`}
         style={{ top: "max(1rem, env(safe-area-inset-top))", right: "max(1rem, env(safe-area-inset-right))" }}
         aria-label={open ? "Close menu" : "Open menu"}
         aria-expanded={open}
@@ -60,14 +69,17 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
 
       {/* Slide-out panel — width capped so more of the page stays visible (reference layout) */}
       <div
-        className={`fixed inset-y-0 right-0 z-40 flex h-screen w-max max-w-full justify-end transform transition-transform duration-300 ease-in-out ${
+        className={`fixed inset-y-0 right-0 z-40 flex h-[100dvh] max-h-[100dvh] w-max max-w-full justify-end transform transition-transform duration-300 ease-in-out ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <div
-          className="relative box-border h-full w-[min(17rem,58vw)] min-w-[11.25rem] max-w-[17rem] flex flex-col bg-secondary sm:w-[min(18rem,52vw)] sm:max-w-[18rem]"
-          style={{ paddingRight: "env(safe-area-inset-right)" }}
+          className="relative box-border flex h-full w-[min(17rem,85vw)] min-w-[11.25rem] max-w-[17rem] flex-col bg-secondary sm:w-[min(18rem,52vw)] sm:max-w-[18rem]"
+          style={{
+            paddingRight: "max(0px, env(safe-area-inset-right))",
+            paddingTop: "env(safe-area-inset-top)",
+          }}
         >
           {/* Close button - top right */}
           <button

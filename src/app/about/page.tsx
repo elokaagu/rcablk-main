@@ -31,7 +31,7 @@ export default async function About() {
   const heading = pickLiveSiteTitle(cms, defaults.title);
 
   return (
-    <div className="about-page flex min-h-dvh min-h-screen min-w-0 w-full flex-col overflow-x-clip bg-white">
+    <div className="about-page flex min-h-screen-safe min-w-0 w-full flex-col overflow-x-clip bg-white">
       <PageBackground background="linear-gradient(to right, #ffffff 0%, #ffffff 50%, hsl(207, 70%, 88%) 50%, hsl(207, 70%, 88%) 100%) fixed" />
       {/*
         Mobile / tablet: stack vertically with each column owning its own
@@ -71,7 +71,7 @@ export default async function About() {
         <div className="grid min-h-screen grid-cols-1 gap-0 lg:grid-cols-2">
         {/* Left column - Text. On mobile we drop a small wordmark above the
             heading because the seam logo is desktop-only. */}
-        <div className="bg-white px-5 py-10 pt-[max(4.5rem,env(safe-area-inset-top))] sm:px-8 sm:py-12 lg:px-16 lg:py-12 lg:pt-12">
+        <div className="bg-white px-page-safe py-10 pt-page-chrome sm:px-8 sm:py-12 lg:px-16 lg:py-12 lg:pt-12">
           <RevealText
             as="h2"
             delay={0.1}

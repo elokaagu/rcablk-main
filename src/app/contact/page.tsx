@@ -151,7 +151,7 @@ function Credits({ className = "" }: { className?: string }) {
 export default function Contact() {
   return (
     <div
-      className="relative min-h-screen w-full overflow-hidden text-black"
+      className="relative min-h-screen-safe w-full overflow-x-clip text-black"
       style={{ backgroundColor: CONTACT_BG }}
     >
       <PageBackground color={CONTACT_BG} />
@@ -162,11 +162,8 @@ export default function Contact() {
       {/* Mobile / tablet — vertical stack                            */}
       {/* ----------------------------------------------------------- */}
       <div
-        className="flex min-h-screen flex-col gap-10 px-5 pb-16 sm:gap-14 sm:px-10 sm:pb-20 lg:hidden"
-        style={{
-          paddingTop: "max(5rem, calc(env(safe-area-inset-top) + 4rem))",
-          paddingBottom: "max(4rem, env(safe-area-inset-bottom))",
-        }}
+        className="flex min-h-screen-safe flex-col gap-10 px-page-safe pb-16 pt-page-chrome sm:gap-14 sm:pb-20 lg:hidden"
+        style={{ paddingBottom: "max(4rem, env(safe-area-inset-bottom))" }}
       >
         <AnimateIn delay={0.05} duration={0.7} y={10}>
           <AddressBlock />

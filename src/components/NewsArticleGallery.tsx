@@ -215,7 +215,7 @@ export function NewsArticleGallery({
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent
-          className="flex max-h-[min(92vh,900px)] w-[min(96vw,56rem)] max-w-none flex-col overflow-hidden border-2 border-black bg-[#FFDD00] p-0 shadow-[6px_6px_0_0_rgba(0,0,0,1)] sm:rounded-lg [&>button:last-child]:text-black [&>button:last-child]:opacity-80 [&>button:last-child]:hover:opacity-100"
+          className="flex max-h-[min(92dvh,900px)] w-[min(calc(100vw-1rem),56rem)] max-w-none flex-col overflow-hidden border-2 border-black bg-[#FFDD00] p-0 shadow-[6px_6px_0_0_rgba(0,0,0,1)] sm:rounded-lg [&>button:last-child]:right-3 [&>button:last-child]:top-3 [&>button:last-child]:flex [&>button:last-child]:h-11 [&>button:last-child]:w-11 [&>button:last-child]:items-center [&>button:last-child]:justify-center [&>button:last-child]:text-black [&>button:last-child]:opacity-80 [&>button:last-child]:hover:opacity-100"
           onKeyDown={(e) => {
             if (images.length < 2) return;
             if (e.key === "ArrowLeft") {
@@ -233,7 +233,7 @@ export function NewsArticleGallery({
             Enlarged gallery view. Use arrow keys to move between images when available.
           </DialogDescription>
 
-          <div className="relative grid min-h-[min(52vh,640px)] w-full flex-1 place-items-center bg-black/[0.04] px-12 pb-11 pt-12 sm:min-h-[min(58vh,720px)] sm:px-16 sm:pb-12 sm:pt-14">
+          <div className="relative grid min-h-[min(52dvh,640px)] w-full flex-1 place-items-center bg-black/[0.04] px-4 pb-11 pt-12 sm:min-h-[min(58dvh,720px)] sm:px-16 sm:pb-12 sm:pt-14">
             {activeSrc && isVideoMediaUrl(activeSrc) ? (
               <video
                 key={activeSrc}
@@ -252,7 +252,7 @@ export function NewsArticleGallery({
                 <button
                   type="button"
                   onClick={goPrev}
-                  className="absolute left-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border-2 border-black bg-white/95 text-black shadow-sm transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black sm:left-4"
+                  className="absolute left-2 top-1/2 z-10 flex size-11 min-h-[44px] min-w-[44px] -translate-y-1/2 touch-manipulation items-center justify-center rounded-full border-2 border-black bg-white/95 text-black shadow-sm transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black sm:left-4"
                   aria-label="Previous image"
                 >
                   <ChevronLeft className="size-5" aria-hidden />
@@ -260,7 +260,7 @@ export function NewsArticleGallery({
                 <button
                   type="button"
                   onClick={goNext}
-                  className="absolute right-3 top-1/2 z-10 flex size-10 -translate-y-1/2 items-center justify-center rounded-full border-2 border-black bg-white/95 text-black shadow-sm transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black sm:right-4"
+                  className="absolute right-2 top-1/2 z-10 flex size-11 min-h-[44px] min-w-[44px] -translate-y-1/2 touch-manipulation items-center justify-center rounded-full border-2 border-black bg-white/95 text-black shadow-sm transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black sm:right-4"
                   aria-label="Next image"
                 >
                   <ChevronRight className="size-5" aria-hidden />

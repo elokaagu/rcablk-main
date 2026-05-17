@@ -21,7 +21,7 @@ type ListingSelectProps = {
 };
 
 const triggerClass =
-  "h-9 min-w-[8.5rem] gap-1.5 rounded-none border-0 border-b border-black/20 bg-transparent px-0 py-1 font-serif text-sm font-normal text-black shadow-none ring-0 ring-offset-0 transition-colors hover:border-black/40 focus:ring-0 focus:ring-offset-0 data-[state=open]:border-black [&>svg]:h-3.5 [&>svg]:w-3.5 [&>svg]:shrink-0 [&>svg]:text-black/50";
+  "h-11 min-h-[44px] min-w-0 gap-1.5 rounded-none border-0 border-b border-black/20 bg-transparent px-0 py-1 font-serif text-base font-normal text-black shadow-none ring-0 ring-offset-0 transition-colors hover:border-black/40 focus:ring-0 focus:ring-offset-0 data-[state=open]:border-black sm:h-9 sm:min-h-0 sm:text-sm [&>svg]:h-3.5 [&>svg]:w-3.5 [&>svg]:shrink-0 [&>svg]:text-black/50";
 
 const contentClass =
   "z-50 rounded-md border border-black/20 bg-white p-1 font-serif text-sm text-black shadow-[0_8px_24px_-8px_rgba(0,0,0,0.25)]";

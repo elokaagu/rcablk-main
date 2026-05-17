@@ -29,7 +29,7 @@ export default async function Accessibility() {
 
   return (
     <div
-      className="min-h-screen flex flex-col overflow-x-hidden w-full min-w-0 text-black"
+      className="min-h-screen-safe flex flex-col overflow-x-hidden w-full min-w-0 text-black"
       style={{ backgroundColor: LEGAL_PAGE_BG }}
     >
       <PageBackground color={LEGAL_PAGE_BG} />
@@ -38,8 +38,7 @@ export default async function Accessibility() {
 
       <AnimateIn delay={0.2} duration={0.6} y={20}>
         <div
-          className="px-5 pb-6 pt-12 text-center sm:py-10"
-          style={{ paddingTop: "max(3rem, calc(env(safe-area-inset-top) + 2rem))" }}
+          className="px-page-safe pb-6 pt-page-chrome text-center sm:py-10"
         >
           <h2 className="px-2 font-display text-xl font-normal text-foreground sm:text-2xl">{heading}</h2>
         </div>

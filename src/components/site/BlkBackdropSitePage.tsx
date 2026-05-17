@@ -33,7 +33,7 @@ export function BlkBackdropSitePage({
 }: BlkBackdropSitePageProps) {
   return (
     <div
-      className="relative flex min-h-screen min-w-0 w-full flex-col text-black"
+      className="relative flex min-h-screen-safe min-w-0 w-full flex-col overflow-x-clip text-black"
       style={{ backgroundColor }}
     >
       <PageBackground color={backgroundColor} />
@@ -50,11 +50,11 @@ export function BlkBackdropSitePage({
             <VerticalBlkBackdrop letterColor={letterColor} letterformImage={letterformImage} />
           </div>
 
-          <div className="relative z-10 flex min-h-0 flex-1 flex-col px-6 sm:px-10 lg:px-12">
-            <div className="flex flex-1 flex-col justify-center py-10 pt-[max(5.5rem,env(safe-area-inset-top,0px))] pb-12 sm:py-14 sm:pt-28 sm:pb-16">
+          <div className="relative z-10 flex min-h-0 flex-1 flex-col px-page-safe sm:px-10 lg:px-12">
+            <div className="flex flex-1 flex-col justify-center pb-12 py-10 pt-page-chrome sm:py-14 sm:pb-16 sm:pt-28">
               <AnimateIn delay={0.15} duration={0.55} y={12}>
                 <header className="mb-8 text-center sm:mb-10">
-                  <h1 className="font-serif text-3xl font-normal tracking-tight text-black sm:text-4xl">
+                  <h1 className="font-serif text-2xl font-normal tracking-tight text-black sm:text-3xl md:text-4xl">
                     {title}
                   </h1>
                 </header>

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen min-w-0 w-full flex-col overflow-x-hidden bg-homeHero">
+    <div className="flex min-h-screen-safe min-w-0 w-full flex-col overflow-x-hidden bg-homeHero">
       <PageBackground color="hsl(40, 100%, 50%)" />
       <SlideOutMenu />
       <main className="flex min-h-0 w-full flex-1 flex-col pb-0">

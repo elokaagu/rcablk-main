@@ -149,11 +149,40 @@
     padding: 0;
     overflow-x: clip;
     -webkit-tap-highlight-color: transparent;
+    overflow-wrap: anywhere;
   }
 
-  /* overflow-x on html/body breaks position:sticky; alumni preview needs document scroll */
-  html:has([data-page="alumni"]),
-  body:has([data-page="alumni"]) {
-    overflow-x: visible;
+  /* Prefer dynamic viewport height on mobile browsers with collapsing chrome */
+  @supports (height: 100dvh) {
+    :root {
+      --screen-min-h: 100dvh;
+    }
+  }
+  @supports not (height: 100dvh) {
+    :root {
+      --screen-min-h: 100vh;
+    }
+  }
+}
+
+@layer utilities {
+  .min-h-screen-safe {
+    min-height: 100vh;
+    min-height: var(--screen-min-h, 100dvh);
+  }
+
+  /* Clears fixed top-left logotype + top-right menu on inner pages */
+  .pt-page-chrome {
+    padding-top: max(3.5rem, calc(env(safe-area-inset-top) + 2.75rem));
+  }
+
+  .px-page-safe {
+    padding-left: max(1.25rem, env(safe-area-inset-left));
+    padding-right: max(1.25rem, env(safe-area-inset-right));
+  }
+
+  .touch-target {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
   }
 }

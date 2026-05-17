@@ -26,7 +26,7 @@ export function PageLogotype({ src, className, priority = true }: PageLogotypePr
         width={200}
         height={43}
         priority={priority}
-        className="h-7 w-auto sm:h-9"
+        className="h-6 w-auto max-w-[calc(100vw-5.75rem)] object-contain object-left sm:h-8 md:h-9 sm:max-w-none"
       />
     </Link>
   );

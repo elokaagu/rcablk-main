@@ -50,7 +50,7 @@ export default function RootLayout({
           Skip to main content
         </a>
         <Providers>
-          <div id="main-content" tabIndex={-1} className="min-h-screen">
+          <div id="main-content" tabIndex={-1} className="min-h-screen-safe min-w-0 overflow-x-clip">
             {children}
           </div>
         </Providers>
