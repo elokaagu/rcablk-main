@@ -22,7 +22,10 @@ const SECTIONS: ReadonlyArray<NavSection> = [
   },
   {
     title: "Site",
-    items: [{ href: "/studio/pages", label: "Pages", description: "On-site copy" }],
+    items: [
+      { href: "/studio/alumni", label: "Alumni", description: "Preview images" },
+      { href: "/studio/pages", label: "Pages", description: "On-site copy" },
+    ],
   },
 ];
 

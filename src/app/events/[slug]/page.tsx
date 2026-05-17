@@ -3,6 +3,8 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
 import { ArticleHeader } from "@/components/ArticleHeader";
+import { PageLogotype } from "@/components/PageLogotype";
+import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
 import { BlurImage } from "@/components/BlurImage";
 import { EventBody } from "@/components/EventBody";
 import { isVideoMediaUrl } from "@/lib/media-url";
@@ -63,6 +65,7 @@ export default async function EventDetail({ params }: PageProps) {
         }}
       />
       <SlideOutMenu />
+      <PageLogotype src={BRAND_LOGOTYPES.yellow} />
 
       <ArticleHeader backHref="/events" backLabel="Events" ariaLabel="Back to all events" />
 

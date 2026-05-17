@@ -6,6 +6,8 @@ import { AboutGalleryColumn } from "@/components/about/AboutGalleryRotator";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import { ABOUT_GALLERY } from "@/data/about-gallery";
 import { RevealText } from "@/components/RevealText";
+import { PageLogotype } from "@/components/PageLogotype";
+import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
 import { getSitePageDefaults } from "@/data/site-pages-static";
 import { getSitePage, pickLiveSiteTitle } from "@/lib/cms/pages-repo";
 import Image from "next/image";
@@ -44,6 +46,7 @@ export default async function About() {
         }
       `}</style>
       <SlideOutMenu />
+      <PageLogotype src={BRAND_LOGOTYPES.black} />
 
       <main className="relative flex-1 lg:min-h-screen">
         {/* Sticky seam logo, only meaningful on lg+ where the seam exists */}
@@ -69,14 +72,6 @@ export default async function About() {
         {/* Left column - Text. On mobile we drop a small wordmark above the
             heading because the seam logo is desktop-only. */}
         <div className="bg-white px-5 py-10 pt-[max(4.5rem,env(safe-area-inset-top))] sm:px-8 sm:py-12 lg:px-16 lg:py-12 lg:pt-12">
-          <Image
-            src={ABOUT_SEAM_LOGO}
-            alt="RCA BLK"
-            width={120}
-            height={120}
-            className="mb-6 h-12 w-auto sm:h-14 lg:hidden"
-            priority
-          />
           <RevealText
             as="h2"
             delay={0.1}

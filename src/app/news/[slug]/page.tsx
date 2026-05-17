@@ -1,8 +1,10 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import SlideOutMenu from "@/components/SlideOutMenu";
 import Footer from "@/components/Footer";
 import PageBackground from "@/components/PageBackground";
+import { ArticleHeader } from "@/components/ArticleHeader";
+import { PageLogotype } from "@/components/PageLogotype";
+import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
 import { NewsArticleGallery } from "@/components/NewsArticleGallery";
 import { NewsBody } from "@/components/NewsBody";
 import { BlurImage } from "@/components/BlurImage";
@@ -69,20 +71,11 @@ export default async function NewsArticle({ params }: PageProps) {
         }}
       />
       <SlideOutMenu />
+      <PageLogotype src={BRAND_LOGOTYPES.forest} />
 
-      <main
-        className="mx-auto w-full max-w-5xl flex-1 px-5 py-8 pb-16 sm:px-10 sm:py-10 sm:pb-20 lg:max-w-[56rem] lg:px-14"
-        style={{ paddingTop: "max(2rem, calc(env(safe-area-inset-top) + 1rem))" }}
-      >
-        <nav className="mb-8 sm:mb-10" aria-label="Breadcrumb">
-          <Link
-            href="/news"
-            className="inline-flex min-h-[44px] items-center font-serif text-sm text-black underline decoration-black/40 underline-offset-[0.2em] transition-opacity hover:opacity-70"
-          >
-            Back to news
-          </Link>
-        </nav>
+      <ArticleHeader backHref="/news" backLabel="News" ariaLabel="Back to all news" />
 
+      <main className="mx-auto w-full max-w-5xl flex-1 px-5 pb-16 pt-4 sm:px-10 sm:pb-20 sm:pt-6 lg:max-w-[56rem] lg:px-14">
         {hasGallery ? (
           <>
             <header className="mb-8 text-center sm:mb-10">

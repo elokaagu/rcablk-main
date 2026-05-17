@@ -11,6 +11,7 @@ import {
 import { AnimateIn } from "@/components/AnimateIn";
 import { AnimateStagger } from "@/components/AnimateStagger";
 import { foundingMembers, alumni, type AlumniMember } from "@/data/alumni";
+import { resolveAlumniMembers } from "@/lib/alumni-resolve";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -42,7 +43,12 @@ const NameList = ({ members }: NameListProps) => (
   </ul>
 );
 
-export default function Alumni() {
+export default async function Alumni() {
+  const [resolvedFounding, resolvedAlumni] = await Promise.all([
+    resolveAlumniMembers(foundingMembers),
+    resolveAlumniMembers(alumni),
+  ]);
+
   return (
     <div
       data-page="alumni"
@@ -73,14 +79,14 @@ export default function Alumni() {
               <AnimateStagger delay={0.3} stagger={0.08} className="min-w-0 space-y-6">
                 <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
                   <h2 className="text-xl font-medium italic text-foreground">Founding Members</h2>
-                  <NameList members={foundingMembers} />
+                  <NameList members={resolvedFounding} />
                 </section>
               </AnimateStagger>
 
               <AnimateStagger delay={0.38} stagger={0.08} className="min-w-0 space-y-6">
                 <section className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,10rem)_1fr] lg:gap-8">
                   <h2 className="text-xl font-medium italic text-foreground">Alumni</h2>
-                  <NameList members={alumni} />
+                  <NameList members={resolvedAlumni} />
                 </section>
               </AnimateStagger>
             </div>

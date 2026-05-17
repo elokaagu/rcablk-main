@@ -5,6 +5,7 @@ import SlideOutMenu from "@/components/SlideOutMenu";
 import PageBackground from "@/components/PageBackground";
 import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
+import { PageLogotype } from "@/components/PageLogotype";
 import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
 import { ContactNewsletterForm } from "./ContactNewsletterForm";
 import { cn } from "@/lib/utils";
@@ -27,21 +28,6 @@ const HERO_ALT =
 /* ------------------------------------------------------------------ */
 /* Building blocks                                                     */
 /* ------------------------------------------------------------------ */
-
-function Wordmark() {
-  return (
-    <Link href="/" aria-label="RCA BLK home" className="inline-block">
-      <Image
-        src={BRAND_LOGOTYPES.white}
-        alt="RCA BLK"
-        width={200}
-        height={43}
-        priority
-        className="h-7 w-auto sm:h-9"
-      />
-    </Link>
-  );
-}
 
 function AddressBlock() {
   return (
@@ -170,6 +156,7 @@ export default function Contact() {
     >
       <PageBackground color={CONTACT_BG} />
       <SlideOutMenu />
+      <PageLogotype src={BRAND_LOGOTYPES.white} />
 
       {/* ----------------------------------------------------------- */}
       {/* Mobile / tablet — vertical stack                            */}
@@ -182,10 +169,7 @@ export default function Contact() {
         }}
       >
         <AnimateIn delay={0.05} duration={0.7} y={10}>
-          <div className="flex flex-col gap-8">
-            <Wordmark />
-            <AddressBlock />
-          </div>
+          <AddressBlock />
         </AnimateIn>
 
         <AnimateIn delay={0.18} duration={0.85} y={14} className="self-center">
@@ -207,18 +191,15 @@ export default function Contact() {
       {/* Desktop — corner-anchored layout matching the reference      */}
       {/* ----------------------------------------------------------- */}
       <div className="relative hidden min-h-screen lg:block">
-        {/* Top-left: wordmark + address */}
-        <AnimateIn
-          delay={0.06}
-          duration={0.75}
-          y={10}
-          className="absolute left-12 top-12 max-w-[22rem] xl:left-16 xl:top-16"
+        {/* Top-left: address (wordmark is fixed via PageLogotype) */}
+        <div
+          className="absolute left-12 max-w-[22rem] xl:left-16"
+          style={{ top: "max(5.5rem, calc(env(safe-area-inset-top) + 3.5rem))" }}
         >
-          <div className="flex flex-col gap-7">
-            <Wordmark />
+          <AnimateIn delay={0.06} duration={0.75} y={10}>
             <AddressBlock />
-          </div>
-        </AnimateIn>
+          </AnimateIn>
+        </div>
 
         {/* Centre — large circular hero. The wrapper is pointer-events-none so
             the corner content beneath the visual circle stays interactive. */}

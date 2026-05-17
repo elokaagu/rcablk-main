@@ -8,16 +8,16 @@ type PageLogotypeProps = {
   priority?: boolean;
 };
 
-/** Corner “rca blk” wordmark on transparent PNG letterforms. */
+/** Corner “rca blk” wordmark — fixed top-left on every page that uses it. */
 export function PageLogotype({ src, className, priority = true }: PageLogotypeProps) {
   return (
     <Link
       href="/"
-      className={cn(
-        "absolute left-4 top-4 z-40 sm:left-6 sm:top-6",
-        className,
-      )}
-      style={{ paddingTop: "max(0px, env(safe-area-inset-top))" }}
+      className={cn("fixed z-40", className)}
+      style={{
+        top: "max(1rem, env(safe-area-inset-top))",
+        left: "max(1rem, env(safe-area-inset-left))",
+      }}
       aria-label="RCA BLK home"
     >
       <Image

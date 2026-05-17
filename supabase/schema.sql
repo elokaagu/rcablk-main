@@ -78,3 +78,17 @@ drop policy if exists "site_pages_select_public" on public.site_pages;
 create policy "site_pages_select_public" on public.site_pages for select using (true);
 
 create index if not exists site_pages_slug_idx on public.site_pages (slug);
+
+-- Alumni preview images (slug matches name slug in src/data/alumni.ts)
+create table if not exists public.alumni_snapshots (
+  slug text primary key,
+  snapshot text not null,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.alumni_snapshots enable row level security;
+
+drop policy if exists "alumni_snapshots_select_public" on public.alumni_snapshots;
+create policy "alumni_snapshots_select_public" on public.alumni_snapshots for select using (true);
+
+create index if not exists alumni_snapshots_updated_at_idx on public.alumni_snapshots (updated_at desc);
