@@ -31,7 +31,12 @@ const NameList = ({ members }: NameListProps) => (
   <ul className="columns-2 gap-x-4 space-y-1 sm:gap-x-10">
     {members.map((member, index) => (
       <li key={memberListKey(member, index)} className="break-inside-avoid">
-        <AlumniName name={member.name} snapshot={member.snapshot} link={member.link} />
+        <AlumniName
+          name={member.name}
+          snapshot={member.snapshot}
+          link={member.link}
+          instagram={member.instagram}
+        />
       </li>
     ))}
   </ul>

@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import SlideOutMenu from "@/components/SlideOutMenu";
@@ -6,6 +7,7 @@ import { BlurImage } from "@/components/BlurImage";
 import { AnimateIn } from "@/components/AnimateIn";
 import { BRAND_LOGOTYPES } from "@/data/brand-logotypes";
 import { ContactNewsletterForm } from "./ContactNewsletterForm";
+import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -35,7 +37,7 @@ function Wordmark() {
         width={200}
         height={43}
         priority
-        className="h-7 w-auto mix-blend-screen sm:h-9"
+        className="h-7 w-auto sm:h-9"
       />
     </Link>
   );
@@ -94,29 +96,65 @@ function CircularHero({ className = "" }: { className?: string }) {
   );
 }
 
-function Credits({ className = "" }: { className?: string }) {
+function CreditLine({
+  label,
+  children,
+  alignEnd,
+}: {
+  label: string;
+  children: ReactNode;
+  alignEnd?: boolean;
+}) {
   return (
-    <dl
-      className={`flex flex-col gap-1 font-serif text-[1rem] leading-snug text-black sm:text-[1.05rem] ${className}`}
+    <p
+      className={cn(
+        "flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5 font-serif text-[0.98rem] leading-snug text-black sm:text-[1.02rem]",
+        alignEnd && "justify-end",
+      )}
     >
-      <div className="flex gap-2">
-        <dt className="font-normal">Identity:</dt>
-        <dd>Studio Frith</dd>
-      </div>
-      <div className="flex gap-2">
-        <dt className="font-normal">Web Development :</dt>
-        <dd>
+      <span className="font-display text-[0.58rem] font-black uppercase tracking-[0.2em] text-black/45">
+        {label}
+      </span>
+      <span className="text-black/90">{children}</span>
+    </p>
+  );
+}
+
+function Credits({ className = "" }: { className?: string }) {
+  const alignEnd = className.includes("text-right");
+
+  return (
+    <aside
+      className={cn(
+        "max-w-[16rem] border-t border-black/15 pt-4 sm:max-w-[18rem] sm:pt-5",
+        className,
+      )}
+      aria-label="Site credits"
+    >
+      <p
+        className={cn(
+          "mb-3 font-display text-[0.55rem] font-black uppercase tracking-[0.22em] text-black/40",
+          alignEnd && "text-right",
+        )}
+      >
+        Credits
+      </p>
+      <div className={cn("flex flex-col gap-2.5", alignEnd && "items-end")}>
+        <CreditLine label="Identity" alignEnd={alignEnd}>
+          Studio Frith
+        </CreditLine>
+        <CreditLine label="Web" alignEnd={alignEnd}>
           <a
             href="https://www.satellitelabs.xyz"
             target="_blank"
             rel="noopener noreferrer"
-            className="border-b border-black/40 transition-colors hover:border-black"
+            className="inline-block rounded-sm px-1.5 py-0.5 -mx-1.5 underline decoration-black/30 underline-offset-[3px] transition-[color,background-color,text-decoration-color] duration-200 hover:bg-black/12 hover:text-black hover:decoration-black/70"
           >
             Satellite Labs
           </a>
-        </dd>
+        </CreditLine>
       </div>
-    </dl>
+    </aside>
   );
 }
 

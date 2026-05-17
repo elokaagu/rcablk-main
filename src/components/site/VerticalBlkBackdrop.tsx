@@ -66,18 +66,14 @@ function BlkLetterformArtwork({ src }: { src: string }) {
 }
 
 /**
- * Fixed vertical BLK behind scrolling copy (Support, Resources).
- * Support: stacked B / L / K SVGs with a colour tint.
- * Resources: single brand BLK letterform artwork.
+ * Vertical BLK behind scrolling copy (Support, Resources).
+ * Render inside a sticky `h-[100dvh]` wrapper so it scrolls away before the footer.
  */
 export function VerticalBlkBackdrop({ letterColor, letterformImage }: VerticalBlkBackdropProps) {
   return (
     <div
-      className="pointer-events-none fixed inset-x-0 top-0 z-0 flex justify-center overflow-hidden"
-      style={{
-        height: "100dvh",
-        color: letterColor,
-      }}
+      className="pointer-events-none relative flex h-full w-full justify-center overflow-hidden"
+      style={{ color: letterColor }}
       aria-hidden
     >
       {letterformImage ? (

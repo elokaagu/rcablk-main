@@ -12,8 +12,10 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-const RESOURCES_BG = "hsl(207, 70%, 85%)";
-const RESOURCES_BLK_ARTWORK = "/assets/resources-blk-letterforms.png";
+/** Original Resources field — bright yellow (not the alumni/support blue). */
+const RESOURCES_BG = "#FAF05A";
+/** Pale blue stacked B/L/K — matches the corner logotype variant. */
+const RESOURCES_LETTER_COLOR = "#BFDEF3";
 
 export default async function Resources() {
   const defaults = getSitePageDefaults("resources")!;
@@ -23,7 +25,7 @@ export default async function Resources() {
   return (
     <BlkBackdropSitePage
       backgroundColor={RESOURCES_BG}
-      letterformImage={RESOURCES_BLK_ARTWORK}
+      letterColor={RESOURCES_LETTER_COLOR}
       logotypeSrc={BRAND_LOGOTYPES.blue}
       title={pickLiveSiteTitle(cms, defaults.title)}
       paragraphs={paragraphs}

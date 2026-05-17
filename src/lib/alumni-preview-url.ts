@@ -1,8 +1,17 @@
 /** Client-safe URL checks for alumni portfolio previews. */
 
+function isInstagramUrl(url: string): boolean {
+  try {
+    const host = new URL(url.trim()).hostname.toLowerCase().replace(/^www\./, "");
+    return host === "instagram.com";
+  } catch {
+    return false;
+  }
+}
+
 export function isPreviewableLink(link: string): boolean {
   const t = link.trim();
-  if (!t || t.startsWith("mailto:")) return false;
+  if (!t || t.startsWith("mailto:") || isInstagramUrl(t)) return false;
   return isAllowedPreviewUrl(t);
 }
 

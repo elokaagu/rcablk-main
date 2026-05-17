@@ -2,22 +2,24 @@
 
 import Link from "next/link";
 import { useAlumniPreview } from "@/components/alumni/AlumniPreviewContext";
-import { isPreviewableLink } from "@/lib/alumni-preview-url";
+import { getAlumniPrimaryLink, hasAlumniPreview } from "@/lib/alumni-links";
 
-interface AlumniNameProps {
+export type AlumniNameProps = {
   name: string;
   snapshot?: string;
   link?: string;
-}
+  instagram?: string;
+};
 
-export function AlumniName({ name, snapshot, link }: AlumniNameProps) {
+export function AlumniName({ name, snapshot, link, instagram }: AlumniNameProps) {
   const { openPreviewForMember, scheduleCloseFromName } = useAlumniPreview();
+  const href = getAlumniPrimaryLink({ link, instagram });
 
-  const canPreview = Boolean(snapshot || (link && isPreviewableLink(link)));
+  const canPreview = hasAlumniPreview({ snapshot, link, instagram });
 
   const handleEnter = () => {
     if (!canPreview) return;
-    openPreviewForMember({ name, snapshot, link });
+    openPreviewForMember({ name, snapshot, link: href });
   };
 
   const sharedProps = {
@@ -27,25 +29,27 @@ export function AlumniName({ name, snapshot, link }: AlumniNameProps) {
     onFocus: handleEnter,
     onBlur: scheduleCloseFromName,
     onTouchStart: () => {
-      if (canPreview) openPreviewForMember({ name, snapshot, link });
+      if (canPreview) openPreviewForMember({ name, snapshot, link: href });
     },
   };
 
   const label = (
     <span
       className={`text-lg text-foreground transition-colors duration-200 ${
-        link
+        href
           ? "underline decoration-black/30 underline-offset-2 hover:bg-secondary/40 hover:text-secondary-foreground rounded-sm px-0.5 -mx-0.5"
-          : ""
+          : canPreview
+            ? "underline decoration-black/20 underline-offset-2 decoration-dotted"
+            : ""
       }`}
     >
       {name}
     </span>
   );
 
-  if (link) {
+  if (href) {
     return (
-      <Link href={link} target="_blank" rel="noopener noreferrer" {...sharedProps}>
+      <Link href={href} target="_blank" rel="noopener noreferrer" {...sharedProps}>
         {label}
       </Link>
     );

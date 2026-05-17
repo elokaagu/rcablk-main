@@ -1,7 +1,8 @@
 "use client";
 
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search } from "lucide-react";
 import { SORT_LABELS, type SortOption } from "@/lib/listing-filters";
+import { ListingSelect } from "@/components/listing/ListingSelect";
 import { cn } from "@/lib/utils";
 
 export type FilterOption = { value: string; label: string };
@@ -18,15 +19,13 @@ type ListingToolbarProps = {
   resultCount: number;
   totalCount: number;
   searchPlaceholder?: string;
-  /** Tailwind ring-offset class matching page background */
-  ringOffsetClass?: string;
   className?: string;
 };
 
-const selectClass =
-  "h-11 w-full min-w-0 appearance-none rounded-md border-2 border-black bg-white/90 px-3 pr-9 font-serif text-sm text-black shadow-none outline-none transition-colors focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2";
-
-const labelClass = "font-display text-[0.65rem] font-black uppercase tracking-[0.2em] text-black/70";
+const sortOptions = (Object.keys(SORT_LABELS) as SortOption[]).map((key) => ({
+  value: key,
+  label: SORT_LABELS[key],
+}));
 
 export function ListingToolbar({
   query,
@@ -40,25 +39,17 @@ export function ListingToolbar({
   resultCount,
   totalCount,
   searchPlaceholder = "Search…",
-  ringOffsetClass = "focus-visible:ring-offset-white",
   className,
 }: ListingToolbarProps) {
   const hasActiveFilters = query.trim().length > 0 || filterValue !== "all";
 
   return (
     <div
-      className={cn(
-        "mb-8 rounded-lg border-2 border-black bg-white/85 p-4 shadow-[4px_4px_0_0_rgba(0,0,0,1)] sm:mb-10 sm:p-5",
-        className,
-      )}
+      className={cn("mb-8 border-b border-black/12 pb-6 sm:mb-10", className)}
       role="search"
     >
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <p className={labelClass}>
-          <SlidersHorizontal className="mr-1.5 inline-block h-3.5 w-3.5 align-[-2px]" aria-hidden />
-          Refine
-        </p>
-        <p className="font-serif text-sm text-black/70" aria-live="polite">
+      <div className="mb-4 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <p className="font-serif text-sm text-black/55" aria-live="polite">
           {resultCount === totalCount ? (
             <span>{totalCount} items</span>
           ) : (
@@ -68,16 +59,28 @@ export function ListingToolbar({
             </span>
           )}
         </p>
+        {hasActiveFilters ? (
+          <button
+            type="button"
+            onClick={() => {
+              onQueryChange("");
+              onFilterChange("all");
+            }}
+            className="font-display text-[0.6rem] font-black uppercase tracking-[0.18em] text-black/55 underline decoration-black/25 underline-offset-[3px] transition-opacity hover:text-black/80"
+          >
+            Clear
+          </button>
+        ) : null}
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-12 md:items-end">
-        <div className="md:col-span-5">
-          <label htmlFor="listing-search" className={cn(labelClass, "mb-1.5 block")}>
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:gap-6 lg:gap-8">
+        <div className="min-w-0 flex-1">
+          <label htmlFor="listing-search" className="sr-only">
             Search
           </label>
           <div className="relative">
             <Search
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-black/45"
+              className="pointer-events-none absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-black/35"
               aria-hidden
             />
             <input
@@ -86,63 +89,48 @@ export function ListingToolbar({
               value={query}
               onChange={(e) => onQueryChange(e.target.value)}
               placeholder={searchPlaceholder}
-              className={cn(selectClass, "pl-10", ringOffsetClass)}
+              className="h-9 w-full border-0 border-b border-black/20 bg-transparent pl-7 pr-2 font-serif text-sm text-black outline-none transition-colors placeholder:text-black/40 focus-visible:border-black"
               autoComplete="off"
             />
           </div>
         </div>
 
-        <div className="md:col-span-3">
-          <label htmlFor="listing-sort" className={cn(labelClass, "mb-1.5 block")}>
-            Sort
-          </label>
-          <select
-            id="listing-sort"
-            value={sort}
-            onChange={(e) => onSortChange(e.target.value as SortOption)}
-            className={cn(selectClass, ringOffsetClass)}
-          >
-            {(Object.keys(SORT_LABELS) as SortOption[]).map((key) => (
-              <option key={key} value={key}>
-                {SORT_LABELS[key]}
-              </option>
-            ))}
-          </select>
-        </div>
+        <div className="flex flex-wrap items-end gap-x-6 gap-y-3 sm:shrink-0">
+          <div>
+            <p
+              id="listing-sort-label"
+              className="mb-1 font-display text-[0.55rem] font-black uppercase tracking-[0.2em] text-black/45"
+            >
+              Sort
+            </p>
+            <ListingSelect
+              id="listing-sort"
+              value={sort}
+              onValueChange={(v) => onSortChange(v as SortOption)}
+              options={sortOptions}
+              ariaLabel="Sort order"
+              className="min-w-[9.5rem]"
+            />
+          </div>
 
-        <div className="md:col-span-4">
-          <label htmlFor="listing-filter" className={cn(labelClass, "mb-1.5 block")}>
-            {filterLabel}
-          </label>
-          <select
-            id="listing-filter"
-            value={filterValue}
-            onChange={(e) => onFilterChange(e.target.value)}
-            className={cn(selectClass, ringOffsetClass)}
-          >
-            {filterOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          <div>
+            <p
+              id="listing-filter-label"
+              className="mb-1 font-display text-[0.55rem] font-black uppercase tracking-[0.2em] text-black/45"
+            >
+              {filterLabel}
+            </p>
+            <ListingSelect
+              id="listing-filter"
+              value={filterValue}
+              onValueChange={onFilterChange}
+              options={filterOptions}
+              ariaLabel={filterLabel}
+              className="min-w-[9.5rem]"
+            />
+          </div>
         </div>
       </div>
-
-      {hasActiveFilters ? (
-        <div className="mt-4 flex justify-end">
-          <button
-            type="button"
-            onClick={() => {
-              onQueryChange("");
-              onFilterChange("all");
-            }}
-            className="font-serif text-sm text-black underline decoration-black/35 underline-offset-2 hover:opacity-70"
-          >
-            Clear filters
-          </button>
-        </div>
-      ) : null}
     </div>
   );
 }

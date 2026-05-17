@@ -14,7 +14,6 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
   const navItems = [
     { label: "Home", href: "/" },
     { label: "About", href: "/about" },
-    { label: "Search", href: "/search" },
     { label: "Events", href: "/events" },
     { label: "Resources", href: "/resources" },
     { label: "News", href: "/news" },
@@ -82,15 +81,9 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
 
           {/* Nav links — scrollable so very small viewports can still reach the bottom */}
           <nav
-            className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-8 pb-6 pt-20 sm:pt-24"
+            className="flex flex-1 flex-col gap-0.5 overflow-y-auto px-8 pb-4 pt-20 sm:pt-24"
             aria-label="Main navigation"
           >
-            <div className="mb-4 border-b-2 border-black/15 pb-5">
-              <p className="mb-2 font-display text-[0.6rem] font-black uppercase tracking-[0.2em] text-black/55">
-                Search
-              </p>
-              <SiteSearchForm compact onNavigate={() => setOpen(false)} inputId="menu-site-search" />
-            </div>
             {navItems.map((item) =>
               item.external ? (
                 <a
@@ -114,6 +107,13 @@ const SlideOutMenu = ({ iconOnDark = false }: { iconOnDark?: boolean }) => {
               )
             )}
           </nav>
+
+          <div className="mt-auto border-t-2 border-black/15 px-8 pb-4 pt-5">
+            <p className="mb-2 font-display text-[0.6rem] font-black uppercase tracking-[0.2em] text-black/55">
+              Search
+            </p>
+            <SiteSearchForm compact onNavigate={() => setOpen(false)} inputId="menu-site-search" />
+          </div>
 
           {/* Footer: RCA logo */}
           <div className="px-8 pb-8 pt-2">

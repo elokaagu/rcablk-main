@@ -256,7 +256,7 @@ export function AlumniPreviewAside() {
               Preview
             </p>
             <p className="font-serif text-[0.95rem] leading-snug text-foreground/75">
-              Hover a linked name to see their site
+              Hover a name to see their work
             </p>
           </div>
         </div>

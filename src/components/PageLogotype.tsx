@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { logotypeUsesScreenBlend } from "@/data/brand-logotypes";
 import { cn } from "@/lib/utils";
 
 type PageLogotypeProps = {
@@ -9,13 +8,8 @@ type PageLogotypeProps = {
   priority?: boolean;
 };
 
-/**
- * Corner “rca blk” wordmark. Coloured brand files ship on black matte;
- * mix-blend-screen drops the matte on saturated page backgrounds.
- */
+/** Corner “rca blk” wordmark on transparent PNG letterforms. */
 export function PageLogotype({ src, className, priority = true }: PageLogotypeProps) {
-  const blend = logotypeUsesScreenBlend(src);
-
   return (
     <Link
       href="/"
@@ -32,7 +26,7 @@ export function PageLogotype({ src, className, priority = true }: PageLogotypePr
         width={200}
         height={43}
         priority={priority}
-        className={cn("h-7 w-auto sm:h-9", blend && "mix-blend-screen")}
+        className="h-7 w-auto sm:h-9"
       />
     </Link>
   );

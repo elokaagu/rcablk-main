@@ -48,7 +48,6 @@ export function EventsListingClient({ events }: EventsListingClientProps) {
         resultCount={filtered.length}
         totalCount={events.length}
         searchPlaceholder="Search events, venues, dates…"
-        ringOffsetClass="focus-visible:ring-offset-[#A8C9A7]"
       />
 
       {filtered.length === 0 ? (

@@ -1,13 +1,10 @@
 /**
- * RCA BLK horizontal logotype variants (black matte in source files;
- * use with mix-blend-screen on coloured page backgrounds).
- *
- * Assignments chosen to echo each page’s field colour and backdrop art.
+ * RCA BLK horizontal logotype variants (transparent PNG letterforms).
  */
 export const BRAND_LOGOTYPES = {
   /** Warm yellow — Support coral field + yellow BLK stack */
   yellow: "/brand-logotypes/logotype-yellow.png",
-  /** Pale blue — Resources / Alumni light-blue fields + blue BLK art */
+  /** Pale blue — Resources corner wordmark + Alumni field */
   blue: "/brand-logotypes/logotype-blue.png",
   /** Coral red — Contact red-coral field */
   coral: "/brand-logotypes/logotype-coral.png",
@@ -43,9 +40,4 @@ export const PAGE_LOGOTYPE: Record<string, BrandLogotypeKey> = {
 export function getPageLogotypeSrc(slug: string): string {
   const key = PAGE_LOGOTYPE[slug] ?? "black";
   return BRAND_LOGOTYPES[key];
-}
-
-/** Black stepped logotype has no matte; coloured variants need screen blend */
-export function logotypeUsesScreenBlend(src: string): boolean {
-  return src.startsWith("/brand-logotypes/");
 }

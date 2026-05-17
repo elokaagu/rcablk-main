@@ -50,7 +50,6 @@ export function NewsListingClient({ articles }: NewsListingClientProps) {
         resultCount={filtered.length}
         totalCount={articles.length}
         searchPlaceholder="Search news, categories, dates…"
-        ringOffsetClass="focus-visible:ring-offset-[#FFDD00]"
       />
 
       {filtered.length === 0 ? (

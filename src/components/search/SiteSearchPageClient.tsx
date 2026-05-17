@@ -51,7 +51,6 @@ export function SiteSearchPageClient({ index }: SiteSearchPageClientProps) {
         resultCount={filtered.length}
         totalCount={index.length}
         searchPlaceholder="Search across news and events…"
-        ringOffsetClass="focus-visible:ring-offset-[#E8E4DC]"
       />
 
       {filtered.length === 0 ? (
