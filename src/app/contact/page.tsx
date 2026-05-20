@@ -127,7 +127,14 @@ function Credits({ className = "" }: { className?: string }) {
       </p>
       <div className={cn("flex flex-col gap-2.5", alignEnd && "items-end")}>
         <CreditLine label="Identity" alignEnd={alignEnd}>
-          Studio Frith
+          <a
+            href="https://studiofrith.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block rounded-sm px-1.5 py-0.5 -mx-1.5 underline decoration-black/30 underline-offset-[3px] transition-[color,background-color,text-decoration-color] duration-200 hover:bg-black/12 hover:text-black hover:decoration-black/70"
+          >
+            Studio Frith
+          </a>
         </CreditLine>
         <CreditLine label="Web" alignEnd={alignEnd}>
           <a
